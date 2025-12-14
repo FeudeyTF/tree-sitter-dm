@@ -1,0 +1,42 @@
+{
+  "$schema": "https://tree-sitter.github.io/tree-sitter/assets/schemas/config.schema.json",
+  "grammars": [
+    {
+      "name": "dm",
+      "camelcase": "Dm",
+      "title": "DreamMaker",
+      "scope": "source.dm",
+      "file-types": [
+        "dmm",
+        "dm",
+        "dme"
+      ],
+      "injection-regex": "^dm$",
+      "class-name": "TreeSitterDm"
+    }
+  ],
+  "metadata": {
+    "version": "0.1.0",
+    "license": "MIT",
+    "description": "DreamMaker grammar",
+    "authors": [
+      {
+        "name": "FeudeyTF",
+        "email": "yanmordanenko089@gmail.com",
+        "url": "https://github.com/FeudeyTF"
+      }
+    ],
+    "links": {
+      "repository": "https://github.com/FeudeyTF/tree-sitter-dm"
+    }
+  },
+  "bindings": {
+    "c": true,
+    "go": true,
+    "node": true,
+    "python": true,
+    "rust": true,
+    "swift": true,
+    "zig": false
+  }
+}
