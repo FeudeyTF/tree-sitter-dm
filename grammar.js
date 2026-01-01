@@ -7,60 +7,81 @@
 /// <reference types="tree-sitter-cli/dsl" />
 // @ts-check
 
-const TYPE_DELIMITER = '/';
-
 module.exports = grammar({
   name: "dm",
-  conflicts: $ => [
-    [$.type_path]
-  ],
-  rules: {
-    source_file: $ => repeat($._definition),
 
-    _definition: $ => choice(
+  conflicts: $ => [
+    [$.type_path],
+  ],
+
+  rules: {
+    source_file: $ => repeat($._instruction),
+
+    _instruction: $ => choice(
+      $.var_definition,
       $.proc_definition,
+      $.proc_override,
+      $.type_definition,
+      $.block_comment,
       $.comment
     ),
 
-    proc_definition: $ => seq(
+    type_definition: $ => seq(
+      $.type_path,
+      '/',
+      field('name', $.identifier),
+      optional($.type_body)
+    ),
+
+    type_body: $ => prec.right(seq(
+      '\n',
+      repeat1(seq('\t', $._type_statement)),
+    )),
+
+    _type_statement: $ => choice(
+      seq($.identifier, '=', $.expression),
+      $.var_definition,
+      $.identifier,
+    ),
+
+    proc_override: $ => seq(
+      $.type_path,
+      '/',
+      field('name', $.identifier),
+      $.proc_parameters
+    ),
+
+    proc_definition: $ => prec.right(seq(
       optional($.type_path),
-      $.proc_keyword,
-      field("name", $.identifier),
-      $.parameter_list,
-      optional($.block)
-    ),
+      seq('/', $.proc_keyword, '/'),
+      field('name', $.identifier),
+      $.proc_parameters,
+      optional($.proc_body)
+    )),
 
-    primitive_type: $ => choice(
-      'obj',
-      'datum',
-      'mob',
-      'turf',
-      'area',
-      'alist',
-      'list',
-      'atom',
-      'atom/movable'
-    ),
-
-    type_path: $ => seq(
-      seq($.type_delimiter, $.primitive_type),
-      repeat(seq($.type_delimiter, $.identifier))
-    ),
-
-    parameter_list: $ => seq(
+    proc_parameters: $ => seq(
       '(',
+      commaSep($.proc_parameter),
       ')'
     ),
 
-    block: $ => choice(
+    proc_parameter: $ => choice(
+      $.var_definition,
+      seq(
+        optional(seq($.type_path, '/')),
+        field('name', $.identifier),
+        optional(seq('=', $.expression))
+      )
+    ),
+
+    proc_body: $ => choice(
       $.indented_block,
       $.braced_block
     ),
 
-    indented_block: $ => seq(
-      repeat1(seq($._indent, $._statement)),
-      $._dedent,
-    ),
+    indented_block: $ => prec.right(seq(
+      repeat1(seq('\t', $._statement)),
+    )),
 
     braced_block: $ => seq(
       '{',
@@ -68,60 +89,87 @@ module.exports = grammar({
       '}',
     ),
 
-    _statement: $ => choice(
-      $.return_statement,
-      $.var_declaration,
-    ),
-
-    return_statement: $ => seq(
-      'return',
-      optional($.expression),
-      optional(';')
-    ),
-    
-    var_declaration: $ => seq(
+    var_definition: $ => seq(
       $.var_keyword,
       optional($.type_path),
       '/',
-      field("name", $.identifier),
+      field('name', $.identifier),
       optional(seq('=', $.expression)),
-      optional(';')
     ),
 
+    call_expression: $ => prec(1, seq(
+      choice(
+        field('name', $.identifier),
+        $.type_path
+      ),
+      field("arguments", $.argument_list)
+    )),
+
+    argument_list: $ => seq(
+      '(',
+      commaSep(seq(optional(seq($.identifier, "=")), $.expression)),
+      ')'
+    ),
+
+    _statement: $ => choice(
+      $.var_definition,
+      $.expression
+    ),
+
+    type_path: $ => seq(
+      optional('/'),
+      $.primitive_type,
+      repeat(seq('/', $.identifier)),
+    ),
+
+    primitive_type: _ => choice(
+      'obj',
+      'mob',
+      'world',
+      'client',
+      'turf',
+      'area',
+      'atom',
+      'mutable_appearance'
+    ),
     expression: $ => choice(
       $.identifier,
-      $.number,
-      $.string,
-      $.null,
-      $.type_path
+      $.number_literal,
+      $.string_literal,
+      $.type_path,
+      $.call_expression
     ),
-
-    identifier: $ => /[a-zA-Z_][a-zA-Z0-9_]*/,
-    number: $ => choice(
+    identifier: _ => /[a-zA-Z_][a-zA-Z0-9_]*/,
+    number_literal: $ => choice(
       /\d+/,
       /\d+\.\d*/,
       /0x[0-9a-fA-F]+/,
     ),
 
-    string: $ => choice(
+    string_literal: $ => choice(
       seq('"', repeat(choice(/[^"\\]/, /\\./)), '"'),
       seq("'", repeat(choice(/[^'\\]/, /\\./)), "'"),
     ),
 
-    null: _ => 'null',
-    proc_keyword: _ => '/proc/',
     var_keyword: _ => 'var',
-    type_delimiter: $ => TYPE_DELIMITER,
-    comment: _ => token(choice(
-      seq('//', /(\\+(.|\r?\n)|[^\\\n])*/),
-      seq(
-        '/*',
-        /[^*]*\*+([^/*][^*]*\*+)*/,
-        '/',
-      ),
-    )),
-    _indent: $ => "\t",
-    _dedent: $ => "\n",
-  }
-});
+    proc_keyword: _ => 'proc',
 
+    block_comment: _ => token(seq(
+      '/*',
+      /[^*]*\*+([^/*][^*]*\*+)*/,
+      '/',
+    )),
+    comment: _ => token(
+      seq('//', /(\\+(.|\r?\n)|[^\\\n])*/),
+    ),
+
+  }
+})
+
+function commaSep(rule) {
+  return optional(commaSep1(rule));
+}
+
+function commaSep1(rule) {
+  return seq(rule, repeat(seq(',', rule)));
+}
