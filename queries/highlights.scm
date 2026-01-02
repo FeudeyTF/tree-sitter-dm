@@ -19,5 +19,6 @@
 (comment) @comment
 (number_literal) @number
 (string_literal) @string
+"static" @keyword
 "return" @keyword.return
 "if" @keyword.conditional

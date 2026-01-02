@@ -115,6 +115,7 @@ module.exports = grammar({
 
     var_definition: $ => seq(
       $.var_keyword,
+      optional(seq('/', 'static')),
       optional($.type_path),
       '/',
       field('name', $.identifier),
@@ -175,7 +176,9 @@ module.exports = grammar({
       'client',
       'turf',
       'area',
+      'datum',
       'atom',
+      'list',
       'mutable_appearance'
     ),
 

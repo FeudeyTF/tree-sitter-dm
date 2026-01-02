@@ -396,6 +396,27 @@
           "type": "CHOICE",
           "members": [
             {
+              "type": "SEQ",
+              "members": [
+                {
+                  "type": "STRING",
+                  "value": "/"
+                },
+                {
+                  "type": "STRING",
+                  "value": "static"
+                }
+              ]
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
+        },
+        {
+          "type": "CHOICE",
+          "members": [
+            {
               "type": "SYMBOL",
               "name": "type_path"
             },
@@ -741,7 +762,15 @@
         },
         {
           "type": "STRING",
+          "value": "datum"
+        },
+        {
+          "type": "STRING",
           "value": "atom"
+        },
+        {
+          "type": "STRING",
+          "value": "list"
         },
         {
           "type": "STRING",

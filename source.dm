@@ -3,7 +3,7 @@ var/obj/test/item
 /proc/test()
 
 /obj/test/item/proc/test(var/item, item = 123, var/obj/test/test = 234)
-	var/test
+	var/static/obj/test
 	test(test = 2, 2, /obj/test/item, "sas")
 	if(test() > 1)
 		return 2
@@ -13,7 +13,8 @@ var/obj/test/item
 /obj/item/test(item)
 
 /obj/item/item
-	var/test = "Test litteral"
+	var/static/obj/test/item
+	var/static/test = "Test litteral"
 	test = 123
 // Test
 /*

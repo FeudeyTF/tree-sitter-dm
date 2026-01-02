@@ -792,6 +792,10 @@
     "named": false
   },
   {
+    "type": "datum",
+    "named": false
+  },
+  {
     "type": "else",
     "named": false
   },
@@ -806,6 +810,10 @@
   {
     "type": "line_comment",
     "named": true
+  },
+  {
+    "type": "list",
+    "named": false
   },
   {
     "type": "mob",
@@ -825,6 +833,10 @@
   },
   {
     "type": "return",
+    "named": false
+  },
+  {
+    "type": "static",
     "named": false
   },
   {
