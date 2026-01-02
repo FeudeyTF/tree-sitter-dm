@@ -7,6 +7,30 @@
 /// <reference types="tree-sitter-cli/dsl" />
 // @ts-check
 
+const PREC = {
+  PAREN_DECLARATOR: -10,
+  ASSIGNMENT: -2,
+  CONDITIONAL: -1,
+  DEFAULT: 0,
+  LOGICAL_OR: 1,
+  LOGICAL_AND: 2,
+  INCLUSIVE_OR: 3,
+  EXCLUSIVE_OR: 4,
+  BITWISE_AND: 5,
+  EQUAL: 6,
+  RELATIONAL: 7,
+  OFFSETOF: 8,
+  SHIFT: 9,
+  ADD: 10,
+  MULTIPLY: 11,
+  CAST: 12,
+  SIZEOF: 13,
+  UNARY: 14,
+  CALL: 15,
+  FIELD: 16,
+  SUBSCRIPT: 17,
+};
+
 module.exports = grammar({
   name: "dm",
 
@@ -56,7 +80,7 @@ module.exports = grammar({
       seq('/', $.proc_keyword, '/'),
       field('name', $.identifier),
       $.proc_parameters,
-      optional($.proc_body)
+      optional($.block)
     )),
 
     proc_parameters: $ => seq(
@@ -74,13 +98,14 @@ module.exports = grammar({
       )
     ),
 
-    proc_body: $ => choice(
+    block: $ => choice(
       $.indented_block,
       $.braced_block
     ),
 
     indented_block: $ => prec.right(seq(
       repeat1(seq('\t', $._statement)),
+      '\n'
     )),
 
     braced_block: $ => seq(
@@ -113,8 +138,30 @@ module.exports = grammar({
 
     _statement: $ => choice(
       $.var_definition,
+      $.expression,
+      $.return_statement,
+      $.if_statement
+    ),
+
+    if_statement: $ => prec.right(seq(
+      'if',
+      '(',
+      field('condition', $.expression),
+      ')',
+      $.block,
+      optional(field('alternative', $.else_clause)),
+    )),
+
+    else_clause: $ => seq('else', $._statement),
+
+    return_statement: $ => seq(
+      'return',
       $.expression
     ),
+
+    break_statement: _ => 'break',
+
+    continue_statement: _ => 'continue',
 
     type_path: $ => seq(
       optional('/'),
@@ -132,12 +179,49 @@ module.exports = grammar({
       'atom',
       'mutable_appearance'
     ),
+
+    unary_expression: $ => prec.left(PREC.UNARY, seq(field('operator', choice('!', '~', '-', '+')), field('argument', $.expression),)),
+
+    binary_expression: $ => {
+      const table = [
+        ['+', PREC.ADD],
+        ['-', PREC.ADD],
+        ['*', PREC.MULTIPLY],
+        ['/', PREC.MULTIPLY],
+        ['%', PREC.MULTIPLY],
+        ['||', PREC.LOGICAL_OR],
+        ['&&', PREC.LOGICAL_AND],
+        ['|', PREC.INCLUSIVE_OR],
+        ['^', PREC.EXCLUSIVE_OR],
+        ['&', PREC.BITWISE_AND],
+        ['==', PREC.EQUAL],
+        ['!=', PREC.EQUAL],
+        ['>', PREC.RELATIONAL],
+        ['>=', PREC.RELATIONAL],
+        ['<=', PREC.RELATIONAL],
+        ['<', PREC.RELATIONAL],
+        ['<<', PREC.SHIFT],
+        ['>>', PREC.SHIFT],
+      ];
+
+      return choice(...table.map(([operator, precedence]) => {
+        return prec.left(precedence, seq(
+          field('left', $.expression),
+          // @ts-ignore
+          field('operator', operator),
+          field('right', $.expression),
+        ));
+      }));
+    },
+
     expression: $ => choice(
       $.identifier,
       $.number_literal,
       $.string_literal,
       $.type_path,
-      $.call_expression
+      $.call_expression,
+      $.binary_expression,
+      $.unary_expression
     ),
     identifier: _ => /[a-zA-Z_][a-zA-Z0-9_]*/,
     number_literal: $ => choice(

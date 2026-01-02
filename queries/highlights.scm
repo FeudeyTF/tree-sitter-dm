@@ -20,4 +20,5 @@
 (block_comment) @comment
 (number_literal) @number
 (string_literal) @string
-
+"return" @keyword.return
+"if" @keyword.conditional
