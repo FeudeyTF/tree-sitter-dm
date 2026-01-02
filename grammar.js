@@ -37,12 +37,15 @@ module.exports = grammar({
   conflicts: $ => [
     [$.type_path],
   ],
-
+  externals: $ => [
+    $.newline,
+    $.indent,
+    $.dedent
+  ],
   rules: {
     source_file: $ => repeat($._instruction),
 
     _instruction: $ => choice(
-      $.var_definition,
       $.proc_definition,
       $.proc_override,
       $.type_definition,
@@ -57,30 +60,33 @@ module.exports = grammar({
     ),
 
     type_body: $ => prec.right(seq(
-      '\n',
-      repeat1(seq('\t', $._type_statement)),
+      $.indent,
+      repeat1(seq($._type_statement, $.newline)),
+      $.dedent
     )),
 
     _type_statement: $ => choice(
       seq($.identifier, '=', $.expression),
       $.var_definition,
       $.identifier,
+      $.comment
     ),
 
     proc_override: $ => seq(
       $.type_path,
       '/',
       field('name', $.identifier),
-      $.proc_parameters
+      $.proc_parameters,
+      optional($.block)
     ),
 
-    proc_definition: $ => prec.right(seq(
+    proc_definition: $ => seq(
       optional($.type_path),
       seq('/', $.proc_keyword, '/'),
       field('name', $.identifier),
       $.proc_parameters,
       optional($.block)
-    )),
+    ),
 
     proc_parameters: $ => seq(
       '(',
@@ -99,13 +105,19 @@ module.exports = grammar({
 
     block: $ => choice(
       $.indented_block,
-      $.braced_block
+      $.braced_block,
+    ),
+    
+    indented_block: $ => choice(
+      seq($.indent, $.indented_block_1),
+      alias($.newline, $.indented_block_1),
     ),
 
-    indented_block: $ => prec.right(seq(
-      repeat1(seq('\t', $._statement)),
-      '\n'
-    )),
+    indented_block_1: $ => seq(
+      repeat($._statement),
+      $.dedent,
+    ),
+
 
     braced_block: $ => seq(
       '{',
@@ -140,7 +152,8 @@ module.exports = grammar({
       $.var_definition,
       $.expression,
       $.return_statement,
-      $.if_statement
+      $.if_statement,
+      $.comment
     ),
 
     if_statement: $ => prec.right(seq(
@@ -149,10 +162,10 @@ module.exports = grammar({
       field('condition', $.expression),
       ')',
       $.block,
-      optional(field('alternative', $.else_clause)),
+      optional(seq(field('alternative', $.else_clause))),
     )),
 
-    else_clause: $ => seq('else', $._statement),
+    else_clause: $ => seq('else', $.block),
 
     return_statement: $ => seq(
       'return',
@@ -216,16 +229,39 @@ module.exports = grammar({
       }));
     },
 
+    assignment_expression: $ => prec.right(PREC.ASSIGNMENT, seq(
+      field('left', $.identifier),
+      field('operator', choice(
+        '=',
+        '*=',
+        '/=',
+        '%=',
+        '+=',
+        '-=',
+        '<<=',
+        '>>=',
+        '&=',
+        '^=',
+        '|=',
+      )),
+      field('right', $.expression),
+    )),
+
     expression: $ => choice(
       $.identifier,
       $.number_literal,
       $.string_literal,
       $.type_path,
       $.call_expression,
+      $.parent_proc_expression,
       $.binary_expression,
+      $.assignment_expression,
       $.unary_expression
     ),
-    identifier: _ => /[a-zA-Z_][a-zA-Z0-9_]*/,
+
+    parent_proc_expression: _ => '..()',
+
+    identifier: _ => /[a-zA-Z_][a-zA-Z0-9_]*|\./,
     number_literal: $ => choice(
       /\d+/,
       /\d+\.\d*/,

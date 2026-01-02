@@ -22,3 +22,4 @@
 "static" @keyword
 "return" @keyword.return
 "if" @keyword.conditional
+"else" @keyword.conditional

@@ -19,6 +19,82 @@
     }
   },
   {
+    "type": "assignment_expression",
+    "named": true,
+    "fields": {
+      "left": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "operator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "%=",
+            "named": false
+          },
+          {
+            "type": "&=",
+            "named": false
+          },
+          {
+            "type": "*=",
+            "named": false
+          },
+          {
+            "type": "+=",
+            "named": false
+          },
+          {
+            "type": "-=",
+            "named": false
+          },
+          {
+            "type": "/=",
+            "named": false
+          },
+          {
+            "type": "<<=",
+            "named": false
+          },
+          {
+            "type": "=",
+            "named": false
+          },
+          {
+            "type": ">>=",
+            "named": false
+          },
+          {
+            "type": "^=",
+            "named": false
+          },
+          {
+            "type": "|=",
+            "named": false
+          }
+        ]
+      },
+      "right": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "binary_expression",
     "named": true,
     "fields": {
@@ -150,6 +226,10 @@
       "required": false,
       "types": [
         {
+          "type": "comment",
+          "named": true
+        },
+        {
           "type": "expression",
           "named": true
         },
@@ -232,19 +312,7 @@
       "required": true,
       "types": [
         {
-          "type": "expression",
-          "named": true
-        },
-        {
-          "type": "if_statement",
-          "named": true
-        },
-        {
-          "type": "return_statement",
-          "named": true
-        },
-        {
-          "type": "var_definition",
+          "type": "block",
           "named": true
         }
       ]
@@ -259,6 +327,10 @@
       "required": true,
       "types": [
         {
+          "type": "assignment_expression",
+          "named": true
+        },
+        {
           "type": "binary_expression",
           "named": true
         },
@@ -272,6 +344,10 @@
         },
         {
           "type": "number_literal",
+          "named": true
+        },
+        {
+          "type": "parent_proc_expression",
           "named": true
         },
         {
@@ -333,6 +409,33 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "indent",
+          "named": true
+        },
+        {
+          "type": "indented_block_1",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "indented_block_1",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "dedent",
+          "named": true
+        },
         {
           "type": "expression",
           "named": true
@@ -419,6 +522,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "block",
+          "named": true
+        },
         {
           "type": "proc_parameters",
           "named": true
@@ -518,10 +625,6 @@
         {
           "type": "type_definition",
           "named": true
-        },
-        {
-          "type": "var_definition",
-          "named": true
         }
       ]
     }
@@ -540,11 +643,27 @@
       "required": true,
       "types": [
         {
+          "type": "comment",
+          "named": true
+        },
+        {
+          "type": "dedent",
+          "named": true
+        },
+        {
           "type": "expression",
           "named": true
         },
         {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "indent",
+          "named": true
+        },
+        {
+          "type": "newline",
           "named": true
         },
         {
@@ -676,14 +795,6 @@
     }
   },
   {
-    "type": "\t",
-    "named": false
-  },
-  {
-    "type": "\n",
-    "named": false
-  },
-  {
     "type": "!",
     "named": false
   },
@@ -700,11 +811,19 @@
     "named": false
   },
   {
+    "type": "%=",
+    "named": false
+  },
+  {
     "type": "&",
     "named": false
   },
   {
     "type": "&&",
+    "named": false
+  },
+  {
+    "type": "&=",
     "named": false
   },
   {
@@ -724,7 +843,15 @@
     "named": false
   },
   {
+    "type": "*=",
+    "named": false
+  },
+  {
     "type": "+",
+    "named": false
+  },
+  {
+    "type": "+=",
     "named": false
   },
   {
@@ -736,7 +863,15 @@
     "named": false
   },
   {
+    "type": "-=",
+    "named": false
+  },
+  {
     "type": "/",
+    "named": false
+  },
+  {
+    "type": "/=",
     "named": false
   },
   {
@@ -745,6 +880,10 @@
   },
   {
     "type": "<<",
+    "named": false
+  },
+  {
+    "type": "<<=",
     "named": false
   },
   {
@@ -772,7 +911,15 @@
     "named": false
   },
   {
+    "type": ">>=",
+    "named": false
+  },
+  {
     "type": "^",
+    "named": false
+  },
+  {
+    "type": "^=",
     "named": false
   },
   {
@@ -796,6 +943,10 @@
     "named": false
   },
   {
+    "type": "dedent",
+    "named": true
+  },
+  {
     "type": "else",
     "named": false
   },
@@ -806,6 +957,10 @@
   {
     "type": "if",
     "named": false
+  },
+  {
+    "type": "indent",
+    "named": true
   },
   {
     "type": "line_comment",
@@ -824,8 +979,16 @@
     "named": false
   },
   {
+    "type": "newline",
+    "named": true
+  },
+  {
     "type": "obj",
     "named": false
+  },
+  {
+    "type": "parent_proc_expression",
+    "named": true
   },
   {
     "type": "proc_keyword",
@@ -857,6 +1020,10 @@
   },
   {
     "type": "|",
+    "named": false
+  },
+  {
+    "type": "|=",
     "named": false
   },
   {

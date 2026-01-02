@@ -1,22 +1,21 @@
-var/obj/test/item
+/obj/item/test/proc/Test()
 
-/proc/test()
+/obj/item/test/proc/New()
+	sleep()
 
-/obj/test/item/proc/test(var/item, item = 123, var/obj/test/test = 234)
-	var/static/obj/test
-	test(test = 2, 2, /obj/test/item, "sas")
-	if(test() > 1)
-		return 2
-	return 1
-/proc/test()
-
-/obj/item/test(item)
-
-/obj/item/item
-	var/static/obj/test/item
-	var/static/test = "Test litteral"
+/datum/test
+	var/test
 	test = 123
-// Test
-/*
-Test
-*/
+/obj/item/test/proc/new()
+	. = ..()
+	if(1)
+		test()
+		if(2)
+			var/test = 1
+			sleep()
+			return 1//sas
+		else
+			var/test = 2
+
+/datum/item/test/test()
+	var/test = 123
