@@ -17,7 +17,6 @@
 (call_expression
   name: (identifier) @function.call)
 (comment) @comment
-(block_comment) @comment
 (number_literal) @number
 (string_literal) @string
 "return" @keyword.return

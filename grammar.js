@@ -46,7 +46,6 @@ module.exports = grammar({
       $.proc_definition,
       $.proc_override,
       $.type_definition,
-      $.block_comment,
       $.comment
     ),
 
@@ -243,10 +242,15 @@ module.exports = grammar({
       /[^*]*\*+([^/*][^*]*\*+)*/,
       '/',
     )),
-    comment: _ => token(
+
+    line_comment: _ => token(
       seq('//', /(\\+(.|\r?\n)|[^\\\n])*/),
     ),
 
+    comment: $ => choice(
+      $.line_comment,
+      $.block_comment
+    )
   }
 })
 

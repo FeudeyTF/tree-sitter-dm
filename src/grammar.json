@@ -30,10 +30,6 @@
         },
         {
           "type": "SYMBOL",
-          "name": "block_comment"
-        },
-        {
-          "type": "SYMBOL",
           "name": "comment"
         }
       ]
@@ -1539,7 +1535,7 @@
         ]
       }
     },
-    "comment": {
+    "line_comment": {
       "type": "TOKEN",
       "content": {
         "type": "SEQ",
@@ -1554,6 +1550,19 @@
           }
         ]
       }
+    },
+    "comment": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "line_comment"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "block_comment"
+        }
+      ]
     }
   },
   "extras": [
