@@ -261,6 +261,8 @@ module.exports = grammar({
         ['<', PREC.RELATIONAL],
         ['<<', PREC.SHIFT],
         ['>>', PREC.SHIFT],
+        ['in', PREC.CONDITIONAL],
+        ['to', PREC.CONDITIONAL]
       ];
 
       return choice(...table.map(([operator, precedence]) => {
@@ -306,7 +308,15 @@ module.exports = grammar({
       $.assignment_expression,
       $.unary_expression,
       $.field_expression,
-      $.field_proc_expression
+      $.field_proc_expression,
+      $.array_expression
+    ),
+
+    array_expression: $ => seq(
+      choice($.identifier, $.field_expression),
+      '[',
+      field('size', $.expression),
+      ']'
     ),
 
     field_expression: $ => seq(

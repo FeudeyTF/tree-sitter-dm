@@ -9,7 +9,7 @@
 
 /obj/item/test/verb/new()
 	. = ..()
-	test.sas.test = 123
+	test.sas.test["sas"] = 123
 	for(var/test in test)
 		return
 	if(1)
@@ -22,6 +22,8 @@
 			return 1
 		else
 			var/test = 2
+	if(1 to 2)
+		return 2
 /datum/item/test/test()
 	var/test = 123
 /proc/test()

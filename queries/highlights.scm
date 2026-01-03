@@ -29,6 +29,7 @@
 (var_modifier) @keyword
 "return" @keyword.return
 "if" @keyword.conditional
+"to" @keyword.conditional
 "else" @keyword.conditional
 "switch" @keyword.conditional
 "for" @keyword.repeat
