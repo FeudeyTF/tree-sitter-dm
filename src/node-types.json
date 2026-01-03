@@ -226,10 +226,6 @@
       "required": false,
       "types": [
         {
-          "type": "comment",
-          "named": true
-        },
-        {
           "type": "expression",
           "named": true
         },
@@ -305,6 +301,7 @@
   {
     "type": "comment",
     "named": true,
+    "extra": true,
     "fields": {},
     "children": {
       "multiple": false,
@@ -519,10 +516,6 @@
       "multiple": true,
       "required": false,
       "types": [
-        {
-          "type": "comment",
-          "named": true
-        },
         {
           "type": "dedent",
           "named": true
@@ -741,10 +734,6 @@
       "required": false,
       "types": [
         {
-          "type": "comment",
-          "named": true
-        },
-        {
           "type": "proc_definition",
           "named": true
         },
@@ -806,10 +795,6 @@
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "comment",
-          "named": true
-        },
         {
           "type": "dedent",
           "named": true
@@ -1210,6 +1195,11 @@
   {
     "type": "line_comment",
     "named": true
+  },
+  {
+    "type": "line_continuation",
+    "named": true,
+    "extra": true
   },
   {
     "type": "list",

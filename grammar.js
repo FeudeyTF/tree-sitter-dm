@@ -33,17 +33,24 @@ const PREC = {
 
 module.exports = grammar({
   name: "dm",
+  extras: $ => [
+    $.comment,
+    /[\s\f\uFEFF\u2060\u200B]|\r?\n/,
+    $.line_continuation
+  ],
 
   conflicts: $ => [
     [$.type_path],
     [$.return_statement],
     [$.builtin_const, $.primitive_type]
   ],
+
   externals: $ => [
     $.newline,
     $.indent,
     $.dedent
   ],
+
   rules: {
     source_file: $ => repeat($._instruction),
 
@@ -51,7 +58,6 @@ module.exports = grammar({
       $.proc_definition,
       $.proc_override,
       $.type_definition,
-      $.comment
     ),
 
     type_definition: $ => seq(
@@ -71,7 +77,6 @@ module.exports = grammar({
       seq($.identifier, '=', $.expression),
       $.var_definition,
       $.identifier,
-      $.comment
     ),
 
     proc_override: $ => seq(
@@ -158,7 +163,6 @@ module.exports = grammar({
       $.if_statement,
       $.for_statement,
       $.switch_statement,
-      $.comment
     ),
 
     for_statement: $ => seq(
@@ -355,7 +359,10 @@ module.exports = grammar({
     comment: $ => choice(
       $.line_comment,
       $.block_comment
-    )
+    ),
+
+    line_continuation: _ => token(seq('\\', choice(seq(optional('\r'), '\n'), '\0'))),
+
   }
 })
 

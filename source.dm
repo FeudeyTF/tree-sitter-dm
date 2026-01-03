@@ -8,7 +8,6 @@
 	test = 123
 /obj/item/test/verb/new()
 	. = ..()
-
 	for(var/test in test)
 		return
 	if(1)
@@ -19,9 +18,8 @@
 			var/test = usr
 			sleep()
 			return 1
-			//Test comment
+	//Test comment
 		else
 			var/test = 2
-
 /datum/item/test/test()
 	var/test = 123
