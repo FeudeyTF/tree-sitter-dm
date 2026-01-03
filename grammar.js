@@ -329,7 +329,7 @@ module.exports = grammar({
       field('argument', $.expression),
       field('operator', '.'),
       field('proc', $.identifier),
-      $.proc_parameters
+      $.argument_list
     ),
 
     new_expression: $ => prec.right(seq(

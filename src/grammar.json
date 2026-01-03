@@ -1965,7 +1965,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "proc_parameters"
+          "name": "argument_list"
         }
       ]
     },
