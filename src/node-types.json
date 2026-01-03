@@ -395,6 +395,10 @@
           "named": true
         },
         {
+          "type": "new_expression",
+          "named": true
+        },
+        {
           "type": "null_const",
           "named": true
         },
@@ -545,6 +549,32 @@
         },
         {
           "type": "var_definition",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "new_expression",
+    "named": true,
+    "fields": {
+      "arguments": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "argument_list",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "type_path",
           "named": true
         }
       ]
@@ -1191,6 +1221,10 @@
   },
   {
     "type": "mutable_appearance",
+    "named": false
+  },
+  {
+    "type": "new",
     "named": false
   },
   {

@@ -194,7 +194,7 @@ module.exports = grammar({
     elseif_clause: $ => seq(
       'else', 'if',
       '(',
-      field('condition', $.expression), 
+      field('condition', $.expression),
       ')',
       $.block
     ),
@@ -288,12 +288,19 @@ module.exports = grammar({
       $.string_literal,
       $.builtin_macro,
       $.null_const,
+      $.new_expression,
       $.type_path,
       $.call_expression,
       $.parent_proc_expression,
       $.binary_expression,
       $.assignment_expression,
       $.unary_expression
+    ),
+
+    new_expression: $ => seq(
+      'new',
+      optional($.type_path),
+      field("arguments", $.argument_list),
     ),
 
     parent_proc_expression: _ => '..()',

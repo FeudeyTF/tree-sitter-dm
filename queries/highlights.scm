@@ -26,6 +26,7 @@
 "switch" @keyword.conditional
 "for" @keyword.repeat
 "in" @keyword.repeat
+"new" @keyword
 (builtin_const) @keyword
 (null_const) @keyword
 (builtin_macro) @keyword
