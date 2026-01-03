@@ -156,8 +156,19 @@ module.exports = grammar({
       $.expression,
       $.return_statement,
       $.if_statement,
+      $.for_statement,
       $.switch_statement,
       $.comment
+    ),
+
+    for_statement: $ => seq(
+      'for',
+      '(',
+      seq($.var_definition, optional(seq('as', $.as_type))),
+      'in',
+      $.expression,
+      ')',
+      $.block,
     ),
 
     switch_statement: $ => prec.right(seq(
@@ -289,7 +300,7 @@ module.exports = grammar({
       seq('"', repeat(choice(/[^"\\]/, /\\./)), '"'),
       seq("'", repeat(choice(/[^'\\]/, /\\./)), "'"),
     ),
-
+    as_type: _ => 'anything',
     var_keyword: _ => 'var',
     proc_keyword: _ => choice('proc', 'verb', 'operator'),
 

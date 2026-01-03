@@ -8,9 +8,14 @@
 	test = 123
 /obj/item/test/verb/new()
 	. = ..()
+
+	for(var/test in test)
+		return
 	if(1)
 		test()
 		if(2)
+			for(var/test2 as anything in test)
+				return
 			var/test = usr
 			sleep()
 			return 1

@@ -24,6 +24,8 @@
 "if" @keyword.conditional
 "else" @keyword.conditional
 "switch" @keyword.conditional
+"for" @keyword.repeat
+"in" @keyword.repeat
 (builtin_const) @keyword
 (null_const) @keyword
 (builtin_macro) @keyword
