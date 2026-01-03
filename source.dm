@@ -5,7 +5,8 @@
 
 /datum/test
 	var/test
-	test = 123
+	test = 1244233234
+
 /obj/item/test/verb/new()
 	. = ..()
 	for(var/test in test)
@@ -18,13 +19,13 @@
 			var/test = usr
 			sleep()
 			return 1
-	//Test comment
 		else
 			var/test = 2
 /datum/item/test/test()
 	var/test = 123
-
+/proc/test()
+	var/sas = 123
 	
 /mutable_appearance/emissive_blocker
 
-/mutable_appearance/emissive_blocker/New()
+/mutable_appearance/emissive_blocker/proc/New()

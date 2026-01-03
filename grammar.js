@@ -68,7 +68,7 @@ module.exports = grammar({
 
     type_definition: $ => prec.dynamic(-1, seq(
       $.type_path,
-      '/',
+      $.type_name_delimiter,
       field('name', $.identifier),
       optional($.type_body)
     )),
@@ -87,7 +87,7 @@ module.exports = grammar({
 
     proc_override: $ => seq(
       $.type_path,
-      '/',
+      $.type_name_delimiter,
       field('name', $.identifier),
       $.proc_parameters,
       optional($.block)
@@ -95,7 +95,7 @@ module.exports = grammar({
 
     proc_definition: $ => prec.dynamic(1, seq(
       optional($.type_path),
-      seq('/', $.proc_keyword, '/'),
+      seq(choice($.type_name_delimiter, '/'), $.proc_keyword, $.type_name_delimiter),
       field('name', $.identifier),
       $.proc_parameters,
       optional($.block)
@@ -110,7 +110,7 @@ module.exports = grammar({
     proc_parameter: $ => choice(
       $.var_definition,
       seq(
-        optional(seq($.type_path, '/')),
+        optional(seq($.type_path, $.type_name_delimiter)),
         field('name', $.identifier),
         optional(seq('=', $.expression))
       ),
@@ -141,9 +141,9 @@ module.exports = grammar({
 
     var_definition: $ => seq(
       $.var_keyword,
-      optional(seq('/', $.var_modifier)),
+      optional(seq($.type_name_delimiter, $.var_modifier)),
       optional($.type_path),
-      '/',
+      $.type_name_delimiter,
       field('name', $.identifier),
       optional(seq('=', $.expression)),
     ),
@@ -221,9 +221,9 @@ module.exports = grammar({
     continue_statement: _ => 'continue',
 
     type_path: $ => seq(
-      optional('/'),
+      optional(choice('/', $.type_name_delimiter)),
       $.primitive_type,
-      repeat(seq('/', $.identifier)),
+      repeat(seq($.type_name_delimiter, $.identifier)),
     ),
 
     primitive_type: _ => choice(
@@ -357,6 +357,8 @@ module.exports = grammar({
       /[^*]*\*+([^/*][^*]*\*+)*/,
       '/',
     )),
+
+    type_name_delimiter: _ => token.immediate('/'),
 
     line_comment: _ => token(
       seq('//', /(\\+(.|\r?\n)|[^\\\n])*/),
