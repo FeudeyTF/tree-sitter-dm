@@ -242,11 +242,25 @@
           "named": true
         },
         {
+          "type": "switch_statement",
+          "named": true
+        },
+        {
           "type": "var_definition",
           "named": true
         }
       ]
     }
+  },
+  {
+    "type": "builtin_const",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "builtin_macro",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "call_expression",
@@ -335,11 +349,23 @@
           "named": true
         },
         {
+          "type": "builtin_const",
+          "named": true
+        },
+        {
+          "type": "builtin_macro",
+          "named": true
+        },
+        {
           "type": "call_expression",
           "named": true
         },
         {
           "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "null_const",
           "named": true
         },
         {
@@ -449,6 +475,10 @@
           "named": true
         },
         {
+          "type": "switch_statement",
+          "named": true
+        },
+        {
           "type": "var_definition",
           "named": true
         }
@@ -502,6 +532,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "proc_keyword",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "proc_override",
@@ -592,7 +627,7 @@
     "fields": {},
     "children": {
       "multiple": false,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "expression",
@@ -633,6 +668,40 @@
     "type": "string_literal",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "switch_statement",
+    "named": true,
+    "fields": {
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "dedent",
+          "named": true
+        },
+        {
+          "type": "if_statement",
+          "named": true
+        },
+        {
+          "type": "indent",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "type_body",
@@ -790,9 +859,18 @@
         {
           "type": "var_keyword",
           "named": true
+        },
+        {
+          "type": "var_modifier",
+          "named": true
         }
       ]
     }
+  },
+  {
+    "type": "var_modifier",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "!",
@@ -867,6 +945,10 @@
     "named": false
   },
   {
+    "type": "...",
+    "named": false
+  },
+  {
     "type": "/",
     "named": false
   },
@@ -915,6 +997,30 @@
     "named": false
   },
   {
+    "type": "DEBUG",
+    "named": false
+  },
+  {
+    "type": "DM_BUILD",
+    "named": false
+  },
+  {
+    "type": "DM_VERSION",
+    "named": false
+  },
+  {
+    "type": "FALSE",
+    "named": false
+  },
+  {
+    "type": "FILE_DIR",
+    "named": false
+  },
+  {
+    "type": "TRUE",
+    "named": false
+  },
+  {
     "type": "^",
     "named": false
   },
@@ -923,7 +1029,23 @@
     "named": false
   },
   {
+    "type": "__FILE__",
+    "named": false
+  },
+  {
+    "type": "__LINE__",
+    "named": false
+  },
+  {
+    "type": "__MAIN__",
+    "named": false
+  },
+  {
     "type": "area",
+    "named": false
+  },
+  {
+    "type": "args",
     "named": false
   },
   {
@@ -939,6 +1061,10 @@
     "named": false
   },
   {
+    "type": "const",
+    "named": false
+  },
+  {
     "type": "datum",
     "named": false
   },
@@ -948,6 +1074,14 @@
   },
   {
     "type": "else",
+    "named": false
+  },
+  {
+    "type": "final",
+    "named": false
+  },
+  {
+    "type": "global",
     "named": false
   },
   {
@@ -983,7 +1117,15 @@
     "named": true
   },
   {
+    "type": "null_const",
+    "named": true
+  },
+  {
     "type": "obj",
+    "named": false
+  },
+  {
+    "type": "operator",
     "named": false
   },
   {
@@ -991,11 +1133,15 @@
     "named": true
   },
   {
-    "type": "proc_keyword",
-    "named": true
+    "type": "proc",
+    "named": false
   },
   {
     "type": "return",
+    "named": false
+  },
+  {
+    "type": "src",
     "named": false
   },
   {
@@ -1003,12 +1149,32 @@
     "named": false
   },
   {
+    "type": "switch",
+    "named": false
+  },
+  {
+    "type": "tmp",
+    "named": false
+  },
+  {
     "type": "turf",
+    "named": false
+  },
+  {
+    "type": "usr",
     "named": false
   },
   {
     "type": "var_keyword",
     "named": true
+  },
+  {
+    "type": "vars",
+    "named": false
+  },
+  {
+    "type": "verb",
+    "named": false
   },
   {
     "type": "world",

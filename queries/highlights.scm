@@ -19,7 +19,11 @@
 (comment) @comment
 (number_literal) @number
 (string_literal) @string
-"static" @keyword
+(var_modifier) @keyword
 "return" @keyword.return
 "if" @keyword.conditional
 "else" @keyword.conditional
+"switch" @keyword.conditional
+(builtin_const) @keyword
+(null_const) @keyword
+(builtin_macro) @keyword

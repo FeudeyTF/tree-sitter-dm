@@ -332,6 +332,10 @@
               ]
             }
           ]
+        },
+        {
+          "type": "STRING",
+          "value": "..."
         }
       ]
     },
@@ -429,8 +433,8 @@
                   "value": "/"
                 },
                 {
-                  "type": "STRING",
-                  "value": "static"
+                  "type": "SYMBOL",
+                  "name": "var_modifier"
                 }
               ]
             },
@@ -639,9 +643,57 @@
         },
         {
           "type": "SYMBOL",
+          "name": "switch_statement"
+        },
+        {
+          "type": "SYMBOL",
           "name": "comment"
         }
       ]
+    },
+    "switch_statement": {
+      "type": "PREC_RIGHT",
+      "value": 0,
+      "content": {
+        "type": "SEQ",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "switch"
+          },
+          {
+            "type": "STRING",
+            "value": "("
+          },
+          {
+            "type": "FIELD",
+            "name": "condition",
+            "content": {
+              "type": "SYMBOL",
+              "name": "expression"
+            }
+          },
+          {
+            "type": "STRING",
+            "value": ")"
+          },
+          {
+            "type": "SYMBOL",
+            "name": "indent"
+          },
+          {
+            "type": "REPEAT1",
+            "content": {
+              "type": "SYMBOL",
+              "name": "if_statement"
+            }
+          },
+          {
+            "type": "SYMBOL",
+            "name": "dedent"
+          }
+        ]
+      }
     },
     "if_statement": {
       "type": "PREC_RIGHT",
@@ -718,8 +770,16 @@
           "value": "return"
         },
         {
-          "type": "SYMBOL",
-          "name": "expression"
+          "type": "CHOICE",
+          "members": [
+            {
+              "type": "SYMBOL",
+              "name": "expression"
+            },
+            {
+              "type": "BLANK"
+            }
+          ]
         }
       ]
     },
@@ -1541,11 +1601,23 @@
         },
         {
           "type": "SYMBOL",
+          "name": "builtin_const"
+        },
+        {
+          "type": "SYMBOL",
           "name": "number_literal"
         },
         {
           "type": "SYMBOL",
           "name": "string_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "builtin_macro"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "null_const"
         },
         {
           "type": "SYMBOL",
@@ -1666,8 +1738,116 @@
       "value": "var"
     },
     "proc_keyword": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "proc"
+        },
+        {
+          "type": "STRING",
+          "value": "verb"
+        },
+        {
+          "type": "STRING",
+          "value": "operator"
+        }
+      ]
+    },
+    "var_modifier": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "static"
+        },
+        {
+          "type": "STRING",
+          "value": "global"
+        },
+        {
+          "type": "STRING",
+          "value": "tmp"
+        },
+        {
+          "type": "STRING",
+          "value": "const"
+        },
+        {
+          "type": "STRING",
+          "value": "final"
+        }
+      ]
+    },
+    "builtin_const": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "usr"
+        },
+        {
+          "type": "STRING",
+          "value": "world"
+        },
+        {
+          "type": "STRING",
+          "value": "src"
+        },
+        {
+          "type": "STRING",
+          "value": "args"
+        },
+        {
+          "type": "STRING",
+          "value": "vars"
+        }
+      ]
+    },
+    "builtin_macro": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "DM_BUILD"
+        },
+        {
+          "type": "STRING",
+          "value": "DM_VERSION"
+        },
+        {
+          "type": "STRING",
+          "value": "__FILE__"
+        },
+        {
+          "type": "STRING",
+          "value": "__LINE__"
+        },
+        {
+          "type": "STRING",
+          "value": "__MAIN__"
+        },
+        {
+          "type": "STRING",
+          "value": "DEBUG"
+        },
+        {
+          "type": "STRING",
+          "value": "FILE_DIR"
+        },
+        {
+          "type": "STRING",
+          "value": "TRUE"
+        },
+        {
+          "type": "STRING",
+          "value": "FALSE"
+        }
+      ]
+    },
+    "null_const": {
       "type": "STRING",
-      "value": "proc"
+      "value": "null"
     },
     "block_comment": {
       "type": "TOKEN",
@@ -1728,6 +1908,13 @@
   "conflicts": [
     [
       "type_path"
+    ],
+    [
+      "return_statement"
+    ],
+    [
+      "builtin_const",
+      "primitive_type"
     ]
   ],
   "precedences": [],

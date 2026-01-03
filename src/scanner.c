@@ -28,7 +28,6 @@ typedef enum {
 typedef struct {
   char flags;
 } Delimiter;
-
 typedef struct {
   Array(uint16_t) indents;
   Array(Delimiter) delimiters;
@@ -42,8 +41,6 @@ static inline void skip(TSLexer *lexer) { lexer->advance(lexer, true); }
 bool tree_sitter_dm_external_scanner_scan(void *payload, TSLexer *lexer,
                                           const bool *valid_symbols) {
   Scanner *scanner = (Scanner *)payload;
-
-  bool error_recovery_mode = valid_symbols[INDENT];
 
   lexer->mark_end(lexer);
 
@@ -64,23 +61,20 @@ bool tree_sitter_dm_external_scanner_scan(void *payload, TSLexer *lexer,
     } else if (lexer->lookahead == '\t') {
       indent_length += 8;
       skip(lexer);
-    } else if (lexer->lookahead == '/') {
-      skip(lexer);
-      if (lexer->lookahead == '/' &&
-          (valid_symbols[INDENT] || valid_symbols[DEDENT] ||
-           valid_symbols[NEWLINE])) {
-        if (!found_end_of_line) {
-          return false;
-        }
-        if (first_comment_indent_length == -1) {
-          first_comment_indent_length = (int32_t)indent_length;
-        }
-        while (lexer->lookahead && lexer->lookahead != '\n') {
-          skip(lexer);
-        }
-        skip(lexer);
-        indent_length = 0;
+    } else if (lexer->lookahead == '#' &&
+               (valid_symbols[INDENT] || valid_symbols[DEDENT] ||
+                valid_symbols[NEWLINE])) {
+      if (!found_end_of_line) {
+        return false;
       }
+      if (first_comment_indent_length == -1) {
+        first_comment_indent_length = (int32_t)indent_length;
+      }
+      while (lexer->lookahead && lexer->lookahead != '\n') {
+        skip(lexer);
+      }
+      skip(lexer);
+      indent_length = 0;
     } else if (lexer->lookahead == '\\') {
       skip(lexer);
       if (lexer->lookahead == '\r') {
@@ -114,7 +108,8 @@ bool tree_sitter_dm_external_scanner_scan(void *payload, TSLexer *lexer,
                                       lexer->lookahead == '\'' ||
                                       lexer->lookahead == '`';
 
-      if ((valid_symbols[DEDENT] || (!valid_symbols[NEWLINE])) &&
+      if ((valid_symbols[DEDENT] ||
+           (!valid_symbols[NEWLINE] && !(next_tok_is_string_start))) &&
           indent_length < current_indent_length &&
           !scanner->inside_interpolated_string &&
           first_comment_indent_length < (int32_t)current_indent_length) {
@@ -124,7 +119,7 @@ bool tree_sitter_dm_external_scanner_scan(void *payload, TSLexer *lexer,
       }
     }
 
-    if (valid_symbols[NEWLINE] && !error_recovery_mode) {
+    if (valid_symbols[NEWLINE]) {
       lexer->result_symbol = NEWLINE;
       return true;
     }

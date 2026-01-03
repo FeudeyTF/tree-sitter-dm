@@ -6,14 +6,15 @@
 /datum/test
 	var/test
 	test = 123
-/obj/item/test/proc/new()
+/obj/item/test/verb/new()
 	. = ..()
 	if(1)
 		test()
 		if(2)
-			var/test = 1
+			var/test = usr
 			sleep()
-			return 1//sas
+			return 1
+			//Test comment
 		else
 			var/test = 2
 

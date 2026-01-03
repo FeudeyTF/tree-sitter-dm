@@ -36,6 +36,8 @@ module.exports = grammar({
 
   conflicts: $ => [
     [$.type_path],
+    [$.return_statement],
+    [$.builtin_const, $.primitive_type]
   ],
   externals: $ => [
     $.newline,
@@ -100,14 +102,15 @@ module.exports = grammar({
         optional(seq($.type_path, '/')),
         field('name', $.identifier),
         optional(seq('=', $.expression))
-      )
+      ),
+      '...'
     ),
 
     block: $ => choice(
       $.indented_block,
       $.braced_block,
     ),
-    
+
     indented_block: $ => choice(
       seq($.indent, $.indented_block_1),
       alias($.newline, $.indented_block_1),
@@ -127,7 +130,7 @@ module.exports = grammar({
 
     var_definition: $ => seq(
       $.var_keyword,
-      optional(seq('/', 'static')),
+      optional(seq('/', $.var_modifier)),
       optional($.type_path),
       '/',
       field('name', $.identifier),
@@ -153,8 +156,19 @@ module.exports = grammar({
       $.expression,
       $.return_statement,
       $.if_statement,
+      $.switch_statement,
       $.comment
     ),
+
+    switch_statement: $ => prec.right(seq(
+      'switch',
+      '(',
+      field('condition', $.expression),
+      ')',
+      $.indent,
+      repeat1($.if_statement),
+      $.dedent
+    )),
 
     if_statement: $ => prec.right(seq(
       'if',
@@ -169,7 +183,7 @@ module.exports = grammar({
 
     return_statement: $ => seq(
       'return',
-      $.expression
+      optional($.expression)
     ),
 
     break_statement: _ => 'break',
@@ -249,8 +263,11 @@ module.exports = grammar({
 
     expression: $ => choice(
       $.identifier,
+      $.builtin_const,
       $.number_literal,
       $.string_literal,
+      $.builtin_macro,
+      $.null_const,
       $.type_path,
       $.call_expression,
       $.parent_proc_expression,
@@ -274,7 +291,29 @@ module.exports = grammar({
     ),
 
     var_keyword: _ => 'var',
-    proc_keyword: _ => 'proc',
+    proc_keyword: _ => choice('proc', 'verb', 'operator'),
+
+    var_modifier: _ => choice(
+      'static',
+      'global',
+      'tmp',
+      'const',
+      'final'
+    ),
+
+    builtin_const: _ => choice(
+      'usr',
+      'world',
+      'src',
+      'args',
+      'vars',
+    ),
+
+    builtin_macro: _ => choice(
+      'DM_BUILD', 'DM_VERSION', '__FILE__', '__LINE__', '__MAIN__', 'DEBUG', 'FILE_DIR', 'TRUE', 'FALSE'
+    ),
+
+    null_const: _ => 'null',
 
     block_comment: _ => token(seq(
       '/*',
