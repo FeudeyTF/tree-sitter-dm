@@ -1,3 +1,5 @@
+#define TEST 123
+
 /obj/item/test/proc/Test()
 
 /obj/item/test/proc/New()

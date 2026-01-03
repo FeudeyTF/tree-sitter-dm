@@ -38,3 +38,7 @@
 (builtin_const) @keyword
 (null_const) @keyword
 (builtin_macro) @keyword
+
+"#define" @keyword.directive
+(preproc_def
+ name: (identifier) @keyword) 

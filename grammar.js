@@ -58,13 +58,34 @@ module.exports = grammar({
       $.proc_definition,
       $.proc_override,
       $.type_definition,
-      $.preproc_call_expression
+      $.preproc_call_expression,
+      $.preproc_def
+    ),
+
+    preproc_def: $ => prec.right(seq(
+      preprocessor('define'),
+      field('name', $.identifier),
+      optional($.preproc_arg)
+    )),
+
+    preproc_undef: $ => seq(
+      preprocessor('undef'),
+      $.identifier
     ),
 
     preproc_call_expression: $ => seq(
       field('directive', $.identifier),
-      $.argument_list
+      $.argument_list,
+      $.newline
     ),
+
+    preproc_arg: $ => prec.right(choice(
+      repeat1(seq(
+        $.expression,
+        $.line_continuation),
+      ),
+      $.expression
+    )),
 
     type_definition: $ => prec.dynamic(-1, seq(
       $.type_path,
@@ -406,4 +427,8 @@ function commaSep(rule) {
 
 function commaSep1(rule) {
   return seq(rule, repeat(seq(',', rule)));
+}
+
+function preprocessor(command) {
+  return alias(new RegExp('#[ \t]*' + command), '#' + command);
 }
