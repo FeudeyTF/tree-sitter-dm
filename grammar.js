@@ -187,8 +187,17 @@ module.exports = grammar({
       field('condition', $.expression),
       ')',
       $.block,
-      optional(seq(field('alternative', $.else_clause))),
+      repeat(field('alternative', $.elseif_clause)),
+      optional(field('alternative', $.else_clause)),
     )),
+
+    elseif_clause: $ => seq(
+      'else', 'if',
+      '(',
+      field('condition', $.expression), 
+      ')',
+      $.block
+    ),
 
     else_clause: $ => seq('else', $.block),
 
