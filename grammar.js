@@ -66,12 +66,12 @@ module.exports = grammar({
       $.argument_list
     ),
 
-    type_definition: $ => seq(
+    type_definition: $ => prec.dynamic(-1, seq(
       $.type_path,
       '/',
       field('name', $.identifier),
       optional($.type_body)
-    ),
+    )),
 
     type_body: $ => prec.right(seq(
       $.indent,
@@ -93,13 +93,13 @@ module.exports = grammar({
       optional($.block)
     ),
 
-    proc_definition: $ => seq(
+    proc_definition: $ => prec.dynamic(1, seq(
       optional($.type_path),
       seq('/', $.proc_keyword, '/'),
       field('name', $.identifier),
       $.proc_parameters,
       optional($.block)
-    ),
+    )),
 
     proc_parameters: $ => seq(
       '(',
