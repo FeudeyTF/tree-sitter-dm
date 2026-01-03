@@ -274,7 +274,7 @@ module.exports = grammar({
     },
 
     assignment_expression: $ => prec.right(PREC.ASSIGNMENT, seq(
-      field('left', $.identifier),
+      field('left', choice($.identifier, $.field_expression)),
       field('operator', choice(
         '=',
         '*=',
@@ -304,7 +304,22 @@ module.exports = grammar({
       $.parent_proc_expression,
       $.binary_expression,
       $.assignment_expression,
-      $.unary_expression
+      $.unary_expression,
+      $.field_expression,
+      $.field_proc_expression
+    ),
+
+    field_expression: $ => seq(
+      field('argument', $.expression),
+      field('operator', '.'),
+      field('field', $.identifier),
+    ),
+
+    field_proc_expression: $ => seq(
+      field('argument', $.expression),
+      field('operator', '.'),
+      field('proc', $.identifier),
+      $.proc_parameters
     ),
 
     new_expression: $ => prec.right(seq(
@@ -316,6 +331,7 @@ module.exports = grammar({
     parent_proc_expression: _ => '..()',
 
     identifier: _ => /[a-zA-Z_][a-zA-Z0-9_]*|\./,
+
     number_literal: $ => choice(
       /\d+/,
       /\d+\.\d*/,

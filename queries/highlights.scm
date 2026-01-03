@@ -17,6 +17,9 @@
 (call_expression
   name: (identifier) @function.call)
 
+(field_proc_expression
+  proc: (identifier) @function.call)
+
 (preproc_call_expression
   directive: (identifier) @keyword)
 

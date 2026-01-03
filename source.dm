@@ -9,6 +9,7 @@
 
 /obj/item/test/verb/new()
 	. = ..()
+	test.sas.test = 123
 	for(var/test in test)
 		return
 	if(1)
