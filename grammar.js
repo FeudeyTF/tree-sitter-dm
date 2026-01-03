@@ -58,6 +58,12 @@ module.exports = grammar({
       $.proc_definition,
       $.proc_override,
       $.type_definition,
+      $.preproc_call_expression
+    ),
+
+    preproc_call_expression: $ => seq(
+      field('directive', $.identifier),
+      $.argument_list
     ),
 
     type_definition: $ => seq(
@@ -301,11 +307,11 @@ module.exports = grammar({
       $.unary_expression
     ),
 
-    new_expression: $ => seq(
+    new_expression: $ => prec.right(seq(
       'new',
       optional($.type_path),
-      field("arguments", $.argument_list),
-    ),
+      optional(field("arguments", $.argument_list)),
+    )),
 
     parent_proc_expression: _ => '..()',
 

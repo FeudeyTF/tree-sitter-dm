@@ -23,3 +23,8 @@
 			var/test = 2
 /datum/item/test/test()
 	var/test = 123
+
+	
+/mutable_appearance/emissive_blocker
+
+/mutable_appearance/emissive_blocker/New()

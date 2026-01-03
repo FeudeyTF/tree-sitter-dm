@@ -16,6 +16,10 @@
 
 (call_expression
   name: (identifier) @function.call)
+
+(preproc_call_expression
+  directive: (identifier) @keyword)
+
 (comment) @comment
 (number_literal) @number
 (string_literal) @string

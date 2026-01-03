@@ -553,7 +553,7 @@
     "fields": {
       "arguments": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "argument_list",
@@ -577,6 +577,32 @@
     "type": "number_literal",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "preproc_call_expression",
+    "named": true,
+    "fields": {
+      "directive": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "argument_list",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "primitive_type",
@@ -733,6 +759,10 @@
       "multiple": true,
       "required": false,
       "types": [
+        {
+          "type": "preproc_call_expression",
+          "named": true
+        },
         {
           "type": "proc_definition",
           "named": true
