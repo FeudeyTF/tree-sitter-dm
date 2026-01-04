@@ -282,19 +282,6 @@ module.exports = grammar({
 
     continue_statement: _ => 'continue',
 
-    primitive_type: _ => choice(
-      'obj',
-      'mob',
-      'world',
-      'client',
-      'turf',
-      'area',
-      'datum',
-      'atom',
-      'list',
-      'mutable_appearance'
-    ),
-
     // Expressions
 
     expression: $ => choice(
@@ -506,6 +493,32 @@ module.exports = grammar({
       'proc',
       'verb',
       'operator'
+    ),
+
+    primitive_type: _ => choice(
+      'obj',
+      'mob',
+      'world',
+      'client',
+      'turf',
+      'area',
+      'datum',
+      'atom',
+      'list',
+      'mutable_appearance',
+      'exception',
+      'generator',
+      'icon',
+      'image',
+      'alist',
+      'matrix',
+      'particles',
+      'pixloc',
+      'regex',
+      'savefile',
+      'sound',
+      'vector',
+      'database'
     ),
 
     var_modifier: _ => choice(
