@@ -856,6 +856,10 @@
           "named": true
         },
         {
+          "type": "block",
+          "named": true
+        },
+        {
           "type": "newline",
           "named": true
         }
@@ -1652,10 +1656,6 @@
   },
   {
     "type": "&=",
-    "named": false
-  },
-  {
-    "type": "'",
     "named": false
   },
   {

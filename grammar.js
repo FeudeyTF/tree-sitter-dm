@@ -33,6 +33,7 @@ const PREC = {
 
 module.exports = grammar({
   name: "dm",
+
   extras: $ => [
     $.comment,
     /[\s\f\uFEFF\u2060\u200B]|\r?\n/,
@@ -68,6 +69,8 @@ module.exports = grammar({
       $.preproc_warn,
       $.preproc_error
     ),
+
+    // Preproccessor directives
 
     preproc_def: $ => prec.right(seq(
       preprocessor('define'),
@@ -127,7 +130,9 @@ module.exports = grammar({
     preproc_call_expression: $ => seq(
       field('directive', $.identifier),
       $.argument_list,
-      $.newline
+      $.newline,
+      // This shouldn't be here, but it fixes some issues with calling the preproc directive
+      optional($.block)
     ),
 
     preproc_arg: $ => seq(prec.right(choice(
@@ -153,6 +158,8 @@ module.exports = grammar({
     ),
 
     preproc_message: $ => /.*/,
+
+    // Main instructions
 
     type_definition: $ => prec.dynamic(-1, seq(
       $.type_path,
@@ -205,26 +212,15 @@ module.exports = grammar({
       '...'
     ),
 
-    block: $ => choice(
-      $.indented_block,
-      $.braced_block,
-    ),
+    // Statements
 
-    indented_block: $ => choice(
-      seq($.indent, $.indented_block_1),
-      alias($.newline, $.indented_block_1),
-    ),
-
-    indented_block_1: $ => seq(
-      repeat($._statement),
-      $.dedent,
-    ),
-
-
-    braced_block: $ => seq(
-      '{',
-      repeat($._statement),
-      '}',
+    _statement: $ => choice(
+      $.var_definition,
+      $.expression,
+      $.return_statement,
+      $.if_statement,
+      $.for_statement,
+      $.switch_statement,
     ),
 
     var_definition: $ => seq(
@@ -234,40 +230,6 @@ module.exports = grammar({
       $.type_name_delimiter,
       field('name', $.identifier),
       optional(seq('=', $.expression)),
-    ),
-
-    call_expression: $ => prec(1, seq(
-      choice(
-        field('name', $.identifier),
-        $.type_path
-      ),
-      field("arguments", $.argument_list)
-    )),
-
-    argument_list: $ => seq(
-      '(',
-      commaSep(
-        choice(
-          $.expression,
-          $.key_value_pair
-        )
-      ),
-      ')'
-    ),
-
-    key_value_pair: $ => seq(
-      choice($.identifier, $.string_literal, $.type_path),
-      "=",
-      $.expression
-    ),
-
-    _statement: $ => choice(
-      $.var_definition,
-      $.expression,
-      $.return_statement,
-      $.if_statement,
-      $.for_statement,
-      $.switch_statement,
     ),
 
     for_statement: $ => seq(
@@ -319,12 +281,6 @@ module.exports = grammar({
 
     continue_statement: _ => 'continue',
 
-    type_path: $ => seq(
-      optional(choice('/', $.type_name_delimiter)),
-      $.primitive_type,
-      repeat(seq($.type_name_delimiter, $.identifier)),
-    ),
-
     primitive_type: _ => choice(
       'obj',
       'mob',
@@ -336,6 +292,48 @@ module.exports = grammar({
       'atom',
       'list',
       'mutable_appearance'
+    ),
+
+    // Expressions
+
+    expression: $ => choice(
+      $.identifier,
+      $.builtin_const,
+      $.number_literal,
+      $.string_literal,
+      $.builtin_macro,
+      $.null_const,
+      $.new_expression,
+      $.type_path,
+      $.call_expression,
+      $.parent_proc_expression,
+      $.binary_expression,
+      $.assignment_expression,
+      $.unary_expression,
+      $.field_expression,
+      $.field_proc_expression,
+      $.array_expression,
+      $.conditional_expression,
+      $.parenthesized_expression
+    ),
+
+    call_expression: $ => prec(1, seq(
+      choice(
+        field('name', $.identifier),
+        $.type_path
+      ),
+      field("arguments", $.argument_list)
+    )),
+
+    argument_list: $ => seq(
+      '(',
+      commaSep(
+        choice(
+          $.expression,
+          $.key_value_pair
+        )
+      ),
+      ')'
     ),
 
     unary_expression: $ => prec.left(PREC.UNARY, seq(field('operator', choice('!', '~', '-', '+')), field('argument', $.expression),)),
@@ -392,27 +390,6 @@ module.exports = grammar({
       field('right', $.expression),
     )),
 
-    expression: $ => choice(
-      $.identifier,
-      $.builtin_const,
-      $.number_literal,
-      $.string_literal,
-      $.builtin_macro,
-      $.null_const,
-      $.new_expression,
-      $.type_path,
-      $.call_expression,
-      $.parent_proc_expression,
-      $.binary_expression,
-      $.assignment_expression,
-      $.unary_expression,
-      $.field_expression,
-      $.field_proc_expression,
-      $.array_expression,
-      $.conditional_expression,
-      $.parenthesized_expression
-    ),
-
     conditional_expression: $ => prec.right(PREC.CONDITIONAL, seq(
       field('condition', $.expression),
       '?',
@@ -457,6 +434,45 @@ module.exports = grammar({
 
     parent_proc_expression: _ => '..()',
 
+    // Simple structures for expressions and statements
+
+    // Type path of object. Example: /obj/item/weapon.
+    type_path: $ => seq(
+      optional(choice('/', $.type_name_delimiter)),
+      $.primitive_type,
+      repeat(seq($.type_name_delimiter, $.identifier)),
+    ),
+
+    // Default block of proc or type definition.
+    block: $ => choice(
+      $.indented_block,
+      $.braced_block,
+    ),
+
+    indented_block: $ => choice(
+      seq($.indent, $.indented_block_1),
+      alias($.newline, $.indented_block_1),
+    ),
+
+    indented_block_1: $ => seq(
+      repeat($._statement),
+      $.dedent,
+    ),
+
+    braced_block: $ => seq(
+      '{',
+      repeat($._statement),
+      '}',
+    ),
+
+    key_value_pair: $ => seq(
+      choice($.identifier, $.string_literal, $.type_path),
+      "=",
+      $.expression
+    ),
+
+    // Literals and identifiers
+
     identifier: _ => /[a-zA-Z_][a-zA-Z0-9_]*|\./,
 
     number_literal: $ => choice(
@@ -465,13 +481,27 @@ module.exports = grammar({
       /0x[0-9a-fA-F]+/,
     ),
 
-    string_literal: $ => choice(
-      seq('"', repeat(choice(/[^"\\]/, /\\./)), '"'),
-      seq("'", repeat(choice(/[^'\\]/, /\\./)), "'"),
+    file_literal: $ => seq(
+      "'",
+      repeat(choice(/[^'\\]/, /\\./)),
+      "'"
     ),
+
+    string_literal: $ => seq(
+      '"',
+      repeat(choice(/[^"\\]/, /\\./)),
+      '"'
+    ),
+
     as_type: _ => 'anything',
+
     var_keyword: _ => 'var',
-    proc_keyword: _ => choice('proc', 'verb', 'operator'),
+
+    proc_keyword: _ => choice(
+      'proc',
+      'verb',
+      'operator'
+    ),
 
     var_modifier: _ => choice(
       'static',
@@ -495,25 +525,26 @@ module.exports = grammar({
 
     null_const: _ => 'null',
 
+    // Delimiter for names of types or procs
+    type_name_delimiter: _ => token.immediate('/'),
+
+    // Comment blocks
+    comment: $ => choice(
+      $.line_comment,
+      $.block_comment
+    ),
+
     block_comment: _ => token(seq(
       '/*',
       /[^*]*\*+([^/*][^*]*\*+)*/,
       '/',
     )),
 
-    type_name_delimiter: _ => token.immediate('/'),
-
     line_comment: _ => token(
       seq('//', /(\\+(.|\r?\n)|[^\\\n])*/),
     ),
 
-    comment: $ => choice(
-      $.line_comment,
-      $.block_comment
-    ),
-
     line_continuation: _ => token(seq('\\', choice(seq(optional('\r'), '\n'), '\0'))),
-
   }
 })
 
