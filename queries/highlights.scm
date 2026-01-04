@@ -5,6 +5,7 @@
 "else" @keyword
 "for" @keyword
 "if" @keyword
+"in" @keyword
 "return" @keyword
 "static" @keyword
 "switch" @keyword
@@ -20,6 +21,8 @@
 "#include" @keyword
 "#warn" @keyword
 "#error" @keyword
+
+"new" @keyword
 
 (preproc_message) @string
 

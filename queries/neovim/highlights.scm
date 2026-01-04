@@ -3,6 +3,7 @@
 [
   "while"
   "for"
+  "in"
   (continue_statement)
   (break_statement)
 ] @keyword.repeat
@@ -12,6 +13,7 @@
   "if"
   "else"
   "switch"
+  "to"
 ] @keyword.conditional
 
 [
@@ -21,9 +23,15 @@
   "#else"
   "#elif"
   "#endif"
+  "#error"
+  "#warn"
 ] @keyword.directive
 
-"#define" @keyword.directive.define
+[
+  "#define"
+  "undef"
+] @keyword.directive.define
+
 "#include" @keyword.import
 
 "..." @punctuation.special
@@ -70,6 +78,7 @@
   "<<="
   "--"
   "++"
+  "new"
 ] @operator
 
 [
