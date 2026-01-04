@@ -12,7 +12,7 @@
           "named": true
         },
         {
-          "type": "identifier",
+          "type": "key_value_pair",
           "named": true
         }
       ]
@@ -684,6 +684,33 @@
     }
   },
   {
+    "type": "key_value_pair",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "string_literal",
+          "named": true
+        },
+        {
+          "type": "type_path",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "new_expression",
     "named": true,
     "fields": {
@@ -728,6 +755,10 @@
         },
         {
           "type": "line_continuation",
+          "named": true
+        },
+        {
+          "type": "newline",
           "named": true
         }
       ]

@@ -25,9 +25,10 @@
 		else
 			var/test = 2
 	if(1 to 2)
-		return 2
+		return 12
+
 /datum/item/test/test()
-	var/test = 123
+	var/test = ""
 /proc/test()
 	var/sas = 123
 	

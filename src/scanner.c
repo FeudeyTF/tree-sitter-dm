@@ -61,7 +61,7 @@ bool tree_sitter_dm_external_scanner_scan(void *payload, TSLexer *lexer,
     } else if (lexer->lookahead == '\t') {
       indent_length += 8;
       skip(lexer);
-    } else if (lexer->lookahead == '#' &&
+    } else if (lexer->lookahead == '~' &&
                (valid_symbols[INDENT] || valid_symbols[DEDENT] ||
                 valid_symbols[NEWLINE])) {
       if (!found_end_of_line) {

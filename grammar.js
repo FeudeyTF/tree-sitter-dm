@@ -79,13 +79,15 @@ module.exports = grammar({
       $.newline
     ),
 
-    preproc_arg: $ => prec.right(choice(
+    preproc_arg: $ => seq(prec.right(choice(
       repeat1(seq(
         $.expression,
         $.line_continuation),
       ),
       $.expression
     )),
+      $.newline
+    ),
 
     type_definition: $ => prec.dynamic(-1, seq(
       $.type_path,
@@ -179,8 +181,19 @@ module.exports = grammar({
 
     argument_list: $ => seq(
       '(',
-      commaSep(seq(optional(seq($.identifier, "=")), $.expression)),
+      commaSep(
+        choice(
+          $.expression,
+          $.key_value_pair
+        )
+      ),
       ')'
+    ),
+
+    key_value_pair: $ => seq(
+      choice($.identifier, $.string_literal, $.type_path),
+      "=",
+      $.expression
     ),
 
     _statement: $ => choice(
