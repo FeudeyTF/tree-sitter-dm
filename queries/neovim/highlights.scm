@@ -29,7 +29,7 @@
 
 [
   "#define"
-  "undef"
+  "#undef"
 ] @keyword.directive.define
 
 "#include" @keyword.import

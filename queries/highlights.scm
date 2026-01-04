@@ -12,6 +12,7 @@
 "while" @keyword
 
 "#define" @keyword
+"#undef" @keyword
 "#elif" @keyword
 "#else" @keyword
 "#endif" @keyword
