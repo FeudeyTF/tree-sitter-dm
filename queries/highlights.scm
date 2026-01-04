@@ -29,17 +29,21 @@
 (file_literal) @string
 (var_modifier) @keyword
 "return" @keyword.return
+(continue_statement) @keyword.repeat
+(break_statement) @keyword.repeat
 "if" @keyword.conditional
 "to" @keyword.conditional
 "else" @keyword.conditional
 "switch" @keyword.conditional
 "for" @keyword.repeat
 "in" @keyword.repeat
+"while" @keyword.repeat
 "new" @keyword
 (builtin_const) @keyword
 (null_const) @keyword
 (builtin_macro) @keyword
 
+"#include" @keyword.directive
 "#define" @keyword.directive
 "#undef" @keyword.directive
 "#if" @keyword.directive

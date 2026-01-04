@@ -14,6 +14,8 @@
 	test.sas.test["sas"] = 123
 	for(var/test in test)
 		return
+	while(TRUE)
+		break
 	if(1)
 		test()
 		if(2)

@@ -63,6 +63,7 @@ module.exports = grammar({
       $.type_definition,
       $.preproc_call_expression,
       $.preproc_def,
+      $.preproc_include,
       $.preproc_undef,
       $.preproc_defproc,
       $.preproc_if,
@@ -72,6 +73,11 @@ module.exports = grammar({
     ),
 
     // Preproccessor directives
+
+    preproc_include: $ => seq(
+      preprocessor('include'),
+      field('file', choice($.string_literal, $.file_literal))
+    ),
 
     preproc_def: $ => prec.right(seq(
       preprocessor('define'),
@@ -219,9 +225,12 @@ module.exports = grammar({
       $.var_definition,
       $.expression,
       $.return_statement,
+      $.break_statement,
+      $.continue_statement,
       $.if_statement,
       $.for_statement,
       $.switch_statement,
+      $.while_statement
     ),
 
     var_definition: $ => seq(
@@ -241,6 +250,14 @@ module.exports = grammar({
       $.expression,
       ')',
       $.block,
+    ),
+
+    while_statement: $ => seq(
+      'while',
+      '(',
+      field('condition', $.expression),
+      ')',
+      $.block
     ),
 
     switch_statement: $ => prec.right(seq(

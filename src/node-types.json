@@ -272,6 +272,14 @@
       "required": false,
       "types": [
         {
+          "type": "break_statement",
+          "named": true
+        },
+        {
+          "type": "continue_statement",
+          "named": true
+        },
+        {
           "type": "expression",
           "named": true
         },
@@ -293,6 +301,10 @@
         },
         {
           "type": "var_definition",
+          "named": true
+        },
+        {
+          "type": "while_statement",
           "named": true
         }
       ]
@@ -703,6 +715,14 @@
       "required": false,
       "types": [
         {
+          "type": "break_statement",
+          "named": true
+        },
+        {
+          "type": "continue_statement",
+          "named": true
+        },
+        {
           "type": "dedent",
           "named": true
         },
@@ -728,6 +748,10 @@
         },
         {
           "type": "var_definition",
+          "named": true
+        },
+        {
+          "type": "while_statement",
           "named": true
         }
       ]
@@ -1075,6 +1099,10 @@
           "named": true
         },
         {
+          "type": "preproc_include",
+          "named": true
+        },
+        {
           "type": "preproc_undef",
           "named": true
         },
@@ -1135,6 +1163,26 @@
           "named": true
         }
       ]
+    }
+  },
+  {
+    "type": "preproc_include",
+    "named": true,
+    "fields": {
+      "file": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "file_literal",
+            "named": true
+          },
+          {
+            "type": "string_literal",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1361,6 +1409,10 @@
         },
         {
           "type": "preproc_ifdef",
+          "named": true
+        },
+        {
+          "type": "preproc_include",
           "named": true
         },
         {
@@ -1607,6 +1659,32 @@
     "fields": {}
   },
   {
+    "type": "while_statement",
+    "named": true,
+    "fields": {
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "block",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "!",
     "named": false
   },
@@ -1648,6 +1726,10 @@
   },
   {
     "type": "#ifndef",
+    "named": false
+  },
+  {
+    "type": "#include",
     "named": false
   },
   {
@@ -1867,12 +1949,20 @@
     "named": true
   },
   {
+    "type": "break_statement",
+    "named": true
+  },
+  {
     "type": "client",
     "named": false
   },
   {
     "type": "const",
     "named": false
+  },
+  {
+    "type": "continue_statement",
+    "named": true
   },
   {
     "type": "database",
@@ -2061,6 +2151,10 @@
   },
   {
     "type": "verb",
+    "named": false
+  },
+  {
+    "type": "while",
     "named": false
   },
   {
