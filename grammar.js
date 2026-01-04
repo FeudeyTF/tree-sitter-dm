@@ -169,8 +169,13 @@ module.exports = grammar({
 
     type_definition: $ => prec.dynamic(-1, seq(
       $.type_path,
-      $.type_name_delimiter,
-      field('name', $.identifier),
+      choice(
+        seq(
+          $.type_name_delimiter,
+          field('name', $.identifier),
+        ),
+        $.newline
+      ),
       optional($.type_body)
     )),
 

@@ -1522,7 +1522,7 @@
     "fields": {
       "name": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "identifier",
@@ -1535,6 +1535,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "newline",
+          "named": true
+        },
         {
           "type": "type_body",
           "named": true

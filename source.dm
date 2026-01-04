@@ -21,7 +21,7 @@ GLOBAL_VAR(/obj/test)
 		if(2)
 			for(var/test2 as anything in test)
 				return
-			var/test = usr
+			var/test = new
 			sleep()
 			return 1
 		else
@@ -34,6 +34,6 @@ GLOBAL_VAR(/obj/test)
 /proc/test()
 	var/sas = 123
 	
-/mutable_appearance/emissive_blocker
+mutable_appearance
 
 /mutable_appearance/emissive_blocker/proc/New()

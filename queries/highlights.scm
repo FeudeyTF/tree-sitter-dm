@@ -62,7 +62,7 @@
 "." @delimiter
 
 (string_literal) @string
-(null) @constant
+(null) @keyword
 (number_literal) @number
 (builtin_const) @keyword
 (builtin_macro) @keyword
