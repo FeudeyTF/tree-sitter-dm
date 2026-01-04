@@ -2320,6 +2320,10 @@
         {
           "type": "SYMBOL",
           "name": "conditional_expression"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "parenthesized_expression"
         }
       ]
     },
@@ -2371,6 +2375,23 @@
           }
         ]
       }
+    },
+    "parenthesized_expression": {
+      "type": "SEQ",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "("
+        },
+        {
+          "type": "SYMBOL",
+          "name": "expression"
+        },
+        {
+          "type": "STRING",
+          "value": ")"
+        }
+      ]
     },
     "array_expression": {
       "type": "SEQ",
@@ -2853,6 +2874,10 @@
     [
       "builtin_const",
       "primitive_type"
+    ],
+    [
+      "field_expression",
+      "field_proc_expression"
     ]
   ],
   "precedences": [],

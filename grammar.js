@@ -42,7 +42,8 @@ module.exports = grammar({
   conflicts: $ => [
     [$.type_path],
     [$.return_statement],
-    [$.builtin_const, $.primitive_type]
+    [$.builtin_const, $.primitive_type],
+    [$.field_expression, $.field_proc_expression]
   ],
 
   externals: $ => [
@@ -408,7 +409,8 @@ module.exports = grammar({
       $.field_expression,
       $.field_proc_expression,
       $.array_expression,
-      $.conditional_expression
+      $.conditional_expression,
+      $.parenthesized_expression
     ),
 
     conditional_expression: $ => prec.right(PREC.CONDITIONAL, seq(
@@ -418,6 +420,12 @@ module.exports = grammar({
       ':',
       field('alternative', $.expression),
     )),
+
+    parenthesized_expression: $ => seq(
+      '(',
+      $.expression,
+      ')'
+    ),
 
     array_expression: $ => seq(
       choice($.identifier, $.field_expression),
