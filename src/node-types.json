@@ -1839,6 +1839,10 @@
     "named": false
   },
   {
+    "type": "alist",
+    "named": false
+  },
+  {
     "type": "area",
     "named": false
   },
@@ -1871,6 +1875,10 @@
     "named": false
   },
   {
+    "type": "database",
+    "named": false
+  },
+  {
     "type": "datum",
     "named": false
   },
@@ -1883,6 +1891,10 @@
     "named": false
   },
   {
+    "type": "exception",
+    "named": false
+  },
+  {
     "type": "final",
     "named": false
   },
@@ -1891,7 +1903,15 @@
     "named": false
   },
   {
+    "type": "generator",
+    "named": false
+  },
+  {
     "type": "global",
+    "named": false
+  },
+  {
+    "type": "icon",
     "named": false
   },
   {
@@ -1900,6 +1920,10 @@
   },
   {
     "type": "if",
+    "named": false
+  },
+  {
+    "type": "image",
     "named": false
   },
   {
@@ -1921,6 +1945,10 @@
   },
   {
     "type": "list",
+    "named": false
+  },
+  {
+    "type": "matrix",
     "named": false
   },
   {
@@ -1956,6 +1984,14 @@
     "named": true
   },
   {
+    "type": "particles",
+    "named": false
+  },
+  {
+    "type": "pixloc",
+    "named": false
+  },
+  {
     "type": "preproc_message",
     "named": true
   },
@@ -1964,7 +2000,19 @@
     "named": false
   },
   {
+    "type": "regex",
+    "named": false
+  },
+  {
     "type": "return",
+    "named": false
+  },
+  {
+    "type": "savefile",
+    "named": false
+  },
+  {
+    "type": "sound",
     "named": false
   },
   {
@@ -2005,6 +2053,10 @@
   },
   {
     "type": "vars",
+    "named": false
+  },
+  {
+    "type": "vector",
     "named": false
   },
   {

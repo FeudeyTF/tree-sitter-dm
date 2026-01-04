@@ -1173,51 +1173,6 @@
       "type": "STRING",
       "value": "continue"
     },
-    "primitive_type": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "obj"
-        },
-        {
-          "type": "STRING",
-          "value": "mob"
-        },
-        {
-          "type": "STRING",
-          "value": "world"
-        },
-        {
-          "type": "STRING",
-          "value": "client"
-        },
-        {
-          "type": "STRING",
-          "value": "turf"
-        },
-        {
-          "type": "STRING",
-          "value": "area"
-        },
-        {
-          "type": "STRING",
-          "value": "datum"
-        },
-        {
-          "type": "STRING",
-          "value": "atom"
-        },
-        {
-          "type": "STRING",
-          "value": "list"
-        },
-        {
-          "type": "STRING",
-          "value": "mutable_appearance"
-        }
-      ]
-    },
     "expression": {
       "type": "CHOICE",
       "members": [
@@ -2664,6 +2619,103 @@
         {
           "type": "STRING",
           "value": "operator"
+        }
+      ]
+    },
+    "primitive_type": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "STRING",
+          "value": "obj"
+        },
+        {
+          "type": "STRING",
+          "value": "mob"
+        },
+        {
+          "type": "STRING",
+          "value": "world"
+        },
+        {
+          "type": "STRING",
+          "value": "client"
+        },
+        {
+          "type": "STRING",
+          "value": "turf"
+        },
+        {
+          "type": "STRING",
+          "value": "area"
+        },
+        {
+          "type": "STRING",
+          "value": "datum"
+        },
+        {
+          "type": "STRING",
+          "value": "atom"
+        },
+        {
+          "type": "STRING",
+          "value": "list"
+        },
+        {
+          "type": "STRING",
+          "value": "mutable_appearance"
+        },
+        {
+          "type": "STRING",
+          "value": "exception"
+        },
+        {
+          "type": "STRING",
+          "value": "generator"
+        },
+        {
+          "type": "STRING",
+          "value": "icon"
+        },
+        {
+          "type": "STRING",
+          "value": "image"
+        },
+        {
+          "type": "STRING",
+          "value": "alist"
+        },
+        {
+          "type": "STRING",
+          "value": "matrix"
+        },
+        {
+          "type": "STRING",
+          "value": "particles"
+        },
+        {
+          "type": "STRING",
+          "value": "pixloc"
+        },
+        {
+          "type": "STRING",
+          "value": "regex"
+        },
+        {
+          "type": "STRING",
+          "value": "savefile"
+        },
+        {
+          "type": "STRING",
+          "value": "sound"
+        },
+        {
+          "type": "STRING",
+          "value": "vector"
+        },
+        {
+          "type": "STRING",
+          "value": "database"
         }
       ]
     },
