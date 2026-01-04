@@ -1438,6 +1438,10 @@
           "named": true
         },
         {
+          "type": "preproc_call_expression",
+          "named": true
+        },
+        {
           "type": "var_definition",
           "named": true
         }

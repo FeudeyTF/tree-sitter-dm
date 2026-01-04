@@ -602,6 +602,10 @@
         {
           "type": "SYMBOL",
           "name": "identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "preproc_call_expression"
         }
       ]
     },
@@ -2885,6 +2889,9 @@
     [
       "field_expression",
       "field_proc_expression"
+    ],
+    [
+      "preproc_call_expression"
     ]
   ],
   "precedences": [],

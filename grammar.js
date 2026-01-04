@@ -44,7 +44,8 @@ module.exports = grammar({
     [$.type_path],
     [$.return_statement],
     [$.builtin_const, $.primitive_type],
-    [$.field_expression, $.field_proc_expression]
+    [$.field_expression, $.field_proc_expression],
+    [$.preproc_call_expression]
   ],
 
   externals: $ => [
@@ -177,6 +178,7 @@ module.exports = grammar({
       seq($.identifier, '=', $.expression),
       $.var_definition,
       $.identifier,
+      $.preproc_call_expression
     ),
 
     proc_override: $ => seq(
