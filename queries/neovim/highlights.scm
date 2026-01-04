@@ -115,7 +115,11 @@
 "?." @delimiter
 "." @delimiter
 
-(string_literal) @string
+[
+  (string_literal) 
+  (file_literal)
+] @string
+
 (null) @keyword
 (number_literal) @number
 (builtin_const) @keyword

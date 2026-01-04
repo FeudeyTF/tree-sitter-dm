@@ -62,6 +62,7 @@
 "." @delimiter
 
 (string_literal) @string
+(file_literal) @string
 (null) @keyword
 (number_literal) @number
 (builtin_const) @keyword
