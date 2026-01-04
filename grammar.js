@@ -59,7 +59,8 @@ module.exports = grammar({
       $.proc_override,
       $.type_definition,
       $.preproc_call_expression,
-      $.preproc_def
+      $.preproc_def,
+      $.preproc_defproc
     ),
 
     preproc_def: $ => prec.right(seq(
@@ -71,6 +72,15 @@ module.exports = grammar({
     preproc_undef: $ => seq(
       preprocessor('undef'),
       $.identifier
+    ),
+
+    preproc_defproc: $ => seq(
+      preprocessor('define'),
+      field('name', $.identifier),
+      token.immediate('('),
+      commaSep($.identifier),
+      ')',
+      $.preproc_arg
     ),
 
     preproc_call_expression: $ => seq(
