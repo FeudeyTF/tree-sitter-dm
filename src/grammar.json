@@ -1223,19 +1223,11 @@
       "members": [
         {
           "type": "SYMBOL",
-          "name": "identifier"
+          "name": "literal"
         },
         {
           "type": "SYMBOL",
           "name": "builtin_const"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "number_literal"
-        },
-        {
-          "type": "SYMBOL",
-          "name": "string_literal"
         },
         {
           "type": "SYMBOL",
@@ -2537,21 +2529,8 @@
       "type": "SEQ",
       "members": [
         {
-          "type": "CHOICE",
-          "members": [
-            {
-              "type": "SYMBOL",
-              "name": "identifier"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "string_literal"
-            },
-            {
-              "type": "SYMBOL",
-              "name": "type_path"
-            }
-          ]
+          "type": "SYMBOL",
+          "name": "literal"
         },
         {
           "type": "STRING",
@@ -2560,6 +2539,27 @@
         {
           "type": "SYMBOL",
           "name": "expression"
+        }
+      ]
+    },
+    "literal": {
+      "type": "CHOICE",
+      "members": [
+        {
+          "type": "SYMBOL",
+          "name": "identifier"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "file_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "string_literal"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "number_literal"
         }
       ]
     },

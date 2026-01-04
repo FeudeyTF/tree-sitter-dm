@@ -26,6 +26,7 @@
 (comment) @comment
 (number_literal) @number
 (string_literal) @string
+(file_literal) @string
 (var_modifier) @keyword
 "return" @keyword.return
 "if" @keyword.conditional

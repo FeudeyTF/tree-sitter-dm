@@ -486,7 +486,7 @@
           "named": true
         },
         {
-          "type": "identifier",
+          "type": "literal",
           "named": true
         },
         {
@@ -498,19 +498,11 @@
           "named": true
         },
         {
-          "type": "number_literal",
-          "named": true
-        },
-        {
           "type": "parent_proc_expression",
           "named": true
         },
         {
           "type": "parenthesized_expression",
-          "named": true
-        },
-        {
-          "type": "string_literal",
           "named": true
         },
         {
@@ -610,6 +602,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "file_literal",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "for_statement",
@@ -749,15 +746,34 @@
           "named": true
         },
         {
+          "type": "literal",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "literal",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "file_literal",
+          "named": true
+        },
+        {
           "type": "identifier",
           "named": true
         },
         {
-          "type": "string_literal",
+          "type": "number_literal",
           "named": true
         },
         {
-          "type": "type_path",
+          "type": "string_literal",
           "named": true
         }
       ]
@@ -1660,6 +1676,10 @@
   },
   {
     "type": "&=",
+    "named": false
+  },
+  {
+    "type": "'",
     "named": false
   },
   {

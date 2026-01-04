@@ -298,10 +298,8 @@ module.exports = grammar({
     // Expressions
 
     expression: $ => choice(
-      $.identifier,
+      $.literal,
       $.builtin_const,
-      $.number_literal,
-      $.string_literal,
       $.builtin_macro,
       $.null_const,
       $.new_expression,
@@ -467,12 +465,18 @@ module.exports = grammar({
     ),
 
     key_value_pair: $ => seq(
-      choice($.identifier, $.string_literal, $.type_path),
+      $.literal,
       "=",
       $.expression
     ),
 
     // Literals and identifiers
+    literal: $ => choice(
+      $.identifier,
+      $.file_literal,
+      $.string_literal,
+      $.number_literal
+    ),
 
     identifier: _ => /[a-zA-Z_][a-zA-Z0-9_]*|\./,
 
