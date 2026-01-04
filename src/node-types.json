@@ -57,6 +57,10 @@
         "required": true,
         "types": [
           {
+            "type": "array_expression",
+            "named": true
+          },
+          {
             "type": "field_expression",
             "named": true
           },
@@ -896,6 +900,205 @@
     }
   },
   {
+    "type": "preproc_elif",
+    "named": true,
+    "fields": {
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "preproc_if_block",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "preproc_else",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "preproc_if_block",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "preproc_error",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "newline",
+          "named": true
+        },
+        {
+          "type": "preproc_message",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "preproc_if",
+    "named": true,
+    "fields": {
+      "alternative": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "preproc_elif",
+            "named": true
+          },
+          {
+            "type": "preproc_else",
+            "named": true
+          }
+        ]
+      },
+      "confition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "preproc_if_block",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "preproc_if_block",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "preproc_call_expression",
+          "named": true
+        },
+        {
+          "type": "preproc_def",
+          "named": true
+        },
+        {
+          "type": "preproc_defproc",
+          "named": true
+        },
+        {
+          "type": "preproc_error",
+          "named": true
+        },
+        {
+          "type": "preproc_if",
+          "named": true
+        },
+        {
+          "type": "preproc_ifdef",
+          "named": true
+        },
+        {
+          "type": "preproc_undef",
+          "named": true
+        },
+        {
+          "type": "preproc_warn",
+          "named": true
+        },
+        {
+          "type": "proc_definition",
+          "named": true
+        },
+        {
+          "type": "proc_override",
+          "named": true
+        },
+        {
+          "type": "type_definition",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "preproc_ifdef",
+    "named": true,
+    "fields": {
+      "alternative": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "preproc_elif",
+            "named": true
+          },
+          {
+            "type": "preproc_else",
+            "named": true
+          }
+        ]
+      },
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "preproc_if_block",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "preproc_undef",
     "named": true,
     "fields": {
@@ -909,6 +1112,25 @@
           }
         ]
       }
+    }
+  },
+  {
+    "type": "preproc_warn",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "newline",
+          "named": true
+        },
+        {
+          "type": "preproc_message",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -1091,7 +1313,23 @@
           "named": true
         },
         {
+          "type": "preproc_error",
+          "named": true
+        },
+        {
+          "type": "preproc_if",
+          "named": true
+        },
+        {
+          "type": "preproc_ifdef",
+          "named": true
+        },
+        {
           "type": "preproc_undef",
+          "named": true
+        },
+        {
+          "type": "preproc_warn",
           "named": true
         },
         {
@@ -1342,7 +1580,39 @@
     "named": false
   },
   {
+    "type": "#elif",
+    "named": false
+  },
+  {
+    "type": "#else",
+    "named": false
+  },
+  {
+    "type": "#endif",
+    "named": false
+  },
+  {
+    "type": "#error",
+    "named": false
+  },
+  {
+    "type": "#if",
+    "named": false
+  },
+  {
+    "type": "#ifdef",
+    "named": false
+  },
+  {
+    "type": "#ifndef",
+    "named": false
+  },
+  {
     "type": "#undef",
+    "named": false
+  },
+  {
+    "type": "#warn",
     "named": false
   },
   {
@@ -1640,6 +1910,10 @@
   },
   {
     "type": "parent_proc_expression",
+    "named": true
+  },
+  {
+    "type": "preproc_message",
     "named": true
   },
   {

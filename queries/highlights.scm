@@ -40,5 +40,25 @@
 (builtin_macro) @keyword
 
 "#define" @keyword.directive
+"#undef" @keyword.directive
+"#if" @keyword.directive
+"#else" @keyword.directive
+"#endif" @keyword.directive
+"#ifdef" @keyword.directive
+"#ifndef" @keyword.directive
+"#warn" @keyword.directive
+"#error" @keyword.directive
+
+(preproc_message) @string
+
+(preproc_ifdef
+  name: (identifier) @keyword)
+
 (preproc_def
  name: (identifier) @keyword) 
+
+(preproc_undef
+ name: (identifier) @keyword) 
+
+(preproc_defproc
+  name: (identifier) @keyword)

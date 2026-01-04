@@ -61,7 +61,11 @@ module.exports = grammar({
       $.preproc_call_expression,
       $.preproc_def,
       $.preproc_undef,
-      $.preproc_defproc
+      $.preproc_defproc,
+      $.preproc_if,
+      $.preproc_ifdef,
+      $.preproc_warn,
+      $.preproc_error
     ),
 
     preproc_def: $ => prec.right(seq(
@@ -84,6 +88,41 @@ module.exports = grammar({
       $.preproc_arg
     ),
 
+    preproc_if: $ => seq(
+      preprocessor('if'),
+      field('confition', $.expression),
+      $.preproc_if_block,
+      repeat(field('alternative', $.preproc_elif)),
+      field('alternative', optional($.preproc_else)),
+      preprocessor('endif')
+
+    ),
+
+    preproc_ifdef: $ => seq(
+      choice(preprocessor('ifdef'), preprocessor('ifndef')),
+      field('name', $.identifier),
+      $.preproc_if_block,
+      repeat(field('alternative', $.preproc_elif)),
+      field('alternative', optional($.preproc_else)),
+      preprocessor('endif')
+    ),
+
+    preproc_elif: $ => seq(
+      preprocessor('elif'),
+      field('condition', $.expression),
+      $.preproc_if_block
+    ),
+
+    preproc_else: $ => seq(
+      preprocessor('else'),
+      $.preproc_if_block
+    ),
+
+    preproc_if_block: $ => choice(
+      repeat1($._instruction),
+      $.block
+    ),
+
     preproc_call_expression: $ => seq(
       field('directive', $.identifier),
       $.argument_list,
@@ -99,6 +138,20 @@ module.exports = grammar({
     )),
       $.newline
     ),
+
+    preproc_warn: $ => seq(
+      preprocessor('warn'),
+      $.preproc_message,
+      $.newline
+    ),
+
+    preproc_error: $ => seq(
+      preprocessor('error'),
+      $.preproc_message,
+      $.newline
+    ),
+
+    preproc_message: $ => /.*/,
 
     type_definition: $ => prec.dynamic(-1, seq(
       $.type_path,
@@ -321,7 +374,7 @@ module.exports = grammar({
     },
 
     assignment_expression: $ => prec.right(PREC.ASSIGNMENT, seq(
-      field('left', choice($.identifier, $.field_expression)),
+      field('left', choice($.identifier, $.field_expression, $.array_expression)),
       field('operator', choice(
         '=',
         '*=',
