@@ -60,6 +60,7 @@ module.exports = grammar({
       $.type_definition,
       $.preproc_call_expression,
       $.preproc_def,
+      $.preproc_undef,
       $.preproc_defproc
     ),
 
@@ -71,7 +72,7 @@ module.exports = grammar({
 
     preproc_undef: $ => seq(
       preprocessor('undef'),
-      $.identifier
+      field('name', $.identifier)
     ),
 
     preproc_defproc: $ => seq(
@@ -353,8 +354,17 @@ module.exports = grammar({
       $.unary_expression,
       $.field_expression,
       $.field_proc_expression,
-      $.array_expression
+      $.array_expression,
+      $.conditional_expression
     ),
+
+    conditional_expression: $ => prec.right(PREC.CONDITIONAL, seq(
+      field('condition', $.expression),
+      '?',
+      optional(field('consequence', $.expression)),
+      ':',
+      field('alternative', $.expression),
+    )),
 
     array_expression: $ => seq(
       choice($.identifier, $.field_expression),
@@ -365,13 +375,15 @@ module.exports = grammar({
 
     field_expression: $ => seq(
       field('argument', $.expression),
-      field('operator', '.'),
+      field('operator', $.field_operator),
       field('field', $.identifier),
     ),
 
+    field_operator: $ => choice('.', '?.'),
+
     field_proc_expression: $ => seq(
       field('argument', $.expression),
-      field('operator', '.'),
+      field('operator', $.field_operator),
       field('proc', $.identifier),
       $.argument_list
     ),
