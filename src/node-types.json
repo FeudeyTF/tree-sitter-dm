@@ -506,7 +506,7 @@
           "named": true
         },
         {
-          "type": "null_const",
+          "type": "null",
           "named": true
         },
         {
@@ -1596,15 +1596,11 @@
             "named": false
           },
           {
-            "type": "+",
+            "type": "++",
             "named": false
           },
           {
-            "type": "-",
-            "named": false
-          },
-          {
-            "type": "~",
+            "type": "--",
             "named": false
           }
         ]
@@ -1785,6 +1781,10 @@
     "named": false
   },
   {
+    "type": "++",
+    "named": false
+  },
+  {
     "type": "+=",
     "named": false
   },
@@ -1794,6 +1794,10 @@
   },
   {
     "type": "-",
+    "named": false
+  },
+  {
+    "type": "--",
     "named": false
   },
   {
@@ -2058,7 +2062,7 @@
     "named": true
   },
   {
-    "type": "null_const",
+    "type": "null",
     "named": true
   },
   {
@@ -2179,10 +2183,6 @@
   },
   {
     "type": "}",
-    "named": false
-  },
-  {
-    "type": "~",
     "named": false
   }
 ]

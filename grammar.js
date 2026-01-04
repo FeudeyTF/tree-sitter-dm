@@ -305,7 +305,7 @@ module.exports = grammar({
       $.literal,
       $.builtin_const,
       $.builtin_macro,
-      $.null_const,
+      $.null,
       $.new_expression,
       $.type_path,
       $.call_expression,
@@ -339,7 +339,7 @@ module.exports = grammar({
       ')'
     ),
 
-    unary_expression: $ => prec.left(PREC.UNARY, seq(field('operator', choice('!', '~', '-', '+')), field('argument', $.expression),)),
+    unary_expression: $ => prec.left(PREC.UNARY, seq(field('operator', choice('!', '--', '++')), field('argument', $.expression),)),
 
     binary_expression: $ => {
       const table = [
@@ -558,7 +558,7 @@ module.exports = grammar({
       'DM_BUILD', 'DM_VERSION', '__FILE__', '__LINE__', '__MAIN__', 'DEBUG', 'FILE_DIR', 'TRUE', 'FALSE'
     ),
 
-    null_const: _ => 'null',
+    null: _ => 'null',
 
     // Delimiter for names of types or procs
     type_name_delimiter: _ => token.immediate('/'),

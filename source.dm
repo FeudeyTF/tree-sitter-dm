@@ -1,5 +1,5 @@
 #define TEST 123
-
+GLOBAL_VAR(/obj/test)
 /obj/item/test/proc/Test()
 
 /obj/item/test/proc/New()

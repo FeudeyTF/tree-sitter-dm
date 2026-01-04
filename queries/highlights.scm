@@ -1,3 +1,68 @@
+(comment) @comment
+
+(break_statement) @keyword
+(continue_statement) @keyword
+"else" @keyword
+"for" @keyword
+"if" @keyword
+"return" @keyword
+"static" @keyword
+"switch" @keyword
+"while" @keyword
+
+"#define" @keyword
+"#elif" @keyword
+"#else" @keyword
+"#endif" @keyword
+"#if" @keyword
+"#ifdef" @keyword
+"#ifndef" @keyword
+"#include" @keyword
+"#warn" @keyword
+"#error" @keyword
+
+(preproc_message) @string
+
+(preproc_ifdef
+  name: (identifier) @keyword)
+
+(preproc_def
+ name: (identifier) @keyword) 
+
+(preproc_undef
+ name: (identifier) @keyword) 
+
+(preproc_defproc
+  name: (identifier) @keyword)
+
+(preproc_call_expression
+  directive: (identifier) @function.special)
+
+"--" @operator
+"-" @operator
+"-=" @operator
+"=" @operator
+"!=" @operator
+"*" @operator
+"&" @operator
+"&&" @operator
+"+" @operator
+"++" @operator
+"+=" @operator
+"<" @operator
+"==" @operator
+">" @operator
+"||" @operator
+
+"?." @delimiter
+"." @delimiter
+
+(string_literal) @string
+(null) @constant
+(number_literal) @number
+(builtin_const) @keyword
+(builtin_macro) @keyword
+
 (primitive_type) @type
 (var_keyword) @keyword
 (proc_keyword) @keyword
@@ -15,56 +80,11 @@
   name: (identifier) @variable)
 
 (call_expression
-  name: (identifier) @function.call)
+  name: (identifier) @function)
 
 (field_proc_expression
-  proc: (identifier) @function.call)
+  proc: (identifier) @function)
 
-(preproc_call_expression
-  directive: (identifier) @keyword)
+(field_expression
+ field: (identifier) @property) 
 
-(comment) @comment
-(number_literal) @number
-(string_literal) @string
-(file_literal) @string
-(var_modifier) @keyword
-"return" @keyword.return
-(continue_statement) @keyword.repeat
-(break_statement) @keyword.repeat
-"if" @keyword.conditional
-"to" @keyword.conditional
-"else" @keyword.conditional
-"switch" @keyword.conditional
-"for" @keyword.repeat
-"in" @keyword.repeat
-"while" @keyword.repeat
-"new" @keyword
-(builtin_const) @keyword
-(null_const) @keyword
-(builtin_macro) @keyword
-
-"#include" @keyword.directive
-"#define" @keyword.directive
-"#undef" @keyword.directive
-"#if" @keyword.directive
-"#elif" @keyword.directive
-"#else" @keyword.directive
-"#endif" @keyword.directive
-"#ifdef" @keyword.directive
-"#ifndef" @keyword.directive
-"#warn" @keyword.directive
-"#error" @keyword.directive
-
-(preproc_message) @string
-
-(preproc_ifdef
-  name: (identifier) @keyword)
-
-(preproc_def
- name: (identifier) @keyword) 
-
-(preproc_undef
- name: (identifier) @keyword) 
-
-(preproc_defproc
-  name: (identifier) @keyword)

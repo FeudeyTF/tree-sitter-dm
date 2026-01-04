@@ -1266,7 +1266,7 @@
         },
         {
           "type": "SYMBOL",
-          "name": "null_const"
+          "name": "null"
         },
         {
           "type": "SYMBOL",
@@ -1434,15 +1434,11 @@
                 },
                 {
                   "type": "STRING",
-                  "value": "~"
+                  "value": "--"
                 },
                 {
                   "type": "STRING",
-                  "value": "-"
-                },
-                {
-                  "type": "STRING",
-                  "value": "+"
+                  "value": "++"
                 }
               ]
             }
@@ -2886,7 +2882,7 @@
         }
       ]
     },
-    "null_const": {
+    "null": {
       "type": "STRING",
       "value": "null"
     },
