@@ -42,6 +42,7 @@
 "#define" @keyword.directive
 "#undef" @keyword.directive
 "#if" @keyword.directive
+"#elif" @keyword.directive
 "#else" @keyword.directive
 "#endif" @keyword.directive
 "#ifdef" @keyword.directive

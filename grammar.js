@@ -99,7 +99,6 @@ module.exports = grammar({
       repeat(field('alternative', $.preproc_elif)),
       field('alternative', optional($.preproc_else)),
       preprocessor('endif')
-
     ),
 
     preproc_ifdef: $ => seq(
