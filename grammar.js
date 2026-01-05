@@ -435,7 +435,7 @@ module.exports = grammar({
 
     array_expression: $ => prec(1, seq(
       choice($.identifier, $.field_expression),
-      optional('?'),
+      optional(token.immediate('?')),
       '[',
       field('size', $.expression),
       ']'
