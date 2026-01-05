@@ -12,7 +12,7 @@
           "named": true
         },
         {
-          "type": "key_value_pair",
+          "type": "pair",
           "named": true
         }
       ]
@@ -75,7 +75,15 @@
         "required": true,
         "types": [
           {
+            "type": "%%=",
+            "named": false
+          },
+          {
             "type": "%=",
+            "named": false
+          },
+          {
+            "type": "&&=",
             "named": false
           },
           {
@@ -99,6 +107,10 @@
             "named": false
           },
           {
+            "type": ":=",
+            "named": false
+          },
+          {
             "type": "<<=",
             "named": false
           },
@@ -116,6 +128,10 @@
           },
           {
             "type": "|=",
+            "named": false
+          },
+          {
+            "type": "||=",
             "named": false
           }
         ]
@@ -159,6 +175,10 @@
             "named": false
           },
           {
+            "type": "%%",
+            "named": false
+          },
+          {
             "type": "&",
             "named": false
           },
@@ -195,6 +215,14 @@
             "named": false
           },
           {
+            "type": "<=>",
+            "named": false
+          },
+          {
+            "type": "<>",
+            "named": false
+          },
+          {
             "type": "==",
             "named": false
           },
@@ -228,6 +256,14 @@
           },
           {
             "type": "||",
+            "named": false
+          },
+          {
+            "type": "~!",
+            "named": false
+          },
+          {
+            "type": "~=",
             "named": false
           }
         ]
@@ -321,6 +357,11 @@
     "fields": {}
   },
   {
+    "type": "builtin_proc",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "call_expression",
     "named": true,
     "fields": {
@@ -336,24 +377,18 @@
       },
       "name": {
         "multiple": false,
-        "required": false,
+        "required": true,
         "types": [
+          {
+            "type": "builtin_proc",
+            "named": true
+          },
           {
             "type": "identifier",
             "named": true
           }
         ]
       }
-    },
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "type_path",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -518,7 +553,7 @@
           "named": true
         },
         {
-          "type": "type_path",
+          "type": "type_path_expression",
           "named": true
         },
         {
@@ -758,22 +793,19 @@
     }
   },
   {
-    "type": "key_value_pair",
+    "type": "interpolation",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "expression",
-          "named": true
-        },
-        {
-          "type": "literal",
-          "named": true
-        }
-      ]
+    "fields": {
+      "expression": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -833,6 +865,36 @@
     "type": "number_literal",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "pair",
+    "named": true,
+    "fields": {
+      "key": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "literal",
+            "named": true
+          },
+          {
+            "type": "type_path_expression",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    }
   },
   {
     "type": "parenthesized_expression",
@@ -1257,7 +1319,7 @@
           "named": true
         },
         {
-          "type": "type_name_delimiter",
+          "type": "type_operator",
           "named": true
         },
         {
@@ -1300,7 +1362,7 @@
           "named": true
         },
         {
-          "type": "type_name_delimiter",
+          "type": "type_operator",
           "named": true
         },
         {
@@ -1334,7 +1396,7 @@
           "named": true
         },
         {
-          "type": "type_name_delimiter",
+          "type": "type_operator",
           "named": true
         },
         {
@@ -1439,9 +1501,50 @@
     }
   },
   {
+    "type": "string_content",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "escape_interpolation",
+          "named": true
+        },
+        {
+          "type": "escape_sequence",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "string_literal",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "interpolation",
+          "named": true
+        },
+        {
+          "type": "string_content",
+          "named": true
+        },
+        {
+          "type": "string_end",
+          "named": true
+        },
+        {
+          "type": "string_start",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "switch_statement",
@@ -1544,7 +1647,7 @@
           "named": true
         },
         {
-          "type": "type_name_delimiter",
+          "type": "type_operator",
           "named": true
         },
         {
@@ -1553,6 +1656,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "type_operator",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "type_path",
@@ -1571,7 +1679,30 @@
           "named": true
         },
         {
-          "type": "type_name_delimiter",
+          "type": "type_operator",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "type_path_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "primitive_type",
+          "named": true
+        },
+        {
+          "type": "type_operator",
           "named": true
         }
       ]
@@ -1600,11 +1731,23 @@
             "named": false
           },
           {
+            "type": "&",
+            "named": false
+          },
+          {
+            "type": "*",
+            "named": false
+          },
+          {
             "type": "++",
             "named": false
           },
           {
             "type": "--",
+            "named": false
+          },
+          {
+            "type": "~",
             "named": false
           }
         ]
@@ -1635,7 +1778,7 @@
           "named": true
         },
         {
-          "type": "type_name_delimiter",
+          "type": "type_operator",
           "named": true
         },
         {
@@ -1693,10 +1836,6 @@
     "named": false
   },
   {
-    "type": "\"",
-    "named": false
-  },
-  {
     "type": "#define",
     "named": false
   },
@@ -1745,6 +1884,14 @@
     "named": false
   },
   {
+    "type": "%%",
+    "named": false
+  },
+  {
+    "type": "%%=",
+    "named": false
+  },
+  {
     "type": "%=",
     "named": false
   },
@@ -1754,6 +1901,10 @@
   },
   {
     "type": "&&",
+    "named": false
+  },
+  {
+    "type": "&&=",
     "named": false
   },
   {
@@ -1829,6 +1980,14 @@
     "named": false
   },
   {
+    "type": "::",
+    "named": false
+  },
+  {
+    "type": ":=",
+    "named": false
+  },
+  {
     "type": "<",
     "named": false
   },
@@ -1842,6 +2001,14 @@
   },
   {
     "type": "<=",
+    "named": false
+  },
+  {
+    "type": "<=>",
+    "named": false
+  },
+  {
+    "type": "<>",
     "named": false
   },
   {
@@ -1877,6 +2044,14 @@
     "named": false
   },
   {
+    "type": "ASSERT",
+    "named": false
+  },
+  {
+    "type": "CRASH",
+    "named": false
+  },
+  {
     "type": "DEBUG",
     "named": false
   },
@@ -1889,6 +2064,10 @@
     "named": false
   },
   {
+    "type": "EXCEPTION",
+    "named": false
+  },
+  {
     "type": "FALSE",
     "named": false
   },
@@ -1897,11 +2076,23 @@
     "named": false
   },
   {
+    "type": "REGEX_QUOTE",
+    "named": false
+  },
+  {
+    "type": "REGEX_QUOTE_REPLACEMENT",
+    "named": false
+  },
+  {
     "type": "TRUE",
     "named": false
   },
   {
     "type": "[",
+    "named": false
+  },
+  {
+    "type": "\\",
     "named": false
   },
   {
@@ -1937,6 +2128,10 @@
     "named": false
   },
   {
+    "type": "arglist",
+    "named": false
+  },
+  {
     "type": "args",
     "named": false
   },
@@ -1959,6 +2154,10 @@
   {
     "type": "break_statement",
     "named": true
+  },
+  {
+    "type": "call",
+    "named": false
   },
   {
     "type": "client",
@@ -1987,6 +2186,14 @@
   {
     "type": "else",
     "named": false
+  },
+  {
+    "type": "escape_interpolation",
+    "named": true
+  },
+  {
+    "type": "escape_sequence",
+    "named": true
   },
   {
     "type": "exception",
@@ -2033,6 +2240,10 @@
     "named": true
   },
   {
+    "type": "input",
+    "named": false
+  },
+  {
     "type": "line_comment",
     "named": true
   },
@@ -2043,6 +2254,10 @@
   },
   {
     "type": "list",
+    "named": false
+  },
+  {
+    "type": "locate",
     "named": false
   },
   {
@@ -2086,6 +2301,10 @@
     "named": false
   },
   {
+    "type": "pick",
+    "named": false
+  },
+  {
     "type": "pixloc",
     "named": false
   },
@@ -2122,6 +2341,14 @@
     "named": false
   },
   {
+    "type": "string_end",
+    "named": true
+  },
+  {
+    "type": "string_start",
+    "named": true
+  },
+  {
     "type": "switch",
     "named": false
   },
@@ -2136,10 +2363,6 @@
   {
     "type": "turf",
     "named": false
-  },
-  {
-    "type": "type_name_delimiter",
-    "named": true
   },
   {
     "type": "usr",
@@ -2186,7 +2409,23 @@
     "named": false
   },
   {
+    "type": "||=",
+    "named": false
+  },
+  {
     "type": "}",
+    "named": false
+  },
+  {
+    "type": "~",
+    "named": false
+  },
+  {
+    "type": "~!",
+    "named": false
+  },
+  {
+    "type": "~=",
     "named": false
   }
 ]
