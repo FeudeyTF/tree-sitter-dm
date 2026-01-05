@@ -192,9 +192,12 @@ module.exports = grammar({
     )),
 
     _type_statement: $ => choice(
-      seq($.identifier, '=', $.expression),
+      seq(
+        alias($.identifier, $.type_member),
+        optional(seq('=', $.expression)
+        )
+      ),
       $.var_definition,
-      $.identifier,
       $.preproc_call_expression
     ),
 
@@ -470,7 +473,7 @@ module.exports = grammar({
       seq(
         optional('/'),
         $.primitive_type,
-        repeat1(seq($.type_operator, $.identifier)),
+        repeat1(seq($.type_operator, alias($.identifier, $.type_identifier))),
       ),
       seq(
         '/',
@@ -484,7 +487,7 @@ module.exports = grammar({
     type_path: $ => seq(
       optional(choice('/', $.type_operator)),
       $.primitive_type,
-      repeat(seq($.type_operator, $.identifier)),
+      repeat(seq($.type_operator, alias($.identifier, $.type_identifier))),
     ),
 
     // Default block of proc or type definition.

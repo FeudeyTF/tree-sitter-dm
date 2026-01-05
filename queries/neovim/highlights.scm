@@ -1,4 +1,7 @@
 (comment) @comment @spell
+(identifier) @variable
+(pair
+  (literal (identifier) @member))
 
 [
   "while"

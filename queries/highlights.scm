@@ -1,4 +1,7 @@
 (comment) @comment
+(identifier) @variable
+(pair
+  (literal (identifier) @member))
 
 (break_statement) @keyword
 (continue_statement) @keyword
