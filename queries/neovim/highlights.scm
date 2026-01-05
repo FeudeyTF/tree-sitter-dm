@@ -160,6 +160,8 @@
 (call_expression
   name: (identifier) @function.call)
 
+(builtin_proc) @function.call
+
 (field_proc_expression
   proc: (identifier) @function.call)
 
