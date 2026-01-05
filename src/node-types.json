@@ -855,6 +855,10 @@
       "required": false,
       "types": [
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
           "type": "type_path",
           "named": true
         }
@@ -1597,10 +1601,6 @@
           "named": true
         },
         {
-          "type": "identifier",
-          "named": true
-        },
-        {
           "type": "indent",
           "named": true
         },
@@ -1610,6 +1610,10 @@
         },
         {
           "type": "preproc_call_expression",
+          "named": true
+        },
+        {
+          "type": "type_member",
           "named": true
         },
         {
@@ -1671,11 +1675,11 @@
       "required": true,
       "types": [
         {
-          "type": "identifier",
+          "type": "primitive_type",
           "named": true
         },
         {
-          "type": "primitive_type",
+          "type": "type_identifier",
           "named": true
         },
         {
@@ -1694,11 +1698,11 @@
       "required": true,
       "types": [
         {
-          "type": "identifier",
+          "type": "primitive_type",
           "named": true
         },
         {
-          "type": "primitive_type",
+          "type": "type_identifier",
           "named": true
         },
         {
@@ -2363,6 +2367,14 @@
   {
     "type": "turf",
     "named": false
+  },
+  {
+    "type": "type_identifier",
+    "named": true
+  },
+  {
+    "type": "type_member",
+    "named": true
   },
   {
     "type": "usr",
