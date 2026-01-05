@@ -42,6 +42,10 @@
 (preproc_call_expression
   directive: (identifier) @function.special)
 
+(interpolation
+  "[" @punctuation.special
+  "]" @punctuation.special) @embedded
+
 [
   "="
   "-"
@@ -89,7 +93,12 @@
 "." @delimiter
 ".[]" @delimiter
 
-(string_literal) @string
+[
+ (string_start)
+ (string_content)
+ (string_end)
+] @string
+
 (file_literal) @string
 (null) @keyword
 (number_literal) @number

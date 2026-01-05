@@ -51,7 +51,12 @@ module.exports = grammar({
   externals: $ => [
     $.newline,
     $.indent,
-    $.dedent
+    $.dedent,
+
+    $.string_start,
+    $._string_content,
+    $.escape_interpolation,
+    $.string_end,
   ],
 
   rules: {
@@ -518,10 +523,43 @@ module.exports = grammar({
     ),
 
     string_literal: $ => seq(
-      '"',
-      repeat(choice(/[^"\\]/, /\\./)),
-      '"'
+      $.string_start,
+      repeat(choice($.interpolation, $.string_content)),
+      $.string_end,
     ),
+
+    string_content: $ => prec.right(repeat1(
+      choice(
+        $.escape_interpolation,
+        $.escape_sequence,
+        $._not_escape_sequence,
+        $._string_content,
+      ))),
+
+    interpolation: $ => seq(
+      '[',
+      field('expression', $._f_expression),
+      ']',
+    ),
+
+    _f_expression: $ => choice(
+      $.expression,
+    ),
+
+    escape_sequence: _ => token.immediate(prec(1, seq(
+      '\\',
+      choice(
+        /u[a-fA-F\d]{4}/,
+        /U[a-fA-F\d]{8}/,
+        /x[a-fA-F\d]{2}/,
+        /\d{1,3}/,
+        /\r?\n/,
+        /['"abfrntv\\]/,
+        /N\{[^}]+\}/,
+      ),
+    ))),
+
+    _not_escape_sequence: _ => token.immediate('\\'),
 
     as_type: _ => 'anything',
 

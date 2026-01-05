@@ -127,9 +127,14 @@
  ".[]"
 ] @delimiter
 
+(interpolation
+  "[" @punctuation.special
+  "]" @punctuation.special) @embedded
 [
-  (string_literal) 
-  (file_literal)
+ (string_start)
+ (string_content)
+ (string_end)
+ (file_literal)
 ] @string
 
 (null) @keyword
