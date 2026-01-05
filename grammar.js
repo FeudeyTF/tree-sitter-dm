@@ -338,7 +338,7 @@ module.exports = grammar({
       commaSep(
         choice(
           $.expression,
-          $.key_value_pair
+          $.pair
         )
       ),
       ')'
@@ -488,10 +488,10 @@ module.exports = grammar({
       '}',
     ),
 
-    key_value_pair: $ => seq(
-      $.literal,
+    pair: $ => seq(
+      field("key", $.literal),
       "=",
-      $.expression
+      field("value", $.expression)
     ),
 
     // Literals and identifiers
