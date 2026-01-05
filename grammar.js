@@ -45,7 +45,8 @@ module.exports = grammar({
     [$.return_statement],
     [$.field_expression, $.field_proc_expression],
     [$.preproc_call_expression],
-    [$.type_path, $.type_path_expression]
+    [$.type_path, $.type_path_expression],
+    [$.builtin_const, $.primitive_type]
   ],
 
   externals: $ => [
@@ -317,7 +318,6 @@ module.exports = grammar({
       $.builtin_macro,
       $.null,
       $.new_expression,
-      $.type_path_expression,
       $.call_expression,
       $.parent_proc_expression,
       $.binary_expression,
@@ -327,7 +327,8 @@ module.exports = grammar({
       $.field_proc_expression,
       $.array_expression,
       $.conditional_expression,
-      $.parenthesized_expression
+      $.parenthesized_expression,
+      $.type_path_expression
     ),
 
     call_expression: $ => prec(1, seq(
@@ -472,7 +473,6 @@ module.exports = grammar({
       )
     )),
 
-
     // Simple structures for expressions and statements
 
     // Type path of object. Example: /obj/item/weapon.
@@ -505,7 +505,7 @@ module.exports = grammar({
     ),
 
     pair: $ => seq(
-      field("key", $.literal),
+      field("key", choice($.literal, $.type_path_expression)),
       "=",
       field("value", $.expression)
     ),
