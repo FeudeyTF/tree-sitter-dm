@@ -171,7 +171,7 @@ module.exports = grammar({
       $.type_path,
       choice(
         seq(
-          $.type_name_delimiter,
+          $.type_operator,
           field('name', $.identifier),
         ),
         $.newline
@@ -194,7 +194,7 @@ module.exports = grammar({
 
     proc_override: $ => seq(
       $.type_path,
-      $.type_name_delimiter,
+      $.type_operator,
       field('name', $.identifier),
       $.proc_parameters,
       optional($.block)
@@ -202,7 +202,7 @@ module.exports = grammar({
 
     proc_definition: $ => prec.dynamic(1, seq(
       optional($.type_path),
-      seq(choice($.type_name_delimiter, '/'), $.proc_keyword, $.type_name_delimiter),
+      seq(choice($.type_operator, '/'), $.proc_keyword, $.type_operator),
       field('name', $.identifier),
       $.proc_parameters,
       optional($.block)
@@ -217,7 +217,7 @@ module.exports = grammar({
     proc_parameter: $ => choice(
       $.var_definition,
       seq(
-        optional(seq($.type_path, $.type_name_delimiter)),
+        optional(seq($.type_path, $.type_operator)),
         field('name', $.identifier),
         optional(seq('=', $.expression))
       ),
@@ -240,9 +240,9 @@ module.exports = grammar({
 
     var_definition: $ => seq(
       $.var_keyword,
-      optional(seq($.type_name_delimiter, $.var_modifier)),
+      optional(seq($.type_operator, $.var_modifier)),
       optional($.type_path),
-      $.type_name_delimiter,
+      $.type_operator,
       field('name', $.identifier),
       optional(seq('=', $.expression)),
     ),
@@ -461,9 +461,9 @@ module.exports = grammar({
 
     // Type path of object. Example: /obj/item/weapon.
     type_path: $ => seq(
-      optional(choice('/', $.type_name_delimiter)),
+      optional(choice('/', $.type_operator)),
       $.primitive_type,
-      repeat(seq($.type_name_delimiter, $.identifier)),
+      repeat(seq($.type_operator, $.identifier)),
     ),
 
     // Default block of proc or type definition.
@@ -581,7 +581,11 @@ module.exports = grammar({
     null: _ => 'null',
 
     // Delimiter for names of types or procs
-    type_name_delimiter: _ => token.immediate('/'),
+    type_operator: _ => choice(
+      token.immediate('/'),
+      token.immediate('::'),
+      token.immediate(':')
+    ),
 
     // Comment blocks
     comment: $ => choice(

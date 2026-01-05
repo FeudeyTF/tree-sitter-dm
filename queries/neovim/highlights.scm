@@ -98,6 +98,8 @@
     ":"
   ] @keyword.conditional.ternary)
 
+(type_operator) @punctuation.delimiter
+
 "return" @keyword.return
 "static" @keyword
 "new" @keyword
