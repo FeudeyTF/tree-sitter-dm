@@ -8,7 +8,6 @@
   (break_statement)
 ] @keyword.repeat
 
-
 [
   "if"
   "else"
@@ -52,6 +51,7 @@
   "/"
   "+"
   "%"
+  "%%"
   "|"
   "&"
   "^"
@@ -62,6 +62,10 @@
   ">="
   ">"
   "=="
+  "<>"
+  "~="
+  "~!"
+  ":="
   "!="
   "!"
   "&&"
@@ -78,6 +82,9 @@
   "<<="
   "--"
   "++"
+  "&&="
+  "||="
+  "%%="
 ] @operator
 
 [
@@ -112,8 +119,11 @@
 (preproc_call_expression
   directive: (identifier) @keyword)
 
-"?." @delimiter
-"." @delimiter
+[
+ "?."
+ "."
+ ".[]"
+] @delimiter
 
 [
   (string_literal) 

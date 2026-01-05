@@ -344,7 +344,12 @@ module.exports = grammar({
       ')'
     ),
 
-    unary_expression: $ => prec.left(PREC.UNARY, seq(field('operator', choice('!', '--', '++')), field('argument', $.expression),)),
+    unary_expression: $ => prec.left(PREC.UNARY,
+      seq(
+        field('operator', choice('!', '--', '++', '~', '*', '&')),
+        field('argument', $.expression)
+      )
+    ),
 
     binary_expression: $ => {
       const table = [
@@ -352,18 +357,23 @@ module.exports = grammar({
         ['-', PREC.ADD],
         ['*', PREC.MULTIPLY],
         ['/', PREC.MULTIPLY],
-        ['%', PREC.MULTIPLY],
         ['||', PREC.LOGICAL_OR],
+        ['%', PREC.MULTIPLY],
+        ['%%', PREC.MULTIPLY],
         ['&&', PREC.LOGICAL_AND],
         ['|', PREC.INCLUSIVE_OR],
         ['^', PREC.EXCLUSIVE_OR],
         ['&', PREC.BITWISE_AND],
-        ['==', PREC.EQUAL],
         ['!=', PREC.EQUAL],
+        ['==', PREC.EQUAL],
+        ['<>', PREC.EQUAL],
         ['>', PREC.RELATIONAL],
+        ['~=', PREC.EQUAL],
+        ['~!', PREC.EQUAL],
         ['>=', PREC.RELATIONAL],
-        ['<=', PREC.RELATIONAL],
         ['<', PREC.RELATIONAL],
+        ['<=', PREC.RELATIONAL],
+        ['<=>', PREC.RELATIONAL],
         ['<<', PREC.SHIFT],
         ['>>', PREC.SHIFT],
         ['in', PREC.CONDITIONAL],
@@ -384,16 +394,21 @@ module.exports = grammar({
       field('left', choice($.identifier, $.field_expression, $.array_expression)),
       field('operator', choice(
         '=',
+        '+=',
+        '-=',
+        '-=',
         '*=',
         '/=',
         '%=',
-        '+=',
-        '-=',
+        '%%=',
+        '&=',
+        '|=',
+        '^=',
         '<<=',
         '>>=',
-        '&=',
-        '^=',
-        '|=',
+        ':=',
+        '&&=',
+        '||='
       )),
       field('right', $.expression),
     )),
@@ -425,7 +440,7 @@ module.exports = grammar({
       field('field', $.identifier),
     ),
 
-    field_operator: $ => choice('.', '?.'),
+    field_operator: $ => choice('.', '?.', '.[]'),
 
     field_proc_expression: $ => seq(
       field('argument', $.expression),

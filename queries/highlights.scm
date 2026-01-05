@@ -42,24 +42,52 @@
 (preproc_call_expression
   directive: (identifier) @function.special)
 
-"--" @operator
-"-" @operator
-"-=" @operator
-"=" @operator
-"!=" @operator
-"*" @operator
-"&" @operator
-"&&" @operator
-"+" @operator
-"++" @operator
-"+=" @operator
-"<" @operator
-"==" @operator
-">" @operator
-"||" @operator
+[
+  "="
+  "-"
+  "*"
+  "/"
+  "+"
+  "%"
+  "%%"
+  "|"
+  "&"
+  "^"
+  "<<"
+  ">>"
+  "<"
+  "<="
+  ">="
+  ">"
+  "=="
+  "<>"
+  "~="
+  "~!"
+  ":="
+  "!="
+  "!"
+  "&&"
+  "||"
+  "-="
+  "+="
+  "*="
+  "/="
+  "%="
+  "|="
+  "&="
+  "^="
+  ">>="
+  "<<="
+  "--"
+  "++"
+  "&&="
+  "||="
+  "%%="
+] @operator
 
 "?." @delimiter
 "." @delimiter
+".[]" @delimiter
 
 (string_literal) @string
 (file_literal) @string
