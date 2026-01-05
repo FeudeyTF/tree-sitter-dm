@@ -17,7 +17,7 @@ GLOBAL_VAR(/obj/test)
 	while(TRUE)
 		break
 	if(1)
-		test()
+		test.test?["test"] = 123
 		if(2)
 			for(var/test2 as anything in test)
 				return

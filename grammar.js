@@ -45,7 +45,7 @@ module.exports = grammar({
     [$.return_statement],
     [$.builtin_const, $.primitive_type],
     [$.field_expression, $.field_proc_expression],
-    [$.preproc_call_expression]
+    [$.preproc_call_expression],
   ],
 
   externals: $ => [
@@ -427,12 +427,13 @@ module.exports = grammar({
       ')'
     ),
 
-    array_expression: $ => seq(
+    array_expression: $ => prec(1, seq(
       choice($.identifier, $.field_expression),
+      optional('?'),
       '[',
       field('size', $.expression),
       ']'
-    ),
+    )),
 
     field_expression: $ => seq(
       field('argument', $.expression),
