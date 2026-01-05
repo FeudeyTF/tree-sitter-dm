@@ -124,7 +124,6 @@
 [
  "?."
  "."
- ".[]"
 ] @delimiter
 
 (interpolation

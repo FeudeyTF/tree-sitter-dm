@@ -91,7 +91,6 @@
 
 "?." @delimiter
 "." @delimiter
-".[]" @delimiter
 
 [
  (string_start)

@@ -43,9 +43,9 @@ module.exports = grammar({
   conflicts: $ => [
     [$.type_path],
     [$.return_statement],
-    [$.builtin_const, $.primitive_type],
     [$.field_expression, $.field_proc_expression],
     [$.preproc_call_expression],
+    [$.type_path, $.type_path_expression]
   ],
 
   externals: $ => [
@@ -317,7 +317,7 @@ module.exports = grammar({
       $.builtin_macro,
       $.null,
       $.new_expression,
-      $.type_path,
+      $.type_path_expression,
       $.call_expression,
       $.parent_proc_expression,
       $.binary_expression,
@@ -331,10 +331,7 @@ module.exports = grammar({
     ),
 
     call_expression: $ => prec(1, seq(
-      choice(
-        field('name', $.identifier),
-        $.type_path
-      ),
+      field('name', $.identifier),
       field("arguments", $.argument_list)
     )),
 
@@ -446,7 +443,7 @@ module.exports = grammar({
       field('field', $.identifier),
     ),
 
-    field_operator: $ => choice('.', '?.', '.[]'),
+    field_operator: $ => choice('.', '?.'),
 
     field_proc_expression: $ => seq(
       field('argument', $.expression),
@@ -462,6 +459,19 @@ module.exports = grammar({
     )),
 
     parent_proc_expression: _ => '..()',
+
+    type_path_expression: $ => prec.left(choice(
+      seq(
+        optional('/'),
+        $.primitive_type,
+        repeat1(seq($.type_operator, $.identifier)),
+      ),
+      seq(
+        '/',
+        $.primitive_type
+      )
+    )),
+
 
     // Simple structures for expressions and statements
 
@@ -538,12 +548,8 @@ module.exports = grammar({
 
     interpolation: $ => seq(
       '[',
-      field('expression', $._f_expression),
+      field('expression', $.expression),
       ']',
-    ),
-
-    _f_expression: $ => choice(
-      $.expression,
     ),
 
     escape_sequence: _ => token.immediate(prec(1, seq(
