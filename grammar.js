@@ -455,7 +455,12 @@ module.exports = grammar({
 
     new_expression: $ => prec.right(seq(
       'new',
-      optional($.type_path),
+      optional(
+        choice(
+          $.type_path,
+          $.identifier
+        )
+      ),
       optional(field("arguments", $.argument_list)),
     )),
 
