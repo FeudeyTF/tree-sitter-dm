@@ -1,7 +1,7 @@
 (comment) @comment @spell
 (identifier) @variable
 (pair
-  (literal (identifier) @member))
+  key: (literal (identifier) @member))
 
 [
   "while"

@@ -274,7 +274,7 @@ module.exports = grammar({
       $.block
     ),
 
-    switch_statement: $ => prec.right(seq(
+    switch_statement: $ => seq(
       'switch',
       '(',
       field('condition', $.expression),
@@ -282,9 +282,9 @@ module.exports = grammar({
       $.indent,
       repeat1($.if_statement),
       $.dedent
-    )),
+    ),
 
-    if_statement: $ => prec.right(seq(
+    if_statement: $ => seq(
       'if',
       '(',
       field('condition', $.expression),
@@ -292,7 +292,7 @@ module.exports = grammar({
       $.block,
       repeat(field('alternative', $.elseif_clause)),
       optional(field('alternative', $.else_clause)),
-    )),
+    ),
 
     elseif_clause: $ => seq(
       'else', 'if',
