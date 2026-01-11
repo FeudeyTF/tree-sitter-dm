@@ -282,9 +282,7 @@ module.exports = grammar({
       '(',
       field('condition', $.expression),
       ')',
-      $.indent,
-      repeat1($.if_statement),
-      $.dedent
+      $.block
     ),
 
     if_statement: $ => seq(
