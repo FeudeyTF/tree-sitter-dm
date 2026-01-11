@@ -209,8 +209,16 @@ module.exports = grammar({
         )
       ),
       $.var_definition,
-      $.preproc_call_expression
+      $.preproc_call_expression,
+      $.type_proc_definition
     ),
+
+    type_proc_definition: $ => prec.left(seq(
+      seq(optional(choice($.type_operator, '/')), $.proc_keyword, $.type_operator),
+      field('name', $.identifier),
+      $.proc_parameters,
+      optional($.block)
+    )),
 
     proc_override: $ => prec.left(seq(
       $.type_path,
@@ -222,7 +230,7 @@ module.exports = grammar({
 
     proc_definition: $ => prec.left(prec.dynamic(1, seq(
       optional($.type_path),
-      seq(choice($.type_operator, '/'), $.proc_keyword, $.type_operator),
+      seq(optional(choice($.type_operator, '/')), $.proc_keyword, $.type_operator),
       field('name', $.identifier),
       $.proc_parameters,
       optional($.block)

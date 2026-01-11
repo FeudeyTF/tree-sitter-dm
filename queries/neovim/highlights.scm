@@ -154,6 +154,9 @@
 (proc_definition
   name: (identifier) @function)
 
+(type_proc_definition
+  name: (identifier) @function)
+
 (proc_override
   name: (identifier) @function)
 
