@@ -72,6 +72,7 @@ module.exports = grammar({
       $.type_definition,
       $.preproc_call_expression,
       $.preproc_def,
+      $.preproc_pragma,
       $.preproc_include,
       $.preproc_undef,
       $.preproc_defproc,
@@ -82,6 +83,13 @@ module.exports = grammar({
     ),
 
     // Preproccessor directives
+
+    preproc_pragma: $ => seq(
+      preprocessor('pragma'),
+      $.identifier,
+      optional($.identifier),
+      '\n'
+    ),
 
     preproc_include: $ => seq(
       preprocessor('include'),
@@ -497,7 +505,7 @@ module.exports = grammar({
       $.braced_block,
     ),
 
-     _statements: $ => seq(
+    _statements: $ => seq(
       sep1($._statement, SEMICOLON),
       optional(SEMICOLON),
       $.newline,
