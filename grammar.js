@@ -31,6 +31,8 @@ const PREC = {
   SUBSCRIPT: 17,
 };
 
+const SEMICOLON = ';';
+
 module.exports = grammar({
   name: "dm",
 
@@ -42,11 +44,12 @@ module.exports = grammar({
 
   conflicts: $ => [
     [$.type_path],
+    [$.type_path_expression],
     [$.return_statement],
     [$.field_expression, $.field_proc_expression],
     [$.preproc_call_expression],
     [$.type_path, $.type_path_expression],
-    [$.builtin_const, $.primitive_type]
+    [$.builtin_const, $.primitive_type],
   ],
 
   externals: $ => [
@@ -201,21 +204,21 @@ module.exports = grammar({
       $.preproc_call_expression
     ),
 
-    proc_override: $ => seq(
+    proc_override: $ => prec.left(seq(
       $.type_path,
       $.type_operator,
       field('name', $.identifier),
       $.proc_parameters,
       optional($.block)
-    ),
+    )),
 
-    proc_definition: $ => prec.dynamic(1, seq(
+    proc_definition: $ => prec.left(prec.dynamic(1, seq(
       optional($.type_path),
       seq(choice($.type_operator, '/'), $.proc_keyword, $.type_operator),
       field('name', $.identifier),
       $.proc_parameters,
       optional($.block)
-    )),
+    ))),
 
     proc_parameters: $ => seq(
       '(',
@@ -295,14 +298,14 @@ module.exports = grammar({
     ),
 
     elseif_clause: $ => seq(
-      'else', 'if',
+      /else\ *if/,
       '(',
       field('condition', $.expression),
       ')',
       $.block
     ),
 
-    else_clause: $ => seq('else', $.block),
+    else_clause: $ => prec(1, seq('else', $.block)),
 
     return_statement: $ => seq(
       'return',
@@ -496,7 +499,14 @@ module.exports = grammar({
       $.braced_block,
     ),
 
+     _statements: $ => seq(
+      sep1($._statement, SEMICOLON),
+      optional(SEMICOLON),
+      $.newline,
+    ),
+
     indented_block: $ => choice(
+      alias($._statements, $.indented_block_1),
       seq($.indent, $.indented_block_1),
       alias($.newline, $.indented_block_1),
     ),
@@ -680,7 +690,11 @@ function commaSep(rule) {
 }
 
 function commaSep1(rule) {
-  return seq(rule, repeat(seq(',', rule)));
+  return sep1(rule, ',');
+}
+
+function sep1(rule, separator) {
+  return seq(rule, repeat(seq(separator, rule)));
 }
 
 function preprocessor(command) {
