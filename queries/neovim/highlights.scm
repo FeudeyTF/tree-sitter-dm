@@ -27,6 +27,7 @@
   "#endif"
   "#error"
   "#warn"
+  "#pragma"
 ] @keyword.directive
 
 [
@@ -104,7 +105,14 @@
 (type_operator) @punctuation.delimiter
 
 "return" @keyword.return
-"static" @keyword
+[
+  "static"
+  "global"
+  "final"
+  "const"
+  "tmp"
+] @keyword
+
 "new" @keyword
 
 (preproc_message) @string

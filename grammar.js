@@ -50,6 +50,7 @@ module.exports = grammar({
     [$.preproc_call_expression],
     [$.type_path, $.type_path_expression],
     [$.builtin_const, $.primitive_type],
+    [$.global_var_definition, $._statement]
   ],
 
   externals: $ => [
@@ -70,6 +71,7 @@ module.exports = grammar({
       $.proc_definition,
       $.proc_override,
       $.type_definition,
+      $.global_var_definition,
       $.preproc_call_expression,
       $.preproc_def,
       $.preproc_pragma,
@@ -196,11 +198,22 @@ module.exports = grammar({
       optional($.type_body)
     )),
 
-    type_body: $ => prec.right(seq(
+    type_body: $ => prec.right(choice(
+      $.type_body_intended,
+      $.type_body_braced
+    )),
+
+    type_body_intended: $ => seq(
       $.indent,
       repeat1(seq($._type_statement, $.newline)),
       $.dedent
-    )),
+    ),
+
+    type_body_braced: $ => seq(
+      '{',
+      sep1($._type_statement, SEMICOLON),
+      '}'
+    ),
 
     _type_statement: $ => choice(
       seq(
@@ -251,6 +264,19 @@ module.exports = grammar({
       ),
       '...'
     ),
+
+    global_var_definition: $ => seq(choice(
+      $.var_definition,
+      seq(
+        optional($.type_path),
+        $.type_operator,
+        $.var_keyword,
+        $.type_operator,
+        optional(seq($.var_modifier, $.type_operator)),
+        field('name', $.identifier),
+        optional(seq('=', $.expression)),
+      )
+    ), $.newline),
 
     // Statements
 
