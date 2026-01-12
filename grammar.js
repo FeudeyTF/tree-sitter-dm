@@ -188,25 +188,24 @@ module.exports = grammar({
 
     type_definition: $ => prec.dynamic(-1, seq(
       $.type_path,
-      choice(
-        seq(
-          $.type_operator,
-          field('name', $.identifier),
-        ),
-        $.newline
-      ),
+      $.type_operator,
+      field('name', $.identifier),
       optional($.type_body)
     )),
 
-    type_body: $ => prec.right(choice(
+    type_body: $ => choice(
       $.type_body_intended,
       $.type_body_braced
-    )),
+    ),
 
     type_body_intended: $ => seq(
-      $.indent,
-      repeat1(seq($._type_statement, $.newline)),
-      $.dedent
+      $.newline,
+      optional(
+        seq(
+          $.indent,
+          repeat1(seq($._type_statement, $.newline)),
+          $.dedent)
+      )
     ),
 
     type_body_braced: $ => seq(
@@ -233,15 +232,15 @@ module.exports = grammar({
       optional($.block)
     )),
 
-    proc_override: $ => prec.left(seq(
+    proc_override: $ => prec.left(prec.dynamic(-1, seq(
       $.type_path,
       $.type_operator,
       field('name', $.identifier),
       $.proc_parameters,
       optional($.block)
-    )),
+    ))),
 
-    proc_definition: $ => prec.left(prec.dynamic(1, seq(
+    proc_definition: $ => prec.right(prec.dynamic(1, seq(
       optional($.type_path),
       seq(optional(choice($.type_operator, '/')), $.proc_keyword, $.type_operator),
       field('name', $.identifier),
