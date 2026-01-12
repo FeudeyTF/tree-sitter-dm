@@ -373,7 +373,8 @@ module.exports = grammar({
       $.array_expression,
       $.conditional_expression,
       $.parenthesized_expression,
-      $.type_path_expression
+      $.type_path_expression,
+      $.proc_return_value,
     ),
 
     call_expression: $ => prec(1, seq(
@@ -439,7 +440,7 @@ module.exports = grammar({
     },
 
     assignment_expression: $ => prec.right(PREC.ASSIGNMENT, seq(
-      field('left', choice($.identifier, $.field_expression, $.array_expression)),
+      field('left', choice($.identifier, $.field_expression, $.array_expression, $.proc_return_value)),
       field('operator', choice(
         '=',
         '+=',
@@ -489,7 +490,7 @@ module.exports = grammar({
       field('field', $.identifier),
     ),
 
-    field_operator: $ => choice('.', '?.'),
+    field_operator: $ => choice(token.immediate('.'), '?.'),
 
     field_proc_expression: $ => seq(
       field('argument', $.expression),
@@ -575,7 +576,9 @@ module.exports = grammar({
       $.number_literal
     ),
 
-    identifier: _ => /[a-zA-Z_][a-zA-Z0-9_]*|\./,
+    proc_return_value: $ => '.',
+
+    identifier: _ => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
     number_literal: $ => choice(
       /\d+/,
