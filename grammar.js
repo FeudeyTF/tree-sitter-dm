@@ -289,7 +289,8 @@ module.exports = grammar({
       $.if_statement,
       $.for_statement,
       $.switch_statement,
-      $.while_statement
+      $.while_statement,
+      $.try_catch_statement
     ),
 
     var_definition: $ => seq(
@@ -299,6 +300,16 @@ module.exports = grammar({
       $.type_operator,
       field('name', $.identifier),
       optional(seq('=', $.expression)),
+    ),
+
+    try_catch_statement: $ => seq(
+      'try',
+      $.block,
+      'catch',
+      optional(
+        seq('(', $.var_definition, ')')
+      ),
+      $.block
     ),
 
     for_statement: $ => seq(

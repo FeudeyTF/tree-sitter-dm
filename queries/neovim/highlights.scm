@@ -21,6 +21,11 @@
 ] @keyword.conditional
 
 [
+  "try"
+  "catch"
+] @keyword.exception
+
+[
   "#if"
   "#ifdef"
   "#ifndef"
