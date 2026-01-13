@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.13)
 
 project(tree-sitter-dm
-        VERSION "0.1.0"
+        VERSION "0.25.0"
         DESCRIPTION "DreamMaker grammar"
         HOMEPAGE_URL "https://github.com/feudeytf/tree-sitter-dm"
         LANGUAGES C)
