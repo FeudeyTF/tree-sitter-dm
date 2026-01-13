@@ -630,10 +630,13 @@ module.exports = grammar({
 
     identifier: _ => /[a-zA-Z_][a-zA-Z0-9_]*/,
 
-    number_literal: $ => choice(
-      /\d+/,
-      /\d+\.\d*/,
-      /0x[0-9a-fA-F]+/,
+    number_literal: _ => seq(
+      optional(/[-\+]/),
+      choice(
+        /\d+/,
+        /\d+\.\d*/,
+        /0x[0-9a-fA-F]+/,
+      ),
     ),
 
     file_literal: $ => seq(
