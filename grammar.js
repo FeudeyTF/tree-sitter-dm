@@ -204,7 +204,8 @@ module.exports = grammar({
         seq(
           $.indent,
           repeat1(seq($._type_statement, $.newline)),
-          $.dedent)
+          $.dedent
+        )
       )
     ),
 
@@ -526,13 +527,13 @@ module.exports = grammar({
       ')'
     ),
 
-    array_expression: $ => prec(1, seq(
-      choice($.identifier, $.field_expression),
+    array_expression: $ => seq(
+      $.expression,
       optional(token.immediate('?')),
       '[',
       field('size', $.expression),
       ']'
-    )),
+    ),
 
     field_expression: $ => seq(
       field('argument', $.expression),
