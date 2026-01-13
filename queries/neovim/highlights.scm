@@ -7,6 +7,7 @@
   "while"
   "for"
   "in"
+  "step"
   (continue_statement)
   (break_statement)
 ] @keyword.repeat
@@ -16,6 +17,7 @@
   "else"
   "switch"
   "to"
+  "as"
 ] @keyword.conditional
 
 [
@@ -182,3 +184,4 @@
 (field_expression
  field: (identifier) @property) 
 
+(as_type) @keyword

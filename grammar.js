@@ -303,11 +303,55 @@ module.exports = grammar({
     for_statement: $ => seq(
       'for',
       '(',
-      seq($.var_definition, optional(seq('as', $.as_type))),
-      'in',
-      $.expression,
+      $.for_condition,
       ')',
       $.block,
+    ),
+
+    for_condition: $ => choice(
+      $.forlist_condition,
+      $.forloop_condition
+    ),
+
+    forlist_condition: $ => prec(1, choice(
+      seq(
+        $.var_definition,
+        optional(seq('as', sep1($.as_type, '|'))),
+        optional(seq('in', $.expression))
+      ),
+      seq(
+        $.var_definition,
+        'in',
+        $.number_literal,
+        'to',
+        $.number_literal,
+        optional(seq('step', $.number_literal))
+      ),
+      seq(
+        field('key', $.var_definition),
+        optional(seq('as', sep1($.as_type, '|'))),
+        ',',
+        field('value', $.identifier),
+        'in',
+        $.expression
+      )
+    )),
+
+    forloop_condition: $ => choice(
+      seq(
+        field('initial', $.var_definition),
+        ',',
+        field('condition', $.expression),
+        ',',
+        field('increment', $.expression)
+      ),
+      seq(
+        field('initial', $.var_definition),
+        ';',
+        field('condition', $.expression),
+        ';',
+        field('increment', $.expression)
+      ),
     ),
 
     while_statement: $ => seq(
@@ -375,6 +419,12 @@ module.exports = grammar({
       $.parenthesized_expression,
       $.type_path_expression,
       $.proc_return_value,
+    ),
+
+    as_expression: $ => seq(
+      $.expression,
+      'as',
+      sep1($.as_type, '|')
     ),
 
     call_expression: $ => prec(1, seq(
@@ -627,7 +677,11 @@ module.exports = grammar({
 
     _not_escape_sequence: _ => token.immediate('\\'),
 
-    as_type: _ => 'anything',
+    as_type: $ => choice(
+      'anything',
+      'text',
+      $.null
+    ),
 
     var_keyword: _ => 'var',
 
