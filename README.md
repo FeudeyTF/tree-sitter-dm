@@ -10,4 +10,4 @@ DreamMaker grammar for [tree-sitter](https://github.com/tree-sitter/tree-sitter)
 # Status
 Project is currently WIP. The parser was tested on the source code of the Space Station 13 codebases.
 
-[discord]: https://img.shields.io/discord/1063097320771698699?logo=discord&label=discord
+[discord]: https://img.shields.io/discord/484170914754330625?logo=discord&label=discord
