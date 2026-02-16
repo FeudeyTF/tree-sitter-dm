@@ -239,20 +239,47 @@ bool tree_sitter_dm_external_scanner_scan(void *payload, TSLexer *lexer,
     } else if (lexer->lookahead == '\t') {
       indent_length += 8;
       skip(lexer);
-    } else if (lexer->lookahead == '|' &&
+    } else if (lexer->lookahead == '/' &&
                (valid_symbols[INDENT] || valid_symbols[DEDENT] ||
                 valid_symbols[NEWLINE])) {
       if (!found_end_of_line) {
         return false;
       }
-      if (first_comment_indent_length == -1) {
-        first_comment_indent_length = (int32_t)indent_length;
-      }
-      while (lexer->lookahead && lexer->lookahead != '\n') {
-        skip(lexer);
-      }
+
       skip(lexer);
-      indent_length = 0;
+      if (lexer->lookahead == '/') {
+        if (first_comment_indent_length == -1) {
+          first_comment_indent_length = (int32_t)indent_length;
+        }
+        while (lexer->lookahead && lexer->lookahead != '\n') {
+          skip(lexer);
+        }
+        if (lexer->lookahead == '\n') {
+          skip(lexer);
+        }
+        indent_length = 0;
+      } else if (lexer->lookahead == '*') {
+        if (first_comment_indent_length == -1) {
+          first_comment_indent_length = (int32_t)indent_length;
+        }
+        skip(lexer);
+        while (lexer->lookahead) {
+          if (lexer->lookahead == '*') {
+            skip(lexer);
+            if (lexer->lookahead == '/') {
+              skip(lexer);
+              break;
+            }
+          } else {
+            if (lexer->lookahead == '\n') {
+              indent_length = 0;
+            }
+            skip(lexer);
+          }
+        }
+      } else {
+        break;
+      }
     } else if (lexer->lookahead == '\\') {
       skip(lexer);
       if (lexer->lookahead == '\r') {
