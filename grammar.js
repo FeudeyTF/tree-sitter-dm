@@ -44,13 +44,11 @@ module.exports = grammar({
 
   conflicts: $ => [
     [$.type_path],
-    [$.type_path_expression],
     [$.return_statement],
     [$.field_expression, $.field_proc_expression],
     [$.preproc_call_expression],
     [$.type_path, $.type_path_expression],
     [$.builtin_const, $.primitive_type],
-    [$.global_var_definition, $._statement]
   ],
 
   externals: $ => [
@@ -120,37 +118,45 @@ module.exports = grammar({
 
     preproc_if: $ => seq(
       preprocessor('if'),
-      field('confition', $.expression),
-      $.preproc_if_block,
-      repeat(field('alternative', $.preproc_elif)),
-      field('alternative', optional($.preproc_else)),
-      preprocessor('endif')
+      field('condition', $.expression),
+      $.newline,
+      optional($.preproc_if_block),
+      field('alternative', optional(choice($.preproc_elif, $.preproc_else))),
+      $.preproc_endif
     ),
 
     preproc_ifdef: $ => seq(
       choice(preprocessor('ifdef'), preprocessor('ifndef')),
       field('name', $.identifier),
-      $.preproc_if_block,
-      repeat(field('alternative', $.preproc_elif)),
-      field('alternative', optional($.preproc_else)),
-      preprocessor('endif')
+      $.newline,
+      optional($.preproc_if_block),
+      field('alternative', optional(choice($.preproc_elif, $.preproc_else))),
+      $.preproc_endif
     ),
 
     preproc_elif: $ => seq(
       preprocessor('elif'),
-      field('condition', $.expression),
-      $.preproc_if_block
+      optional($.preproc_message),
+      $.newline,
+      optional($.preproc_if_block),
+      field('alternative', optional(choice($.preproc_elif, $.preproc_else)))
     ),
 
     preproc_else: $ => seq(
       preprocessor('else'),
-      $.preproc_if_block
+      $.newline,
+      optional($.preproc_if_block)
     ),
 
-    preproc_if_block: $ => choice(
-      repeat1($._instruction),
-      $.block
-    ),
+    preproc_endif: $ => seq(preprocessor('endif'), $.newline),
+
+    preproc_if_block: $ => repeat1(choice(
+      $._statement,
+      $.proc_definition,
+      $.proc_override,
+      $.type_definition,
+      $.global_var_definition
+    )),
 
     preproc_call_expression: $ => seq(
       field('directive', $.identifier),
@@ -227,6 +233,15 @@ module.exports = grammar({
       ),
       $.var_definition,
       $.preproc_call_expression,
+      $.preproc_def,
+      $.preproc_pragma,
+      $.preproc_include,
+      $.preproc_undef,
+      $.preproc_defproc,
+      $.preproc_if,
+      $.preproc_ifdef,
+      $.preproc_warn,
+      $.preproc_error,
       $.type_proc_definition
     ),
 
@@ -287,6 +302,15 @@ module.exports = grammar({
     _statement: $ => choice(
       $.var_definition,
       $.expression,
+      $.preproc_def,
+      $.preproc_pragma,
+      $.preproc_include,
+      $.preproc_undef,
+      $.preproc_defproc,
+      $.preproc_if,
+      $.preproc_ifdef,
+      $.preproc_warn,
+      $.preproc_error,
       $.return_statement,
       $.break_statement,
       $.continue_statement,

@@ -103,6 +103,59 @@ static inline void advance(TSLexer *lexer) { lexer->advance(lexer, false); }
 
 static inline void skip(TSLexer *lexer) { lexer->advance(lexer, true); }
 
+static inline bool is_identifier_char(int32_t character) {
+  return (character >= 'a' && character <= 'z') ||
+         (character >= 'A' && character <= 'Z') ||
+         (character >= '0' && character <= '9') || character == '_';
+}
+
+static bool is_preproc_closing_directive(TSLexer *lexer) {
+  if (lexer->lookahead != '#') {
+    return false;
+  }
+
+  lexer->mark_end(lexer);
+  advance(lexer);
+  while (lexer->lookahead == ' ' || lexer->lookahead == '\t') {
+    advance(lexer);
+  }
+
+  if (lexer->lookahead != 'e') {
+    return false;
+  }
+
+  advance(lexer);
+  if (lexer->lookahead == 'l') {
+    advance(lexer);
+    if (lexer->lookahead == 's') {
+      advance(lexer);
+      if (lexer->lookahead == 'e') {
+        advance(lexer);
+        return !is_identifier_char(lexer->lookahead);
+      }
+    } else if (lexer->lookahead == 'i') {
+      advance(lexer);
+      if (lexer->lookahead == 'f') {
+        advance(lexer);
+        return !is_identifier_char(lexer->lookahead);
+      }
+    }
+  } else if (lexer->lookahead == 'n') {
+    advance(lexer);
+    if (lexer->lookahead == 'd') {
+      advance(lexer);
+      if (lexer->lookahead == 'i') {
+        advance(lexer);
+        if (lexer->lookahead == 'f') {
+          advance(lexer);
+          return !is_identifier_char(lexer->lookahead);
+        }
+      }
+    }
+  }
+
+  return false;
+}
 bool tree_sitter_dm_external_scanner_scan(void *payload, TSLexer *lexer,
                                           const bool *valid_symbols) {
   Scanner *scanner = (Scanner *)payload;
@@ -302,8 +355,13 @@ bool tree_sitter_dm_external_scanner_scan(void *payload, TSLexer *lexer,
   if (found_end_of_line) {
     if (scanner->indents.size > 0) {
       uint16_t current_indent_length = *array_back(&scanner->indents);
+      bool is_preprocessor_line = lexer->lookahead == '#';
+      bool can_preprocessor_dedent = is_preprocessor_line &&
+                                     valid_symbols[DEDENT] &&
+                                     is_preproc_closing_directive(lexer);
 
-      if (valid_symbols[INDENT] && indent_length > current_indent_length) {
+      if (valid_symbols[INDENT] && indent_length > current_indent_length &&
+          !is_preprocessor_line) {
         array_push(&scanner->indents, indent_length);
         lexer->result_symbol = INDENT;
         return true;
@@ -318,6 +376,7 @@ bool tree_sitter_dm_external_scanner_scan(void *payload, TSLexer *lexer,
             !(valid_symbols[STRING_START] && next_tok_is_string_start))) &&
           indent_length < current_indent_length &&
           !scanner->inside_interpolated_string &&
+          (!is_preprocessor_line || can_preprocessor_dedent) &&
 
           first_comment_indent_length < (int32_t)current_indent_length) {
         array_pop(&scanner->indents);
