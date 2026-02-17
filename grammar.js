@@ -421,14 +421,17 @@ module.exports = grammar({
     ),
 
     elseif_clause: $ => seq(
-      /else\ *if/,
+      "else", "if",
       '(',
       field('condition', $.expression),
       ')',
       $.block
     ),
 
-    else_clause: $ => prec(1, seq('else', $.block)),
+    else_clause: $ => seq(
+      'else',
+      $.block
+    ),
 
     return_statement: $ => seq(
       'return',
@@ -636,13 +639,11 @@ module.exports = grammar({
     ),
 
     indented_block: $ => choice(
-      alias($._statements, $.indented_block_1),
-      seq($.indent, $.indented_block_1),
-      alias($.newline, $.indented_block_1),
+      seq($.newline, optional(seq($.indent, $.indented_block_1))),
     ),
 
     indented_block_1: $ => seq(
-      repeat($._statement),
+      repeat(seq($._statement, optional(SEMICOLON))),
       $.dedent,
     ),
 
