@@ -497,7 +497,7 @@ module.exports = grammar({
     ),
 
     call_expression: $ => prec(1, seq(
-      field('name', choice($.identifier, $.builtin_proc)),
+      field('name', $.identifier),
       field("arguments", $.argument_list)
     )),
 
@@ -760,21 +760,6 @@ module.exports = grammar({
       'proc',
       'verb',
       'operator'
-    ),
-
-    builtin_proc: _ => choice(
-      'alist',
-      'list',
-      'call',
-      'input',
-      'locate',
-      'pick',
-      'arglist',
-      'CRASH',
-      'ASSERT',
-      'EXCEPTION',
-      'REGEX_QUOTE',
-      'REGEX_QUOTE_REPLACEMENT'
     ),
 
     primitive_type: _ => choice(...PRIMITIVE_TYPES),
