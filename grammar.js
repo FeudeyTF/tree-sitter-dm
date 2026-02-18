@@ -33,6 +33,32 @@ const PREC = {
 
 const SEMICOLON = ';';
 
+const PRIMITIVE_TYPES = [
+  'obj',
+  'mob',
+  'world',
+  'client',
+  'turf',
+  'area',
+  'datum',
+  'atom',
+  'list',
+  'mutable_appearance',
+  'exception',
+  'generator',
+  'icon',
+  'image',
+  'alist',
+  'matrix',
+  'particles',
+  'pixloc',
+  'regex',
+  'savefile',
+  'sound',
+  'vector',
+  'database',
+];
+
 module.exports = grammar({
   name: "dm",
 
@@ -607,13 +633,14 @@ module.exports = grammar({
 
     type_path_expression: $ => prec.left(choice(
       seq(
-        optional('/'),
+        '/',
         $.primitive_type,
-        repeat1(seq($.type_operator, alias($.identifier, $.type_identifier))),
+        repeat(seq($.type_operator, alias($.identifier, $.type_identifier))),
       ),
       seq(
-        '/',
-        $.primitive_type
+        $.primitive_type_path,
+        alias($.identifier, $.type_identifier),
+        repeat(seq($.type_operator, alias($.identifier, $.type_identifier))),
       )
     )),
 
@@ -750,31 +777,9 @@ module.exports = grammar({
       'REGEX_QUOTE_REPLACEMENT'
     ),
 
-    primitive_type: _ => choice(
-      'obj',
-      'mob',
-      'world',
-      'client',
-      'turf',
-      'area',
-      'datum',
-      'atom',
-      'list',
-      'mutable_appearance',
-      'exception',
-      'generator',
-      'icon',
-      'image',
-      'alist',
-      'matrix',
-      'particles',
-      'pixloc',
-      'regex',
-      'savefile',
-      'sound',
-      'vector',
-      'database'
-    ),
+    primitive_type: _ => choice(...PRIMITIVE_TYPES),
+
+    primitive_type_path: _ => token(seq(choice(...PRIMITIVE_TYPES), '/')),
 
     var_modifier: _ => choice(
       'static',
