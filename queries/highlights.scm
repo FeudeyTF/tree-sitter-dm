@@ -126,8 +126,6 @@
 (call_expression
   name: (identifier) @function)
 
-(builtin_proc) @function
-
 (field_proc_expression
   proc: (identifier) @function)
 
