@@ -1,5 +1,8 @@
 (comment) @comment @spell
 (identifier) @variable
+((identifier) @constant
+ (#match? @constant "^[A-Z][A-Z\\d_]*$"))
+
 (pair
   key: (literal (identifier) @member))
 
@@ -188,3 +191,4 @@
  field: (identifier) @property) 
 
 (as_type) @keyword
+

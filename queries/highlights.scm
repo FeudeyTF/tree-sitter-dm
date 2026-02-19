@@ -1,5 +1,7 @@
 (comment) @comment
 (identifier) @variable
+((identifier) @constant
+ (#match? @constant "^[A-Z][A-Z\\d_]*$"))
 (pair
   (literal (identifier) @member))
 
