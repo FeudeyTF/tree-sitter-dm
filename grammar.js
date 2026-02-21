@@ -334,8 +334,25 @@ module.exports = grammar({
       $.switch_statement,
       $.while_statement,
       $.try_catch_statement,
+      $.goto_label,
+      $.goto_statement,
 
       $.preproc_directive
+    ),
+
+    goto_label: $ => prec(1, seq(
+      optional(':'),
+      $.identifier,
+      optional(':'),
+      choice(
+        $.newline,
+        $.indented_block
+      )
+    )),
+
+    goto_statement: $ => seq(
+      'goto',
+      $.identifier
     ),
 
     var_definition: $ => seq(
