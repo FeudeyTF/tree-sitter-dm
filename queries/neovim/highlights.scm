@@ -13,6 +13,7 @@
   "step"
   (continue_statement)
   (break_statement)
+  "goto"
 ] @keyword.repeat
 
 [

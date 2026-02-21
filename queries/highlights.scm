@@ -10,6 +10,7 @@
 "else" @keyword
 "for" @keyword
 "if" @keyword
+"goto" @keyword
 "in" @keyword
 "return" @keyword
 "static" @keyword
