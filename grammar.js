@@ -96,6 +96,11 @@ module.exports = grammar({
       $.proc_override,
       $.type_definition,
       $.global_var_definition,
+
+      $.preproc_directive
+    ),
+
+    preproc_directive: $ => choice(
       $.preproc_call_expression,
       $.preproc_def,
       $.preproc_pragma,
@@ -105,7 +110,7 @@ module.exports = grammar({
       $.preproc_if,
       $.preproc_ifdef,
       $.preproc_warn,
-      $.preproc_error
+      $.preproc_error,
     ),
 
     // Preproccessor directives
@@ -258,17 +263,9 @@ module.exports = grammar({
         )
       ),
       $.var_definition,
-      $.preproc_call_expression,
-      $.preproc_def,
-      $.preproc_pragma,
-      $.preproc_include,
-      $.preproc_undef,
-      $.preproc_defproc,
-      $.preproc_if,
-      $.preproc_ifdef,
-      $.preproc_warn,
-      $.preproc_error,
-      $.type_proc_definition
+      $.type_proc_definition,
+
+      $.preproc_directive
     ),
 
     type_proc_definition: $ => prec.left(seq(
@@ -328,15 +325,6 @@ module.exports = grammar({
     _statement: $ => choice(
       $.var_definition,
       $.expression,
-      $.preproc_def,
-      $.preproc_pragma,
-      $.preproc_include,
-      $.preproc_undef,
-      $.preproc_defproc,
-      $.preproc_if,
-      $.preproc_ifdef,
-      $.preproc_warn,
-      $.preproc_error,
       $.return_statement,
       $.break_statement,
       $.continue_statement,
@@ -344,7 +332,9 @@ module.exports = grammar({
       $.for_statement,
       $.switch_statement,
       $.while_statement,
-      $.try_catch_statement
+      $.try_catch_statement,
+
+      $.preproc_directive
     ),
 
     var_definition: $ => seq(
