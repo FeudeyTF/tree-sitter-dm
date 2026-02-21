@@ -72,9 +72,9 @@ module.exports = grammar({
     [$.type_path],
     [$.return_statement],
     [$.field_expression, $.field_proc_expression],
-    [$.preproc_call_expression],
     [$.type_path, $.type_path_expression],
     [$.builtin_const, $.primitive_type],
+    [$.preproc_call_expression]
   ],
 
   externals: $ => [
@@ -97,11 +97,11 @@ module.exports = grammar({
       $.type_definition,
       $.global_var_definition,
 
+      $.preproc_call_expression,
       $.preproc_directive
     ),
 
     preproc_directive: $ => choice(
-      $.preproc_call_expression,
       $.preproc_def,
       $.preproc_pragma,
       $.preproc_include,
@@ -265,6 +265,7 @@ module.exports = grammar({
       $.var_definition,
       $.type_proc_definition,
 
+      $.preproc_call_expression,
       $.preproc_directive
     ),
 
