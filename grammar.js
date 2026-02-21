@@ -71,7 +71,6 @@ module.exports = grammar({
   conflicts: $ => [
     [$.type_path],
     [$.return_statement],
-    [$.field_expression, $.field_proc_expression],
     [$.type_path, $.type_path_expression],
     [$.builtin_const, $.primitive_type],
     [$.preproc_call_expression]
@@ -617,14 +616,14 @@ module.exports = grammar({
       field('field', $.identifier),
     ),
 
-    field_operator: $ => choice(token.immediate('.'), '?.'),
+    field_operator: $ => choice(token.immediate('.'), '?.', token.immediate(':')),
 
-    field_proc_expression: $ => seq(
+    field_proc_expression: $ => prec(1, seq(
       field('argument', $.expression),
       field('operator', $.field_operator),
       field('proc', $.identifier),
       $.argument_list
-    ),
+    )),
 
     new_expression: $ => prec.right(seq(
       'new',
