@@ -224,6 +224,13 @@ bool tree_sitter_dm_external_scanner_scan(void *payload, TSLexer *lexer,
           return has_content;
         } else {
           lexer->mark_end(lexer);
+          advance(lexer);
+          if (is_format(delimiter) &&
+              (lexer->lookahead == '[' || lexer->lookahead == ']')) {
+            advance(lexer);
+            has_content = true;
+            continue;
+          }
           lexer->result_symbol = STRING_CONTENT;
           return has_content;
         }
