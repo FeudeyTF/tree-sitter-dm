@@ -11,6 +11,8 @@
         "dm",
         "dme"
       ],
+      "highlights": "queries/highlights.scm",
+      "tags": "queries/tags.scm",
       "injection-regex": "^dm$",
       "class-name": "TreeSitterDm"
     }
