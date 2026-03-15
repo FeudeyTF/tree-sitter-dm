@@ -359,6 +359,10 @@
           "named": true
         },
         {
+          "type": "set_expression",
+          "named": true
+        },
+        {
           "type": "switch_statement",
           "named": true
         },
@@ -1003,6 +1007,10 @@
           "named": true
         },
         {
+          "type": "set_expression",
+          "named": true
+        },
+        {
           "type": "switch_statement",
           "named": true
         },
@@ -1500,6 +1508,10 @@
           "named": true
         },
         {
+          "type": "set_expression",
+          "named": true
+        },
+        {
           "type": "switch_statement",
           "named": true
         },
@@ -1793,6 +1805,25 @@
       "types": [
         {
           "type": "expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "set_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "identifier",
           "named": true
         }
       ]
@@ -2759,6 +2790,10 @@
   },
   {
     "type": "savefile",
+    "named": false
+  },
+  {
+    "type": "set",
     "named": false
   },
   {
