@@ -166,6 +166,7 @@
 (primitive_type) @type
 (var_keyword) @keyword
 (proc_keyword) @keyword
+"set" @keyword
 
 (var_definition
   name: (identifier) @variable)

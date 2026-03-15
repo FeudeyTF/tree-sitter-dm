@@ -335,8 +335,16 @@ module.exports = grammar({
       $.try_catch_statement,
       $.goto_label,
       $.goto_statement,
+      $.set_expression,
 
       $.preproc_directive
+    ),
+
+    set_expression: $ => seq(
+      'set',
+      $.identifier,
+      '=',
+      $.expression
     ),
 
     goto_label: $ => prec(1, seq(
