@@ -171,6 +171,8 @@
 (var_definition
   name: (identifier) @variable)
 
+"spawn" @function
+
 (proc_definition
   name: (identifier) @function)
 

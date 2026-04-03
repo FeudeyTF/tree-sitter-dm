@@ -336,8 +336,21 @@ module.exports = grammar({
       $.goto_label,
       $.goto_statement,
       $.set_expression,
+      $.spawn_statement,
 
       $.preproc_directive
+    ),
+
+    spawn_statement: $ => seq(
+      'spawn',
+      optional(
+        seq(
+          '(',
+          $.expression,
+          ')'
+        )
+      ),
+      $.block
     ),
 
     set_expression: $ => seq(

@@ -29,6 +29,7 @@
 "#include" @keyword
 "#warn" @keyword
 "#error" @keyword
+"spawn" @keyword
 
 "new" @keyword
 
