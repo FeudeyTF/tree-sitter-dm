@@ -363,6 +363,10 @@
           "named": true
         },
         {
+          "type": "spawn_statement",
+          "named": true
+        },
+        {
           "type": "switch_statement",
           "named": true
         },
@@ -914,9 +918,13 @@
         ]
       },
       "condition": {
-        "multiple": false,
+        "multiple": true,
         "required": true,
         "types": [
+          {
+            "type": ",",
+            "named": false
+          },
           {
             "type": "expression",
             "named": true
@@ -1008,6 +1016,10 @@
         },
         {
           "type": "set_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_statement",
           "named": true
         },
         {
@@ -1512,6 +1524,10 @@
           "named": true
         },
         {
+          "type": "spawn_statement",
+          "named": true
+        },
+        {
           "type": "switch_statement",
           "named": true
         },
@@ -1860,6 +1876,25 @@
         },
         {
           "type": "type_definition",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "spawn_statement",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "expression",
           "named": true
         }
       ]
@@ -2798,6 +2833,10 @@
   },
   {
     "type": "sound",
+    "named": false
+  },
+  {
+    "type": "spawn",
     "named": false
   },
   {
