@@ -152,11 +152,10 @@
   "[" @punctuation.special
   "]" @punctuation.special) @embedded
 [
- (string_start)
- (string_content)
- (string_end)
+ (string_literal)
  (file_literal)
 ] @string
+(escape_sequence) @string.escape
 
 (null) @keyword
 (number_literal) @number
