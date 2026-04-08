@@ -376,7 +376,8 @@ bool tree_sitter_dm_external_scanner_scan(void *payload, TSLexer *lexer,
 
       bool next_tok_is_string_start = lexer->lookahead == '\"' ||
                                       lexer->lookahead == '\'' ||
-                                      lexer->lookahead == '`';
+                                      lexer->lookahead == '`' ||
+                                      lexer->lookahead == '@';
 
       if ((valid_symbols[DEDENT] ||
            (!valid_symbols[NEWLINE] &&
@@ -400,8 +401,18 @@ bool tree_sitter_dm_external_scanner_scan(void *payload, TSLexer *lexer,
 
   if (first_comment_indent_length == -1 && valid_symbols[STRING_START]) {
     Delimiter delimiter = new_delimiter();
-    set_format(&delimiter);
     bool has_flags = false;
+
+    if (lexer->lookahead == '@') {
+      set_raw(&delimiter);
+      has_flags = true;
+      advance(lexer);
+    }
+
+    if (!is_raw(&delimiter)) {
+      set_format(&delimiter);
+    }
+
     if (lexer->lookahead == '`') {
       set_end_character(&delimiter, '`');
       advance(lexer);
