@@ -4099,11 +4099,75 @@
                 },
                 {
                   "type": "PATTERN",
-                  "value": "['\"abfrntv\\\\]"
+                  "value": "['\"snt\\\\<>]"
                 },
                 {
                   "type": "PATTERN",
                   "value": "N\\{[^}]+\\}"
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "[Tt]he"
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "[Aa]n"
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "[Aa]"
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "[Hh]e"
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "[Ss]he"
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "[Hh]is"
+                },
+                {
+                  "type": "STRING",
+                  "value": "him"
+                },
+                {
+                  "type": "STRING",
+                  "value": "himself"
+                },
+                {
+                  "type": "STRING",
+                  "value": "hers"
+                },
+                {
+                  "type": "STRING",
+                  "value": "proper"
+                },
+                {
+                  "type": "STRING",
+                  "value": "improper"
+                },
+                {
+                  "type": "STRING",
+                  "value": "th"
+                },
+                {
+                  "type": "STRING",
+                  "value": "icon"
+                },
+                {
+                  "type": "STRING",
+                  "value": "ref"
+                },
+                {
+                  "type": "PATTERN",
+                  "value": "[Rr]oman"
+                },
+                {
+                  "type": "STRING",
+                  "value": "..."
                 }
               ]
             }
