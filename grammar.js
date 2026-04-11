@@ -33,7 +33,7 @@ const PREC = {
 
 const SEMICOLON = ';';
 
-const PRIMITIVE_TYPES = [
+const BUILTIN_TYPES = [
   'obj',
   'mob',
   'world',
@@ -72,7 +72,6 @@ module.exports = grammar({
     [$.type_path],
     [$.return_statement],
     [$.type_path, $.type_path_expression],
-    [$.builtin_const, $.primitive_type],
     [$.preproc_call_expression]
   ],
 
@@ -807,9 +806,17 @@ module.exports = grammar({
       'operator'
     ),
 
-    primitive_type: _ => choice(...PRIMITIVE_TYPES),
+    primitive_type: $ => prec(-1, 
+      choice(
+        ...BUILTIN_TYPES,
+        prec(-1, $.identifier)
+      )
+    ),
 
-    primitive_type_path: _ => token(seq(choice(...PRIMITIVE_TYPES), '/')),
+    primitive_type_path: $ => prec(-1,
+      seq($.identifier, token.immediate('/')
+      )
+    ),
 
     var_modifier: _ => choice(
       'static',

@@ -112,6 +112,10 @@
 (builtin_const) @keyword
 (builtin_macro) @keyword
 
+
+(primitive_type 
+  (identifier) @type)
+
 (primitive_type) @type
 (var_keyword) @keyword
 (proc_keyword) @keyword
