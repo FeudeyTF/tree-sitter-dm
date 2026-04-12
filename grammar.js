@@ -515,6 +515,7 @@ module.exports = grammar({
       $.parenthesized_expression,
       $.type_path_expression,
       $.proc_return_value,
+      $.update_expression
     ),
 
     as_expression: $ => seq(
@@ -541,10 +542,19 @@ module.exports = grammar({
 
     unary_expression: $ => prec.left(PREC.UNARY,
       seq(
-        field('operator', choice('!', '--', '++', '~', '*', '&')),
+        field('operator', choice('!', '~', '*', '&')),
         field('argument', $.expression)
       )
     ),
+
+    update_expression: $ => {
+      const argument = field('argument', $.expression);
+      const operator = field('operator', choice('--', '++'));
+      return prec.right(PREC.UNARY, choice(
+        seq(operator, argument),
+        seq(argument, operator),
+      ));
+    },
 
     binary_expression: $ => {
       const table = [
@@ -806,7 +816,7 @@ module.exports = grammar({
       'operator'
     ),
 
-    primitive_type: $ => prec(-1, 
+    primitive_type: $ => prec(-1,
       choice(
         ...BUILTIN_TYPES,
         prec(-1, $.identifier)
