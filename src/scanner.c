@@ -26,6 +26,7 @@ typedef enum {
   Format = 1 << 4,
   Triple = 1 << 5,
   Bytes = 1 << 6,
+  Braced = 1 << 7,
 } Flags;
 
 typedef struct {
@@ -48,6 +49,10 @@ static inline bool is_triple(Delimiter *delimiter) {
 
 static inline bool is_bytes(Delimiter *delimiter) {
   return delimiter->flags & Bytes;
+}
+
+static inline bool is_braced(Delimiter *delimiter) {
+  return delimiter->flags & Braced;
 }
 
 static inline int32_t end_character(Delimiter *delimiter) {
@@ -75,6 +80,10 @@ static inline void set_triple(Delimiter *delimiter) {
 
 static inline void set_bytes(Delimiter *delimiter) {
   delimiter->flags |= Bytes;
+}
+
+static inline void set_braced(Delimiter *delimiter) {
+  delimiter->flags |= Braced;
 }
 
 static inline void set_end_character(Delimiter *delimiter, int32_t character) {
@@ -165,16 +174,13 @@ bool tree_sitter_dm_external_scanner_scan(void *payload, TSLexer *lexer,
 
   bool advanced_once = false;
   if (valid_symbols[ESCAPE_INTERPOLATION] && scanner->delimiters.size > 0 &&
-      (lexer->lookahead == '[' || lexer->lookahead == ']') &&
-      !error_recovery_mode) {
+      lexer->lookahead == '[' && !error_recovery_mode) {
     Delimiter *delimiter = array_back(&scanner->delimiters);
     if (is_format(delimiter)) {
       lexer->mark_end(lexer);
-      bool is_left_brace = lexer->lookahead == '[';
       advance(lexer);
       advanced_once = true;
-      if ((lexer->lookahead == '[' && is_left_brace) ||
-          (lexer->lookahead == ']' && !is_left_brace)) {
+      if (lexer->lookahead == '[') {
         advance(lexer);
         lexer->mark_end(lexer);
         lexer->result_symbol = ESCAPE_INTERPOLATION;
@@ -190,9 +196,7 @@ bool tree_sitter_dm_external_scanner_scan(void *payload, TSLexer *lexer,
     int32_t end_char = end_character(delimiter);
     bool has_content = advanced_once;
     while (lexer->lookahead) {
-      if ((advanced_once || lexer->lookahead == '[' ||
-           lexer->lookahead == ']') &&
-          is_format(delimiter)) {
+      if ((advanced_once || lexer->lookahead == '[') && is_format(delimiter)) {
         lexer->mark_end(lexer);
         lexer->result_symbol = STRING_CONTENT;
         return has_content;
@@ -235,6 +239,25 @@ bool tree_sitter_dm_external_scanner_scan(void *payload, TSLexer *lexer,
           return has_content;
         }
       } else if (lexer->lookahead == end_char) {
+        if (is_braced(delimiter)) {
+          lexer->mark_end(lexer);
+          advance(lexer);
+          if (lexer->lookahead == '}') {
+            if (has_content) {
+              lexer->result_symbol = STRING_CONTENT;
+            } else {
+              advance(lexer);
+              lexer->mark_end(lexer);
+              array_pop(&scanner->delimiters);
+              lexer->result_symbol = STRING_END;
+              scanner->inside_interpolated_string = false;
+            }
+            return true;
+          }
+          has_content = true;
+          continue;
+        }
+
         if (is_triple(delimiter)) {
           lexer->mark_end(lexer);
           advance(lexer);
@@ -261,18 +284,20 @@ bool tree_sitter_dm_external_scanner_scan(void *payload, TSLexer *lexer,
           return true;
         }
         if (has_content) {
+          lexer->mark_end(lexer);
           lexer->result_symbol = STRING_CONTENT;
-        } else {
-          advance(lexer);
-          array_pop(&scanner->delimiters);
-          lexer->result_symbol = STRING_END;
-          scanner->inside_interpolated_string = false;
+          return true;
         }
+
+        advance(lexer);
+        array_pop(&scanner->delimiters);
+        lexer->result_symbol = STRING_END;
+        scanner->inside_interpolated_string = false;
         lexer->mark_end(lexer);
         return true;
 
       } else if (lexer->lookahead == '\n' && has_content &&
-                 !is_triple(delimiter)) {
+                 !is_triple(delimiter) && !is_braced(delimiter)) {
         return false;
       }
       advance(lexer);
@@ -377,7 +402,8 @@ bool tree_sitter_dm_external_scanner_scan(void *payload, TSLexer *lexer,
       bool next_tok_is_string_start = lexer->lookahead == '\"' ||
                                       lexer->lookahead == '\'' ||
                                       lexer->lookahead == '`' ||
-                                      lexer->lookahead == '@';
+                                      lexer->lookahead == '@' ||
+                                      lexer->lookahead == '{';
 
       if ((valid_symbols[DEDENT] ||
            (!valid_symbols[NEWLINE] &&
@@ -402,10 +428,16 @@ bool tree_sitter_dm_external_scanner_scan(void *payload, TSLexer *lexer,
   if (first_comment_indent_length == -1 && valid_symbols[STRING_START]) {
     Delimiter delimiter = new_delimiter();
     bool has_flags = false;
+    bool braced_string = false;
 
     if (lexer->lookahead == '@') {
       set_raw(&delimiter);
       has_flags = true;
+      advance(lexer);
+    }
+
+    if (lexer->lookahead == '{') {
+      braced_string = true;
       advance(lexer);
     }
 
@@ -421,7 +453,7 @@ bool tree_sitter_dm_external_scanner_scan(void *payload, TSLexer *lexer,
       set_end_character(&delimiter, '\'');
       advance(lexer);
       lexer->mark_end(lexer);
-      if (lexer->lookahead == '\'') {
+      if (!braced_string && lexer->lookahead == '\'') {
         advance(lexer);
         if (lexer->lookahead == '\'') {
           advance(lexer);
@@ -433,7 +465,7 @@ bool tree_sitter_dm_external_scanner_scan(void *payload, TSLexer *lexer,
       set_end_character(&delimiter, '"');
       advance(lexer);
       lexer->mark_end(lexer);
-      if (lexer->lookahead == '"') {
+      if (!braced_string && lexer->lookahead == '"') {
         advance(lexer);
         if (lexer->lookahead == '"') {
           advance(lexer);
@@ -444,6 +476,9 @@ bool tree_sitter_dm_external_scanner_scan(void *payload, TSLexer *lexer,
     }
 
     if (end_character(&delimiter)) {
+      if (braced_string) {
+        set_braced(&delimiter);
+      }
       array_push(&scanner->delimiters, delimiter);
       lexer->result_symbol = STRING_START;
       scanner->inside_interpolated_string = is_format(&delimiter);
