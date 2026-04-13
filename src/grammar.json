@@ -2192,6 +2192,10 @@
         {
           "type": "SYMBOL",
           "name": "proc_return_value"
+        },
+        {
+          "type": "SYMBOL",
+          "name": "update_expression"
         }
       ]
     },
@@ -2340,14 +2344,6 @@
                 },
                 {
                   "type": "STRING",
-                  "value": "--"
-                },
-                {
-                  "type": "STRING",
-                  "value": "++"
-                },
-                {
-                  "type": "STRING",
                   "value": "~"
                 },
                 {
@@ -2368,6 +2364,75 @@
               "type": "SYMBOL",
               "name": "expression"
             }
+          }
+        ]
+      }
+    },
+    "update_expression": {
+      "type": "PREC_RIGHT",
+      "value": 14,
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "FIELD",
+                "name": "operator",
+                "content": {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": "--"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "++"
+                    }
+                  ]
+                }
+              },
+              {
+                "type": "FIELD",
+                "name": "argument",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "expression"
+                }
+              }
+            ]
+          },
+          {
+            "type": "SEQ",
+            "members": [
+              {
+                "type": "FIELD",
+                "name": "argument",
+                "content": {
+                  "type": "SYMBOL",
+                  "name": "expression"
+                }
+              },
+              {
+                "type": "FIELD",
+                "name": "operator",
+                "content": {
+                  "type": "CHOICE",
+                  "members": [
+                    {
+                      "type": "STRING",
+                      "value": "--"
+                    },
+                    {
+                      "type": "STRING",
+                      "value": "++"
+                    }
+                  ]
+                }
+              }
+            ]
           }
         ]
       }
@@ -3950,6 +4015,10 @@
             {
               "type": "PATTERN",
               "value": "0x[0-9a-fA-F]+"
+            },
+            {
+              "type": "PATTERN",
+              "value": "\\d+e[-]?\\d"
             }
           ]
         }
@@ -4221,207 +4290,130 @@
       ]
     },
     "primitive_type": {
-      "type": "CHOICE",
-      "members": [
-        {
-          "type": "STRING",
-          "value": "obj"
-        },
-        {
-          "type": "STRING",
-          "value": "mob"
-        },
-        {
-          "type": "STRING",
-          "value": "world"
-        },
-        {
-          "type": "STRING",
-          "value": "client"
-        },
-        {
-          "type": "STRING",
-          "value": "turf"
-        },
-        {
-          "type": "STRING",
-          "value": "area"
-        },
-        {
-          "type": "STRING",
-          "value": "datum"
-        },
-        {
-          "type": "STRING",
-          "value": "atom"
-        },
-        {
-          "type": "STRING",
-          "value": "list"
-        },
-        {
-          "type": "STRING",
-          "value": "mutable_appearance"
-        },
-        {
-          "type": "STRING",
-          "value": "exception"
-        },
-        {
-          "type": "STRING",
-          "value": "generator"
-        },
-        {
-          "type": "STRING",
-          "value": "icon"
-        },
-        {
-          "type": "STRING",
-          "value": "image"
-        },
-        {
-          "type": "STRING",
-          "value": "alist"
-        },
-        {
-          "type": "STRING",
-          "value": "matrix"
-        },
-        {
-          "type": "STRING",
-          "value": "particles"
-        },
-        {
-          "type": "STRING",
-          "value": "pixloc"
-        },
-        {
-          "type": "STRING",
-          "value": "regex"
-        },
-        {
-          "type": "STRING",
-          "value": "savefile"
-        },
-        {
-          "type": "STRING",
-          "value": "sound"
-        },
-        {
-          "type": "STRING",
-          "value": "vector"
-        },
-        {
-          "type": "STRING",
-          "value": "database"
-        }
-      ]
+      "type": "PREC",
+      "value": -1,
+      "content": {
+        "type": "CHOICE",
+        "members": [
+          {
+            "type": "STRING",
+            "value": "obj"
+          },
+          {
+            "type": "STRING",
+            "value": "mob"
+          },
+          {
+            "type": "STRING",
+            "value": "world"
+          },
+          {
+            "type": "STRING",
+            "value": "client"
+          },
+          {
+            "type": "STRING",
+            "value": "turf"
+          },
+          {
+            "type": "STRING",
+            "value": "area"
+          },
+          {
+            "type": "STRING",
+            "value": "datum"
+          },
+          {
+            "type": "STRING",
+            "value": "atom"
+          },
+          {
+            "type": "STRING",
+            "value": "list"
+          },
+          {
+            "type": "STRING",
+            "value": "mutable_appearance"
+          },
+          {
+            "type": "STRING",
+            "value": "exception"
+          },
+          {
+            "type": "STRING",
+            "value": "generator"
+          },
+          {
+            "type": "STRING",
+            "value": "icon"
+          },
+          {
+            "type": "STRING",
+            "value": "image"
+          },
+          {
+            "type": "STRING",
+            "value": "alist"
+          },
+          {
+            "type": "STRING",
+            "value": "matrix"
+          },
+          {
+            "type": "STRING",
+            "value": "particles"
+          },
+          {
+            "type": "STRING",
+            "value": "pixloc"
+          },
+          {
+            "type": "STRING",
+            "value": "regex"
+          },
+          {
+            "type": "STRING",
+            "value": "savefile"
+          },
+          {
+            "type": "STRING",
+            "value": "sound"
+          },
+          {
+            "type": "STRING",
+            "value": "vector"
+          },
+          {
+            "type": "STRING",
+            "value": "database"
+          },
+          {
+            "type": "PREC",
+            "value": -1,
+            "content": {
+              "type": "SYMBOL",
+              "name": "identifier"
+            }
+          }
+        ]
+      }
     },
     "primitive_type_path": {
-      "type": "TOKEN",
+      "type": "PREC",
+      "value": -1,
       "content": {
         "type": "SEQ",
         "members": [
           {
-            "type": "CHOICE",
-            "members": [
-              {
-                "type": "STRING",
-                "value": "obj"
-              },
-              {
-                "type": "STRING",
-                "value": "mob"
-              },
-              {
-                "type": "STRING",
-                "value": "world"
-              },
-              {
-                "type": "STRING",
-                "value": "client"
-              },
-              {
-                "type": "STRING",
-                "value": "turf"
-              },
-              {
-                "type": "STRING",
-                "value": "area"
-              },
-              {
-                "type": "STRING",
-                "value": "datum"
-              },
-              {
-                "type": "STRING",
-                "value": "atom"
-              },
-              {
-                "type": "STRING",
-                "value": "list"
-              },
-              {
-                "type": "STRING",
-                "value": "mutable_appearance"
-              },
-              {
-                "type": "STRING",
-                "value": "exception"
-              },
-              {
-                "type": "STRING",
-                "value": "generator"
-              },
-              {
-                "type": "STRING",
-                "value": "icon"
-              },
-              {
-                "type": "STRING",
-                "value": "image"
-              },
-              {
-                "type": "STRING",
-                "value": "alist"
-              },
-              {
-                "type": "STRING",
-                "value": "matrix"
-              },
-              {
-                "type": "STRING",
-                "value": "particles"
-              },
-              {
-                "type": "STRING",
-                "value": "pixloc"
-              },
-              {
-                "type": "STRING",
-                "value": "regex"
-              },
-              {
-                "type": "STRING",
-                "value": "savefile"
-              },
-              {
-                "type": "STRING",
-                "value": "sound"
-              },
-              {
-                "type": "STRING",
-                "value": "vector"
-              },
-              {
-                "type": "STRING",
-                "value": "database"
-              }
-            ]
+            "type": "SYMBOL",
+            "name": "identifier"
           },
           {
-            "type": "STRING",
-            "value": "/"
+            "type": "IMMEDIATE_TOKEN",
+            "content": {
+              "type": "STRING",
+              "value": "/"
+            }
           }
         ]
       }
@@ -4663,10 +4655,6 @@
     [
       "type_path",
       "type_path_expression"
-    ],
-    [
-      "builtin_const",
-      "primitive_type"
     ],
     [
       "preproc_call_expression"

@@ -593,6 +593,10 @@
         {
           "type": "unary_expression",
           "named": true
+        },
+        {
+          "type": "update_expression",
+          "named": true
         }
       ]
     }
@@ -1671,7 +1675,32 @@
   {
     "type": "primitive_type",
     "named": true,
-    "fields": {}
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": false,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "primitive_type_path",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": false,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "proc_definition",
@@ -2250,15 +2279,37 @@
             "named": false
           },
           {
+            "type": "~",
+            "named": false
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "update_expression",
+    "named": true,
+    "fields": {
+      "argument": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      },
+      "operator": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
             "type": "++",
             "named": false
           },
           {
             "type": "--",
-            "named": false
-          },
-          {
-            "type": "~",
             "named": false
           }
         ]
@@ -2801,10 +2852,6 @@
   },
   {
     "type": "preproc_message",
-    "named": true
-  },
-  {
-    "type": "primitive_type_path",
     "named": true
   },
   {
