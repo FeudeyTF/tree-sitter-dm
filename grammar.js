@@ -741,7 +741,9 @@ module.exports = grammar({
         /\d+/,
         /\d+\.\d*/,
         /0x[0-9a-fA-F]+/,
-        /\d+e[-]?\d/
+        /\d+e-?\d/,
+        /\d\.?#INF/,
+        /\d\.?#IND/
       ),
     ),
 
