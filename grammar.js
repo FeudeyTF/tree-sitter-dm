@@ -408,12 +408,12 @@ module.exports = grammar({
 
     forlist_condition: $ => prec(1, choice(
       seq(
-        $.var_definition,
+        $.for_var_definition,
         optional(seq('as', sep1($.as_type, '|'))),
         optional(seq('in', $.expression))
       ),
       seq(
-        $.var_definition,
+        $.for_var_definition,
         'in',
         $.number_literal,
         'to',
@@ -421,7 +421,7 @@ module.exports = grammar({
         optional(seq('step', $.number_literal))
       ),
       seq(
-        field('key', $.var_definition),
+        field('key', $.for_var_definition),
         optional(seq('as', sep1($.as_type, '|'))),
         ',',
         field('value', $.identifier),
@@ -432,20 +432,29 @@ module.exports = grammar({
 
     forloop_condition: $ => choice(
       seq(
-        field('initial', $.var_definition),
+        optional(field('initial', $.for_var_definition)),
         ',',
-        field('condition', $.expression),
+        optional(field('condition', $.expression)),
         ',',
-        field('increment', $.expression)
+        optional(field('increment', $.expression))
       ),
       seq(
-        field('initial', $.var_definition),
+        optional(field('initial', $.for_var_definition)),
         ';',
-        field('condition', $.expression),
+        optional(field('condition', $.expression)),
         ';',
-        field('increment', $.expression)
+        optional(field('increment', $.expression))
       ),
     ),
+
+
+    for_var_definition: $ => prec.left(commaSep1(
+      choice(
+        $.var_definition,
+        seq($.identifier, optional(seq('[', $.literal, ']'))),
+        "."
+      ),
+    )),
 
     while_statement: $ => seq(
       'while',
