@@ -271,6 +271,7 @@ module.exports = grammar({
       seq(optional(choice($.type_operator, '/')), $.proc_keyword, $.type_operator),
       field('name', $.identifier),
       $.proc_parameters,
+      optional($.as_operator),
       optional($.block)
     )),
 
@@ -279,6 +280,7 @@ module.exports = grammar({
       $.type_operator,
       field('name', $.identifier),
       $.proc_parameters,
+      optional($.as_operator),
       optional($.block)
     ))),
 
@@ -287,6 +289,7 @@ module.exports = grammar({
       seq(optional(choice($.type_operator, '/')), $.proc_keyword, $.type_operator),
       field('name', $.identifier),
       $.proc_parameters,
+      optional($.as_operator),
       optional($.block)
     ))),
 
@@ -296,14 +299,17 @@ module.exports = grammar({
       ')'
     ),
 
-    proc_parameter: $ => choice(
-      $.var_definition,
-      seq(
-        optional(seq($.type_path, $.type_operator)),
-        field('name', $.identifier),
-        optional(seq('=', $.expression))
+    proc_parameter: $ => seq(
+      choice(
+        $.var_definition,
+        seq(
+          optional(seq($.type_path, $.type_operator)),
+          field('name', $.identifier),
+          optional(seq('=', $.expression))
+        ),
+        '...'
       ),
-      '...'
+      optional($.as_operator)
     ),
 
     global_var_definition: $ => seq(choice(
@@ -409,7 +415,7 @@ module.exports = grammar({
     forlist_condition: $ => prec(1, choice(
       seq(
         $.for_var_definition,
-        optional(seq('as', sep1($.as_type, '|'))),
+        optional($.as_operator),
         optional(seq('in', $.expression))
       ),
       seq(
@@ -422,7 +428,7 @@ module.exports = grammar({
       ),
       seq(
         field('key', $.for_var_definition),
-        optional(seq('as', sep1($.as_type, '|'))),
+        optional($.as_operator),
         ',',
         field('value', $.identifier),
         'in',
@@ -524,14 +530,19 @@ module.exports = grammar({
       $.parenthesized_expression,
       $.type_path_expression,
       $.proc_return_value,
-      $.update_expression
+      $.update_expression,
+      $.as_expression
     ),
 
-    as_expression: $ => seq(
+    as_expression: $ => prec(-1, seq(
       $.expression,
+      $.as_operator
+    )),
+
+    as_operator: $ => prec.right(1, seq(
       'as',
       sep1($.as_type, '|')
-    ),
+    )),
 
     call_expression: $ => prec(1, seq(
       field('name', $.identifier),
@@ -816,6 +827,8 @@ module.exports = grammar({
     as_type: $ => choice(
       'anything',
       'text',
+      'num',
+      $.type_path,
       $.null
     ),
 
