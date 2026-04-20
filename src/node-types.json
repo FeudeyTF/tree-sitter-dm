@@ -461,6 +461,10 @@
         "required": true,
         "types": [
           {
+            "type": "..",
+            "named": false
+          },
+          {
             "type": "identifier",
             "named": true
           }
@@ -628,10 +632,6 @@
         },
         {
           "type": "null",
-          "named": true
-        },
-        {
-          "type": "parent_proc_expression",
           "named": true
         },
         {
@@ -918,10 +918,6 @@
           "named": true
         },
         {
-          "type": "newline",
-          "named": true
-        },
-        {
           "type": "type_operator",
           "named": true
         },
@@ -958,10 +954,6 @@
         },
         {
           "type": "indented_block",
-          "named": true
-        },
-        {
-          "type": "newline",
           "named": true
         }
       ]
@@ -1031,19 +1023,11 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
-      "required": true,
+      "multiple": false,
+      "required": false,
       "types": [
         {
-          "type": "indent",
-          "named": true
-        },
-        {
           "type": "indented_block_1",
-          "named": true
-        },
-        {
-          "type": "newline",
           "named": true
         }
       ]
@@ -1055,7 +1039,7 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "break_statement",
@@ -1063,10 +1047,6 @@
         },
         {
           "type": "continue_statement",
-          "named": true
-        },
-        {
-          "type": "dedent",
           "named": true
         },
         {
@@ -1339,10 +1319,6 @@
           "named": true
         },
         {
-          "type": "newline",
-          "named": true
-        },
-        {
           "type": "preproc_directive",
           "named": true
         },
@@ -1402,10 +1378,6 @@
         },
         {
           "type": "block",
-          "named": true
-        },
-        {
-          "type": "newline",
           "named": true
         }
       ]
@@ -1535,12 +1507,8 @@
     },
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
-        {
-          "type": "newline",
-          "named": true
-        },
         {
           "type": "preproc_if_block",
           "named": true
@@ -1557,13 +1525,9 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
-      "required": true,
+      "multiple": false,
+      "required": false,
       "types": [
-        {
-          "type": "newline",
-          "named": true
-        },
         {
           "type": "preproc_if_block",
           "named": true
@@ -1574,30 +1538,16 @@
   {
     "type": "preproc_endif",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "newline",
-          "named": true
-        }
-      ]
-    }
+    "fields": {}
   },
   {
     "type": "preproc_error",
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
-        {
-          "type": "newline",
-          "named": true
-        },
         {
           "type": "preproc_message",
           "named": true
@@ -1638,10 +1588,6 @@
       "multiple": true,
       "required": true,
       "types": [
-        {
-          "type": "newline",
-          "named": true
-        },
         {
           "type": "preproc_endif",
           "named": true
@@ -1774,10 +1720,6 @@
       "required": true,
       "types": [
         {
-          "type": "newline",
-          "named": true
-        },
-        {
           "type": "preproc_endif",
           "named": true
         },
@@ -1844,13 +1786,9 @@
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
-        {
-          "type": "newline",
-          "named": true
-        },
         {
           "type": "preproc_message",
           "named": true
@@ -2291,22 +2229,10 @@
     "fields": {},
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
-          "type": "dedent",
-          "named": true
-        },
-        {
           "type": "expression",
-          "named": true
-        },
-        {
-          "type": "indent",
-          "named": true
-        },
-        {
-          "type": "newline",
           "named": true
         },
         {
@@ -2826,6 +2752,10 @@
     "named": false
   },
   {
+    "type": "..",
+    "named": false
+  },
+  {
     "type": "...",
     "named": false
   },
@@ -3030,10 +2960,6 @@
     "named": false
   },
   {
-    "type": "dedent",
-    "named": true
-  },
-  {
     "type": "do",
     "named": false
   },
@@ -3094,10 +3020,6 @@
     "named": false
   },
   {
-    "type": "indent",
-    "named": true
-  },
-  {
     "type": "line_comment",
     "named": true
   },
@@ -3127,10 +3049,6 @@
     "named": false
   },
   {
-    "type": "newline",
-    "named": true
-  },
-  {
     "type": "null",
     "named": true
   },
@@ -3145,10 +3063,6 @@
   {
     "type": "operator",
     "named": false
-  },
-  {
-    "type": "parent_proc_expression",
-    "named": true
   },
   {
     "type": "particles",
