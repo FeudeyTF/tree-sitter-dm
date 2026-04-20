@@ -598,9 +598,9 @@ module.exports = grammar({
       optional($.expression)
     ),
 
-    break_statement: _ => 'break',
+    break_statement: _ => prec.left('break'),
 
-    continue_statement: _ => 'continue',
+    continue_statement: _ => prec.left('continue'),
 
     // Expressions
 

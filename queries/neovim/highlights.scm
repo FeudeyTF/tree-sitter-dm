@@ -11,8 +11,8 @@
   "for"
   "in"
   "step"
-  (continue_statement)
-  (break_statement)
+  "continue"
+  "break"
   "goto"
   "do"
 ] @keyword.repeat

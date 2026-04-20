@@ -6,8 +6,8 @@
 (pair
   key: (expression (literal (identifier) @member)))
 
-(break_statement) @keyword
-(continue_statement) @keyword
+"break" @keyword
+"continue" @keyword
 "else" @keyword
 "for" @keyword
 "if" @keyword
