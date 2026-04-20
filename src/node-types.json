@@ -176,6 +176,10 @@
             "named": false
           },
           {
+            "type": "[]=",
+            "named": false
+          },
+          {
             "type": "^=",
             "named": false
           },
@@ -424,6 +428,11 @@
     }
   },
   {
+    "type": "break_statement",
+    "named": true,
+    "fields": {}
+  },
+  {
     "type": "builtin_const",
     "named": true,
     "fields": {}
@@ -514,6 +523,11 @@
         ]
       }
     }
+  },
+  {
+    "type": "continue_statement",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "else_clause",
@@ -1187,6 +1201,61 @@
     "type": "number_literal",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "operator",
+    "named": true,
+    "fields": {}
+  },
+  {
+    "type": "operator_override",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "as_operator",
+          "named": true
+        },
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "operator",
+          "named": true
+        },
+        {
+          "type": "proc_keyword",
+          "named": true
+        },
+        {
+          "type": "proc_parameters",
+          "named": true
+        },
+        {
+          "type": "type_operator",
+          "named": true
+        },
+        {
+          "type": "type_path",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "pair",
@@ -2022,6 +2091,10 @@
           "named": true
         },
         {
+          "type": "operator_override",
+          "named": true
+        },
+        {
           "type": "preproc_call_expression",
           "named": true
         },
@@ -2186,10 +2259,6 @@
           "named": true
         },
         {
-          "type": "preproc_call_expression",
-          "named": true
-        },
-        {
           "type": "preproc_directive",
           "named": true
         },
@@ -2198,7 +2267,15 @@
           "named": true
         },
         {
+          "type": "type_operator_override",
+          "named": true
+        },
+        {
           "type": "type_proc_definition",
+          "named": true
+        },
+        {
+          "type": "type_proc_override",
           "named": true
         },
         {
@@ -2233,10 +2310,6 @@
           "named": true
         },
         {
-          "type": "preproc_call_expression",
-          "named": true
-        },
-        {
           "type": "preproc_directive",
           "named": true
         },
@@ -2245,7 +2318,15 @@
           "named": true
         },
         {
+          "type": "type_operator_override",
+          "named": true
+        },
+        {
           "type": "type_proc_definition",
+          "named": true
+        },
+        {
+          "type": "type_proc_override",
           "named": true
         },
         {
@@ -2258,28 +2339,13 @@
   {
     "type": "type_definition",
     "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
+    "fields": {},
     "children": {
       "multiple": true,
       "required": true,
       "types": [
         {
           "type": "type_body",
-          "named": true
-        },
-        {
-          "type": "type_operator",
           "named": true
         },
         {
@@ -2293,6 +2359,52 @@
     "type": "type_operator",
     "named": true,
     "fields": {}
+  },
+  {
+    "type": "type_operator_override",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "as_operator",
+          "named": true
+        },
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "operator",
+          "named": true
+        },
+        {
+          "type": "proc_keyword",
+          "named": true
+        },
+        {
+          "type": "proc_parameters",
+          "named": true
+        },
+        {
+          "type": "type_operator",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "type_path",
@@ -2387,6 +2499,40 @@
     }
   },
   {
+    "type": "type_proc_override",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "as_operator",
+          "named": true
+        },
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "proc_parameters",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "unary_expression",
     "named": true,
     "fields": {
@@ -2474,6 +2620,10 @@
       "required": true,
       "types": [
         {
+          "type": "as_operator",
+          "named": true
+        },
+        {
           "type": "expression",
           "named": true
         },
@@ -2537,6 +2687,10 @@
   },
   {
     "type": "!=",
+    "named": false
+  },
+  {
+    "type": "\"\"",
     "named": false
   },
   {
@@ -2784,6 +2938,14 @@
     "named": false
   },
   {
+    "type": "[]",
+    "named": false
+  },
+  {
+    "type": "[]=",
+    "named": false
+  },
+  {
     "type": "\\",
     "named": false
   },
@@ -2840,8 +3002,8 @@
     "named": true
   },
   {
-    "type": "break_statement",
-    "named": true
+    "type": "break",
+    "named": false
   },
   {
     "type": "catch",
@@ -2856,8 +3018,8 @@
     "named": false
   },
   {
-    "type": "continue_statement",
-    "named": true
+    "type": "continue",
+    "named": false
   },
   {
     "type": "database",
@@ -2870,6 +3032,10 @@
   {
     "type": "dedent",
     "named": true
+  },
+  {
+    "type": "do",
+    "named": false
   },
   {
     "type": "else",
