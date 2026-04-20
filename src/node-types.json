@@ -45,6 +45,40 @@
     }
   },
   {
+    "type": "as_expression",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "as_operator",
+          "named": true
+        },
+        {
+          "type": "expression",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "as_operator",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "as_type",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "as_type",
     "named": true,
     "fields": {},
@@ -54,6 +88,10 @@
       "types": [
         {
           "type": "null",
+          "named": true
+        },
+        {
+          "type": "type_path",
           "named": true
         }
       ]
@@ -531,6 +569,10 @@
           "named": true
         },
         {
+          "type": "as_expression",
+          "named": true
+        },
+        {
           "type": "assignment_expression",
           "named": true
         },
@@ -732,6 +774,29 @@
     }
   },
   {
+    "type": "for_var_definition",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "literal",
+          "named": true
+        },
+        {
+          "type": "var_definition",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "forlist_condition",
     "named": true,
     "fields": {
@@ -740,7 +805,7 @@
         "required": false,
         "types": [
           {
-            "type": "var_definition",
+            "type": "for_var_definition",
             "named": true
           }
         ]
@@ -761,7 +826,7 @@
       "required": true,
       "types": [
         {
-          "type": "as_type",
+          "type": "as_operator",
           "named": true
         },
         {
@@ -769,11 +834,11 @@
           "named": true
         },
         {
-          "type": "number_literal",
+          "type": "for_var_definition",
           "named": true
         },
         {
-          "type": "var_definition",
+          "type": "number_literal",
           "named": true
         }
       ]
@@ -785,7 +850,7 @@
     "fields": {
       "condition": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "expression",
@@ -795,7 +860,7 @@
       },
       "increment": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
             "type": "expression",
@@ -805,10 +870,10 @@
       },
       "initial": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
-            "type": "var_definition",
+            "type": "for_var_definition",
             "named": true
           }
         ]
@@ -1132,11 +1197,7 @@
         "required": true,
         "types": [
           {
-            "type": "literal",
-            "named": true
-          },
-          {
-            "type": "type_path_expression",
+            "type": "expression",
             "named": true
           }
         ]
@@ -1177,7 +1238,31 @@
       "required": true,
       "types": [
         {
+          "type": "break_statement",
+          "named": true
+        },
+        {
+          "type": "continue_statement",
+          "named": true
+        },
+        {
           "type": "expression",
+          "named": true
+        },
+        {
+          "type": "for_statement",
+          "named": true
+        },
+        {
+          "type": "goto_label",
+          "named": true
+        },
+        {
+          "type": "goto_statement",
+          "named": true
+        },
+        {
+          "type": "if_statement",
           "named": true
         },
         {
@@ -1186,6 +1271,38 @@
         },
         {
           "type": "newline",
+          "named": true
+        },
+        {
+          "type": "preproc_directive",
+          "named": true
+        },
+        {
+          "type": "return_statement",
+          "named": true
+        },
+        {
+          "type": "set_expression",
+          "named": true
+        },
+        {
+          "type": "spawn_statement",
+          "named": true
+        },
+        {
+          "type": "switch_statement",
+          "named": true
+        },
+        {
+          "type": "try_catch_statement",
+          "named": true
+        },
+        {
+          "type": "var_definition",
+          "named": true
+        },
+        {
+          "type": "while_statement",
           "named": true
         }
       ]
@@ -1722,6 +1839,10 @@
       "required": true,
       "types": [
         {
+          "type": "as_operator",
+          "named": true
+        },
+        {
           "type": "block",
           "named": true
         },
@@ -1769,6 +1890,10 @@
       "required": true,
       "types": [
         {
+          "type": "as_operator",
+          "named": true
+        },
+        {
           "type": "block",
           "named": true
         },
@@ -1807,6 +1932,10 @@
       "required": false,
       "types": [
         {
+          "type": "as_operator",
+          "named": true
+        },
+        {
           "type": "expression",
           "named": true
         },
@@ -1839,6 +1968,11 @@
         }
       ]
     }
+  },
+  {
+    "type": "proc_return_value",
+    "named": true,
+    "fields": {}
   },
   {
     "type": "return_statement",
@@ -2229,6 +2363,10 @@
       "multiple": true,
       "required": true,
       "types": [
+        {
+          "type": "as_operator",
+          "named": true
+        },
         {
           "type": "block",
           "named": true
@@ -2831,6 +2969,10 @@
     "named": true
   },
   {
+    "type": "num",
+    "named": false
+  },
+  {
     "type": "obj",
     "named": false
   },
@@ -2857,10 +2999,6 @@
   {
     "type": "proc",
     "named": false
-  },
-  {
-    "type": "proc_return_value",
-    "named": true
   },
   {
     "type": "regex",
