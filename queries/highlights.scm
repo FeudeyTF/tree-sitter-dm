@@ -17,6 +17,7 @@
 "static" @keyword
 "switch" @keyword
 "while" @keyword
+"do" @keyword
 "set" @keyword
 
 "#define" @keyword

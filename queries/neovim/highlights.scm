@@ -14,6 +14,7 @@
   (continue_statement)
   (break_statement)
   "goto"
+  "do"
 ] @keyword.repeat
 
 [

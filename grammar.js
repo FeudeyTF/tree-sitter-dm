@@ -544,12 +544,22 @@ module.exports = grammar({
       ),
     )),
 
-    while_statement: $ => seq(
-      'while',
-      '(',
-      field('condition', $.expression),
-      ')',
-      $.block
+    while_statement: $ => choice(
+      seq(
+        'while',
+        '(',
+        field('condition', $.expression),
+        ')',
+        $.block
+      ),
+      seq(
+        'do',
+        $.block,
+        'while',
+        '(',
+        field('condition', $.expression),
+        ')',
+      )
     ),
 
     switch_statement: $ => seq(
