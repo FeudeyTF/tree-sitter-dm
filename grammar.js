@@ -119,7 +119,6 @@ module.exports = grammar({
     [$.type_path],
     [$.return_statement],
     [$.type_path, $.type_path_expression],
-    [$.preproc_call_expression]
   ],
 
   externals: $ => [
@@ -271,12 +270,6 @@ module.exports = grammar({
 
     type_definition: $ => prec.dynamic(-1, seq(
       $.type_path,
-      optional(
-        seq(
-          $.type_operator,
-          field('name', $.identifier)
-        )
-      ),
       $.type_body
     )),
 
