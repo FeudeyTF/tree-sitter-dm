@@ -122,9 +122,9 @@ module.exports = grammar({
   ],
 
   externals: $ => [
-    $.newline,
-    $.indent,
-    $.dedent,
+    $._newline,
+    $._indent,
+    $._dedent,
 
     $.string_start,
     $._string_content,
@@ -195,7 +195,7 @@ module.exports = grammar({
     preproc_if: $ => seq(
       preprocessor('if'),
       field('condition', $.expression),
-      $.newline,
+      $._newline,
       optional($.preproc_if_block),
       field('alternative', optional(choice($.preproc_elif, $.preproc_else))),
       $.preproc_endif
@@ -204,7 +204,7 @@ module.exports = grammar({
     preproc_ifdef: $ => seq(
       choice(preprocessor('ifdef'), preprocessor('ifndef')),
       field('name', $.identifier),
-      $.newline,
+      $._newline,
       optional($.preproc_if_block),
       field('alternative', optional(choice($.preproc_elif, $.preproc_else))),
       $.preproc_endif
@@ -213,18 +213,18 @@ module.exports = grammar({
     preproc_elif: $ => seq(
       preprocessor('elif'),
       optional($.preproc_message),
-      $.newline,
+      $._newline,
       optional($.preproc_if_block),
       field('alternative', optional(choice($.preproc_elif, $.preproc_else)))
     ),
 
     preproc_else: $ => seq(
       preprocessor('else'),
-      $.newline,
+      $._newline,
       optional($.preproc_if_block)
     ),
 
-    preproc_endif: $ => seq(preprocessor('endif'), $.newline),
+    preproc_endif: $ => seq(preprocessor('endif'), $._newline),
 
     preproc_if_block: $ => repeat1(choice(
       $._statement,
@@ -237,7 +237,7 @@ module.exports = grammar({
     preproc_call_expression: $ => seq(
       field('directive', $.identifier),
       $.argument_list,
-      $.newline,
+      $._newline,
       // This shouldn't be here, but it fixes some issues with calling the preproc directive
       optional($.block)
     ),
@@ -249,19 +249,19 @@ module.exports = grammar({
       ),
       $._statements
     )),
-      $.newline
+      $._newline
     ),
 
     preproc_warn: $ => seq(
       preprocessor('warn'),
       $.preproc_message,
-      $.newline
+      $._newline
     ),
 
     preproc_error: $ => seq(
       preprocessor('error'),
       $.preproc_message,
-      $.newline
+      $._newline
     ),
 
     preproc_message: $ => /.*/,
@@ -279,12 +279,12 @@ module.exports = grammar({
     ),
 
     type_body_intended: $ => seq(
-      $.newline,
+      $._newline,
       optional(
         seq(
-          $.indent,
-          repeat1(seq($._type_statement, $.newline)),
-          $.dedent
+          $._indent,
+          repeat1(seq($._type_statement, $._newline)),
+          $._dedent
         )
       )
     ),
@@ -397,7 +397,7 @@ module.exports = grammar({
         field('name', $.identifier),
         optional(seq('=', $.expression)),
       )
-    ), $.newline),
+    ), $._newline),
 
     // Statements
 
@@ -444,7 +444,7 @@ module.exports = grammar({
       $.identifier,
       optional(':'),
       choice(
-        $.newline,
+        $._newline,
         $.indented_block
       )
     )),
@@ -604,7 +604,6 @@ module.exports = grammar({
       $.null,
       $.new_expression,
       $.call_expression,
-      $.parent_proc_expression,
       $.binary_expression,
       $.assignment_expression,
       $.unary_expression,
@@ -630,7 +629,7 @@ module.exports = grammar({
     )),
 
     call_expression: $ => prec(1, seq(
-      field('name', $.identifier),
+      field('name', choice($.identifier, '..')),
       field("arguments", $.argument_list)
     )),
 
@@ -754,8 +753,6 @@ module.exports = grammar({
       optional(field("arguments", $.argument_list)),
     )),
 
-    parent_proc_expression: _ => '..()',
-
     type_path_expression: $ => prec.left(choice(
       seq(
         '/',
@@ -787,16 +784,16 @@ module.exports = grammar({
     _statements: $ => seq(
       sep1($._statement, SEMICOLON),
       optional(SEMICOLON),
-      $.newline,
+      $._newline,
     ),
 
     indented_block: $ => choice(
-      seq($.newline, optional(seq($.indent, $.indented_block_1))),
+      seq($._newline, optional(seq($._indent, $.indented_block_1))),
     ),
 
     indented_block_1: $ => seq(
       repeat(seq($._statement, optional(SEMICOLON))),
-      $.dedent,
+      $._dedent,
     ),
 
     braced_block: $ => seq(
@@ -974,7 +971,7 @@ function commaSep(rule) {
 }
 
 function commaSep1(rule) {
-  return sep1(rule, ',');
+  return seq(sep1(rule, ','), optional(','));
 }
 
 function sep1(rule, separator) {
