@@ -59,6 +59,53 @@ const BUILTIN_TYPES = [
   'database',
 ];
 
+const OPERATORS = [
+  '+',
+  '-',
+  '*',
+  '/',
+  '||',
+  '%',
+  '%%',
+  '&&',
+  '|',
+  '^',
+  '&',
+  '!=',
+  '==',
+  '<>',
+  '>',
+  '~=',
+  '~!',
+  '>=',
+  '<',
+  '<=',
+  '<=>',
+  '<<',
+  '>>',
+  '[]'
+];
+
+const ASSIGNMENT_OPERATORS = [
+  '=',
+  '+=',
+  '-=',
+  '-=',
+  '*=',
+  '/=',
+  '%=',
+  '%%=',
+  '&=',
+  '|=',
+  '^=',
+  '<<=',
+  '>>=',
+  ':=',
+  '&&=',
+  '||=',
+  '[]='
+];
+
 module.exports = grammar({
   name: "dm",
 
@@ -94,6 +141,7 @@ module.exports = grammar({
       $.proc_override,
       $.type_definition,
       $.global_var_definition,
+      $.operator_override,
 
       $.preproc_call_expression,
       $.preproc_directive
@@ -262,12 +310,45 @@ module.exports = grammar({
       ),
       $.var_definition,
       $.type_proc_definition,
+      $.type_proc_override,
+      $.type_operator_override,
 
-      $.preproc_call_expression,
       $.preproc_directive
     ),
 
-    type_proc_definition: $ => prec.left(seq(
+    operator_override: $ => prec.right(prec.dynamic(1, seq(
+      optional($.type_path),
+      seq(optional(choice($.type_operator, '/')), $.proc_keyword, $.type_operator),
+      field('name', $.identifier),
+      $.operator,
+      $.proc_parameters,
+      optional($.as_operator),
+      optional($.block)
+    ))),
+
+    type_operator_override: $ => prec.right(seq(
+      seq($.proc_keyword, $.type_operator),
+      field('name', $.identifier),
+      $.operator,
+      $.proc_parameters,
+      optional($.as_operator),
+      optional($.block)
+    )),
+
+    operator: $ => choice(
+      ...ASSIGNMENT_OPERATORS,
+      ...OPERATORS,
+      "\"\""
+    ),
+
+    type_proc_override: $ => prec.right(seq(
+      field('name', $.identifier),
+      $.proc_parameters,
+      optional($.as_operator),
+      optional($.block)
+    )),
+
+    type_proc_definition: $ => prec.right(seq(
       seq(optional(choice($.type_operator, '/')), $.proc_keyword, $.type_operator),
       field('name', $.identifier),
       $.proc_parameters,
@@ -617,24 +698,7 @@ module.exports = grammar({
 
     assignment_expression: $ => prec.right(PREC.ASSIGNMENT, seq(
       field('left', choice($.identifier, $.field_expression, $.array_expression, $.proc_return_value)),
-      field('operator', choice(
-        '=',
-        '+=',
-        '-=',
-        '-=',
-        '*=',
-        '/=',
-        '%=',
-        '%%=',
-        '&=',
-        '|=',
-        '^=',
-        '<<=',
-        '>>=',
-        ':=',
-        '&&=',
-        '||='
-      )),
+      field('operator', choice(...ASSIGNMENT_OPERATORS)),
       field('right', $.expression),
     )),
 
