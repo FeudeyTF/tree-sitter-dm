@@ -4,7 +4,7 @@
  (#match? @constant "^[A-Z][A-Z\\d_]*$"))
 
 (pair
-  key: (literal (identifier) @member))
+  key: (expression (literal (identifier) @member)))
 
 [
   "while"

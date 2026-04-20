@@ -197,10 +197,10 @@ module.exports = grammar({
 
     preproc_arg: $ => seq(prec.right(choice(
       repeat1(seq(
-        $.expression,
+        $._statements,
         $.line_continuation),
       ),
-      $.expression
+      $._statements
     )),
       $.newline
     ),
@@ -738,7 +738,7 @@ module.exports = grammar({
     ),
 
     pair: $ => seq(
-      field("key", choice($.literal, $.type_path_expression)),
+      field("key", choice($.expression)),
       "=",
       field("value", $.expression)
     ),
