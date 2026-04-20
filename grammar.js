@@ -461,14 +461,15 @@ module.exports = grammar({
       $.identifier
     ),
 
-    var_definition: $ => seq(
+    var_definition: $ => prec.left(seq(
       $.var_keyword,
       optional(seq($.type_operator, $.var_modifier)),
       optional($.type_path),
       $.type_operator,
       field('name', $.identifier),
       optional(seq('=', $.expression)),
-    ),
+      optional($.as_operator)
+    )),
 
     try_catch_statement: $ => seq(
       'try',
