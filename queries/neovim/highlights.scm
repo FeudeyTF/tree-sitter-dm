@@ -1,7 +1,7 @@
 (comment) @comment @spell
 (identifier) @variable
-((identifier) @constant
- (#match? @constant "^[A-Z][A-Z\\d_]*$"))
+((identifier) @keyword
+ (#match? @keyword "^[A-Z][A-Z\\d_]*$"))
 
 (pair
   key: (expression (literal (identifier) @member)))

@@ -445,7 +445,7 @@ module.exports = grammar({
       optional(':'),
       choice(
         $._newline,
-        $.indented_block
+        $._indented_block
       )
     )),
 
@@ -777,8 +777,8 @@ module.exports = grammar({
 
     // Default block of proc or type definition.
     block: $ => choice(
-      $.indented_block,
-      $.braced_block,
+      $._indented_block,
+      $._braced_block,
     ),
 
     _statements: $ => seq(
@@ -787,18 +787,18 @@ module.exports = grammar({
       $._newline,
     ),
 
-    indented_block: $ => choice(
-      seq($._newline, optional(seq($._indent, $.indented_block_1))),
+    _indented_block: $ => choice(
+      seq($._newline, optional(seq($._indent, $._indented_block_1))),
     ),
 
-    indented_block_1: $ => seq(
+    _indented_block_1: $ => seq(
       repeat(seq($._statement, optional(SEMICOLON))),
       $._dedent,
     ),
 
-    braced_block: $ => seq(
+    _braced_block: $ => seq(
       '{',
-      repeat($._statement),
+      repeat($._statements),
       '}',
     ),
 
@@ -826,7 +826,7 @@ module.exports = grammar({
         /\d+/,
         /\d+\.\d*/,
         /0x[0-9a-fA-F]+/,
-        /\d+e-?\d/,
+        /\d+e-?\d+/,
         /\d\.?#INF/,
         /\d\.?#IND/
       ),
@@ -907,7 +907,8 @@ module.exports = grammar({
 
     primitive_type: $ => prec(-1,
       choice(
-        ...BUILTIN_TYPES,
+        // For some reason parser can thinks, that list() is type list with () expression
+        //...BUILTIN_TYPES,
         prec(-1, $.identifier)
       )
     ),
