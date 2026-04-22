@@ -1,0 +1,205 @@
+(comment) @comment @spell
+(identifier) @variable
+((identifier) @macro
+ (#match? @macro "^[A-Z][A-Z\\d_]*$"))
+
+(pair
+  key: (expression (literal (identifier) @member)))
+
+[
+  "while"
+  "for"
+  "in"
+  "step"
+  "continue"
+  "break"
+  "goto"
+  "do"
+] @keyword
+
+[
+  "if"
+  "else"
+  "switch"
+  "to"
+  "as"
+] @keyword
+
+[
+  "try"
+  "catch"
+] @keyword
+
+[
+  "#if"
+  "#ifdef"
+  "#ifndef"
+  "#else"
+  "#elif"
+  "#endif"
+  "#error"
+  "#warn"
+  "#pragma"
+] @keyword
+
+[
+  "#define"
+  "#undef"
+] @keyword
+
+"#include" @keyword
+
+"..." @punctuation.special
+
+[
+  "("
+  ")"
+  "["
+  "]"
+  "{"
+  "}"
+] @punctuation.bracket
+
+[
+  "="
+  "-"
+  "*"
+  "/"
+  "+"
+  "%"
+  "%%"
+  "|"
+  "&"
+  "^"
+  "<<"
+  ">>"
+  "<"
+  "<="
+  ">="
+  ">"
+  "=="
+  "<>"
+  "~="
+  "~!"
+  ":="
+  "!="
+  "!"
+  "&&"
+  "||"
+  "-="
+  "+="
+  "*="
+  "/="
+  "%="
+  "|="
+  "&="
+  "^="
+  ">>="
+  "<<="
+  "--"
+  "++"
+  "&&="
+  "||="
+  "%%="
+] @operator
+
+[
+  "TRUE"
+  "FALSE"
+] @macro
+
+(conditional_expression
+  [
+    "?"
+    ":"
+  ] @keyword.conditional.ternary)
+
+(type_operator) @punctuation.delimiter
+
+"return" @keyword.return
+[
+  "static"
+  "global"
+  "final"
+  "const"
+  "tmp"
+] @macro
+
+"new" @macro
+
+(preproc_message) @string
+
+(preproc_ifdef
+  name: (identifier) @keyword)
+
+(preproc_def
+ name: (identifier) @keyword) 
+
+(preproc_undef
+ name: (identifier) @keyword) 
+
+(preproc_defproc
+  name: (identifier) @keyword)
+
+(preproc_call_expression
+  directive: (identifier) @keyword)
+
+[
+ "?."
+ "."
+] @delimiter
+
+(interpolation
+  "[" @punctuation.special
+  "]" @punctuation.special) @embedded
+[
+ (string_literal)
+ (file_literal)
+] @string
+(escape_sequence) @string.escape
+
+(null) @macro
+(number_literal) @number
+(builtin_const) @macro
+(builtin_macro) @macro
+
+(primitive_type 
+  (identifier) @type)
+
+(primitive_type) @type
+
+(var_keyword) @macro
+(proc_keyword) @macro
+"set" @macro
+
+(var_definition
+  name: (identifier) @variable)
+
+"spawn" @function
+
+(proc_definition
+  name: (identifier) @function)
+
+(type_proc_definition
+  name: (identifier) @function)
+
+(type_proc_override
+  name: (identifier) @function)
+
+(proc_override
+  name: (identifier) @function)
+
+(proc_parameter
+  name: (identifier) @variable)
+
+(call_expression
+  name: (identifier) @function.call)
+
+(field_proc_expression
+  proc: (identifier) @function.call)
+
+(field_expression
+ field: (identifier) @property) 
+
+(as_type) @macro
+
