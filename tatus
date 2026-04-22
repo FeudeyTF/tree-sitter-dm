@@ -1,0 +1,44 @@
+[1mdiff --git a/queries/vscode/highlights.scm b/queries/vscode/highlights.scm[m
+[1mindex 500dee6..0db2a27 100644[m
+[1m--- a/queries/vscode/highlights.scm[m
+[1m+++ b/queries/vscode/highlights.scm[m
+[36m@@ -1,7 +1,7 @@[m
+ (comment) @comment @spell[m
+[31m-(identifier) @variable[m
+ ((identifier) @macro[m
+  (#match? @macro "^[A-Z][A-Z\\d_]*$"))[m
+[32m+[m[32m(identifier) @variable[m
+ [m
+ (pair[m
+   key: (expression (literal (identifier) @member)))[m
+[36m@@ -133,10 +133,10 @@[m
+   name: (identifier) @keyword)[m
+ [m
+ (preproc_def[m
+[31m- name: (identifier) @keyword) [m
+[32m+[m[32m name: (identifier) @keyword)[m
+ [m
+ (preproc_undef[m
+[31m- name: (identifier) @keyword) [m
+[32m+[m[32m name: (identifier) @keyword)[m
+ [m
+ (preproc_defproc[m
+   name: (identifier) @keyword)[m
+[36m@@ -163,7 +163,7 @@[m
+ (builtin_const) @macro[m
+ (builtin_macro) @macro[m
+ [m
+[31m-(primitive_type [m
+[32m+[m[32m(primitive_type[m
+   (identifier) @type)[m
+ [m
+ (primitive_type) @type[m
+[36m@@ -199,7 +199,6 @@[m
+   proc: (identifier) @function.call)[m
+ [m
+ (field_expression[m
+[31m- field: (identifier) @property) [m
+[32m+[m[32m field: (identifier) @property)[m
+ [m
+ (as_type) @macro[m
+[31m-[m

@@ -1,7 +1,7 @@
 (comment) @comment @spell
-(identifier) @variable
 ((identifier) @macro
  (#match? @macro "^[A-Z][A-Z\\d_]*$"))
+(identifier) @variable
 
 (pair
   key: (expression (literal (identifier) @member)))
@@ -130,19 +130,19 @@
 (preproc_message) @string
 
 (preproc_ifdef
-  name: (identifier) @keyword)
+  name: (identifier) @macro)
 
 (preproc_def
- name: (identifier) @keyword) 
+ name: (identifier) @macro)
 
 (preproc_undef
- name: (identifier) @keyword) 
+ name: (identifier) @macro)
 
 (preproc_defproc
-  name: (identifier) @keyword)
+  name: (identifier) @macro)
 
 (preproc_call_expression
-  directive: (identifier) @keyword)
+  directive: (identifier) @macro)
 
 [
  "?."
@@ -163,7 +163,7 @@
 (builtin_const) @macro
 (builtin_macro) @macro
 
-(primitive_type 
+(primitive_type
   (identifier) @type)
 
 (primitive_type) @type
@@ -199,7 +199,6 @@
   proc: (identifier) @function.call)
 
 (field_expression
- field: (identifier) @property) 
+ field: (identifier) @property)
 
 (as_type) @macro
-
