@@ -11,7 +11,7 @@ DreamMaker grammar for [tree-sitter](https://github.com/tree-sitter/tree-sitter)
 - [DM Reference](https://www.byond.com/docs/ref/#/DM)
 
 # Status
-Project is currently WIP. The parser was tested on the source code of the Space Station 13 codebases.
+Project tested on [dm-test-suite](https://github.com/spacestation13/dm-test-suite) - special project for testing DM parsers
 
 [discord]: https://img.shields.io/discord/484170914754330625?logo=discord&label=discord
 [npm]: https://img.shields.io/npm/v/tree-sitter-dm?logo=npm
