@@ -1,6 +1,6 @@
 {
   "name": "tree-sitter-dm",
-  "version": "0.25.0",
+  "version": "0.99.99",
   "description": "DreamMaker grammar",
   "repository": "https://github.com/feudeytf/tree-sitter-dm",
   "license": "MIT",
