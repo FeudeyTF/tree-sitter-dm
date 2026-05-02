@@ -63,7 +63,6 @@ jobs:
     needs: prep
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
       matrix:
         include:
           - { os: ubuntu-latest,    arch: x86_64 }
@@ -98,7 +97,6 @@ jobs:
     needs: prep
     runs-on: ${{ matrix.os }}
     strategy:
-      fail-fast: false
       matrix:
         include:
           - { os: ubuntu-latest,    target: linux-x86_64 }
