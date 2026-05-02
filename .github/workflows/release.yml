@@ -105,9 +105,11 @@ jobs:
           ref: ${{ needs.prep.outputs.sha }}
       - uses: actions/setup-node@v6
         with:
-          node-version: "20"
+          node-version: "22"
       - run: npm install --ignore-scripts
-      - run: npx prebuildify --napi --strip
+      - name: Build prebuilds
+        shell: bash
+        run: npx prebuildify --napi --strip --target=$(node -p 'process.versions.node')
       - name: Package prebuilds
         shell: bash
         run: tar -czf tree-sitter-dm-prebuild-${{ matrix.target }}.tar.gz prebuilds
@@ -134,6 +136,9 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: ${{ needs.prep.outputs.sha }}
+      - name: Skip CMake parser regen step
+        shell: bash
+        run: touch src/parser.c
       - name: Configure, build, and install
         shell: bash
         run: |
