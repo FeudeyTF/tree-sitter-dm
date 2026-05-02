@@ -86,38 +86,12 @@ jobs:
           if-no-files-found: error
 
   node-prebuilds:
-    name: Node prebuild (${{ matrix.target }})
+    name: Node prebuilds
     needs: prep
-    runs-on: ${{ matrix.os }}
-    strategy:
-      fail-fast: false
-      matrix:
-        include:
-          - { os: ubuntu-latest,    target: linux-x64 }
-          - { os: ubuntu-24.04-arm, target: linux-arm64 }
-          - { os: macos-15-intel,   target: darwin-x64 }
-          - { os: macos-14,         target: darwin-arm64 }
-          - { os: windows-latest,   target: win32-x64 }
-          - { os: windows-11-arm,   target: win32-arm64 }
-    steps:
-      - uses: actions/checkout@v6
-        with:
-          ref: ${{ needs.prep.outputs.sha }}
-      - uses: actions/setup-node@v6
-        with:
-          node-version: "22"
-      - run: npm install --ignore-scripts
-      - name: Build prebuilds
-        shell: bash
-        run: npx prebuildify --napi --strip --target=$(node -p 'process.versions.node')
-      - name: Package prebuilds
-        shell: bash
-        run: tar -czf tree-sitter-dm-prebuild-${{ matrix.target }}.tar.gz prebuilds
-      - uses: actions/upload-artifact@v7
-        with:
-          name: node-prebuild-${{ matrix.target }}
-          path: tree-sitter-dm-prebuild-*.tar.gz
-          if-no-files-found: error
+    uses: Datadog/action-prebuildify/.github/workflows/build.yml@v1
+    with:
+      napi: true
+      target-name: tree_sitter_dm_binding
 
   c-library:
     name: C library (${{ matrix.target }})
@@ -137,11 +111,6 @@ jobs:
       - uses: actions/checkout@v6
         with:
           ref: ${{ needs.prep.outputs.sha }}
-      - name: Patch CMakeLists.txt to skip parser regen
-        shell: bash
-        run: |
-          sed -i.bak 's|"${TREE_SITTER_CLI}" generate src/grammar.json|"${CMAKE_COMMAND}" -E echo "Skipping parser regen"|' CMakeLists.txt
-          rm -f CMakeLists.txt.bak
       - name: Configure, build, and install
         shell: bash
         run: |
