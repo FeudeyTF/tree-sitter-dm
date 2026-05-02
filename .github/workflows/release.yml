@@ -91,6 +91,7 @@ jobs:
     with:
       napi: true
       target-name: tree_sitter_dm_binding
+      min-node-version: 16  # binding.cc uses napi_type_tag, requires N-API 8 (Node 16+)
 
   c-library:
     name: C library (${{ matrix.target }})
