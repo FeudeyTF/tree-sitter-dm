@@ -70,7 +70,6 @@ jobs:
           - { os: macos-15-intel,   arch: x86_64 }
           - { os: macos-14,         arch: arm64 }
           - { os: windows-latest,   arch: AMD64 }
-          - { os: windows-11-arm,   arch: ARM64 }
     steps:
       - uses: actions/checkout@v6
         with:
@@ -105,7 +104,6 @@ jobs:
           - { os: macos-15-intel,   target: darwin-x86_64 }
           - { os: macos-14,         target: darwin-arm64 }
           - { os: windows-latest,   target: windows-x86_64 }
-          - { os: windows-11-arm,   target: windows-arm64 }
     steps:
       - uses: actions/checkout@v6
         with:
