@@ -57,6 +57,7 @@ jobs:
           name: sdist
           path: dist/*.tar.gz
           if-no-files-found: error
+          retention-days: 1
 
   wheels:
     name: Wheels (${{ matrix.os }}, ${{ matrix.arch }})
@@ -82,6 +83,7 @@ jobs:
           name: wheel-${{ matrix.os }}-${{ matrix.arch }}
           path: wheelhouse/*.whl
           if-no-files-found: error
+          retention-days: 1
 
   node-prebuilds:
     name: Node prebuilds
@@ -91,6 +93,7 @@ jobs:
       napi: true
       target-name: tree_sitter_dm_binding
       min-node-version: 16  # binding.cc uses napi_type_tag, requires N-API 8 (Node 16+)
+      node-gyp-build-major: 4  # package.json pins node-gyp-build ^4.8.4 (DataDog default is 3)
 
   c-library:
     name: C library (${{ matrix.target }})
@@ -124,6 +127,7 @@ jobs:
           name: c-library-${{ matrix.target }}
           path: tree-sitter-dm-*.tar.gz
           if-no-files-found: error
+          retention-days: 1
 
   release:
     name: Publish GitHub Release
@@ -136,6 +140,6 @@ jobs:
           merge-multiple: true
       - uses: softprops/action-gh-release@v3
         with:
-          files: artifacts/*
+          files: artifacts/**/*
           generate_release_notes: true
           fail_on_unmatched_files: true
