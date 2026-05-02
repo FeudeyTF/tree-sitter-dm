@@ -1,0 +1,157 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: write
+
+jobs:
+  prep:
+    name: Bump versions and commit
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.compute.outputs.value }}
+      sha: ${{ steps.sha.outputs.value }}
+    steps:
+      - id: compute
+        shell: bash
+        run: echo "value=${GITHUB_REF_NAME#v}" >> "$GITHUB_OUTPUT"
+
+      - uses: callowayproject/bump-my-version@v1.3.0
+        with:
+          args: --new-version ${{ steps.compute.outputs.value }} patch
+          branch: ${{ github.event.repository.default_branch }}
+
+      - id: sha
+        shell: bash
+        run: echo "value=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+
+  sdist:
+    name: Build sdist
+    needs: prep
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.prep.outputs.sha }}
+      - uses: actions/setup-python@v6
+        with:
+          python-version: "3.13"
+      - run: pip install build
+      - run: python -m build --sdist
+      - uses: actions/upload-artifact@v7
+        with:
+          name: sdist
+          path: dist/*.tar.gz
+          if-no-files-found: error
+
+  wheels:
+    name: Wheels (${{ matrix.os }}, ${{ matrix.arch }})
+    needs: prep
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest,    arch: x86_64 }
+          - { os: ubuntu-24.04-arm, arch: aarch64 }
+          - { os: macos-13,         arch: x86_64 }
+          - { os: macos-14,         arch: arm64 }
+          - { os: windows-latest,   arch: AMD64 }
+          - { os: windows-11-arm,   arch: ARM64 }
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.prep.outputs.sha }}
+      - uses: pypa/cibuildwheel@v3.4.1
+        env:
+          CIBW_ARCHS: ${{ matrix.arch }}
+      - uses: actions/upload-artifact@v7
+        with:
+          name: wheel-${{ matrix.os }}-${{ matrix.arch }}
+          path: wheelhouse/*.whl
+          if-no-files-found: error
+
+  node-prebuilds:
+    name: Node prebuild (${{ matrix.target }})
+    needs: prep
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest,    target: linux-x64 }
+          - { os: ubuntu-24.04-arm, target: linux-arm64 }
+          - { os: macos-13,         target: darwin-x64 }
+          - { os: macos-14,         target: darwin-arm64 }
+          - { os: windows-latest,   target: win32-x64 }
+          - { os: windows-11-arm,   target: win32-arm64 }
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.prep.outputs.sha }}
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "20"
+      - run: npm install --ignore-scripts
+      - run: npx prebuildify --napi --strip
+      - name: Package prebuilds
+        shell: bash
+        run: tar -czf tree-sitter-dm-prebuild-${{ matrix.target }}.tar.gz prebuilds
+      - uses: actions/upload-artifact@v7
+        with:
+          name: node-prebuild-${{ matrix.target }}
+          path: tree-sitter-dm-prebuild-*.tar.gz
+          if-no-files-found: error
+
+  c-library:
+    name: C library (${{ matrix.target }})
+    needs: prep
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - { os: ubuntu-latest,    target: linux-x86_64 }
+          - { os: ubuntu-24.04-arm, target: linux-aarch64 }
+          - { os: macos-13,         target: darwin-x86_64 }
+          - { os: macos-14,         target: darwin-arm64 }
+          - { os: windows-latest,   target: windows-x86_64 }
+          - { os: windows-11-arm,   target: windows-arm64 }
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.prep.outputs.sha }}
+      - name: Configure, build, and install
+        shell: bash
+        run: |
+          cmake -B build -S . \
+            -DCMAKE_BUILD_TYPE=Release \
+            -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON
+          cmake --build build --config Release --parallel
+          cmake --install build --prefix install --config Release
+      - name: Package
+        shell: bash
+        run: tar -czf tree-sitter-dm-${{ matrix.target }}.tar.gz -C install .
+      - uses: actions/upload-artifact@v7
+        with:
+          name: c-library-${{ matrix.target }}
+          path: tree-sitter-dm-*.tar.gz
+          if-no-files-found: error
+
+  release:
+    name: Publish GitHub Release
+    needs: [sdist, wheels, node-prebuilds, c-library]
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/download-artifact@v8
+        with:
+          path: artifacts
+          merge-multiple: true
+      - uses: softprops/action-gh-release@v3
+        with:
+          files: artifacts/*
+          generate_release_notes: true
+          fail_on_unmatched_files: true

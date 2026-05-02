@@ -1,0 +1,47 @@
+[tool.bumpversion]
+current_version = "0.25.0"
+allow_dirty = true
+commit = true
+tag = false
+
+[[tool.bumpversion.files]]
+filename = "pyproject.toml"
+search = '^version = "[^"]+"$'
+replace = 'version = "{new_version}"'
+regex = true
+
+[[tool.bumpversion.files]]
+filename = "Cargo.toml"
+search = '^version = "[^"]+"$'
+replace = 'version = "{new_version}"'
+regex = true
+
+[[tool.bumpversion.files]]
+filename = "package.json"
+search = '"version": "[^"]+"'
+replace = '"version": "{new_version}"'
+regex = true
+
+[[tool.bumpversion.files]]
+filename = "tree-sitter.json"
+search = '"version": "[^"]+"'
+replace = '"version": "{new_version}"'
+regex = true
+
+[[tool.bumpversion.files]]
+filename = "Makefile"
+search = '^VERSION := .+$'
+replace = 'VERSION := {new_version}'
+regex = true
+
+[[tool.bumpversion.files]]
+filename = "CMakeLists.txt"
+search = '\bVERSION "[^"]+"\s*$'
+replace = 'VERSION "{new_version}"'
+regex = true
+
+[[tool.bumpversion.files]]
+filename = ".bumpversion.toml"
+search = '^current_version = "[^"]+"$'
+replace = 'current_version = "{new_version}"'
+regex = true
