@@ -24,6 +24,15 @@ jobs:
           args: --new-version ${{ steps.compute.outputs.value }} patch
           branch: ${{ github.event.repository.default_branch }}
 
+      - name: Move tag to bumped commit
+        shell: bash
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          git tag -f "$GITHUB_REF_NAME"
+          git push --force "https://x-access-token:${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" "$GITHUB_REF_NAME"
+
       - id: sha
         shell: bash
         run: echo "value=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
