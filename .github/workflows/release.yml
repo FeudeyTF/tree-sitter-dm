@@ -57,7 +57,6 @@ jobs:
           name: sdist
           path: dist/*.tar.gz
           if-no-files-found: error
-          retention-days: 1
 
   wheels:
     name: Wheels (${{ matrix.os }}, ${{ matrix.arch }})
@@ -83,7 +82,6 @@ jobs:
           name: wheel-${{ matrix.os }}-${{ matrix.arch }}
           path: wheelhouse/*.whl
           if-no-files-found: error
-          retention-days: 1
 
   node-prebuilds:
     name: Node prebuilds
@@ -127,7 +125,6 @@ jobs:
           name: c-library-${{ matrix.target }}
           path: tree-sitter-dm-*.tar.gz
           if-no-files-found: error
-          retention-days: 1
 
   release:
     name: Publish GitHub Release
