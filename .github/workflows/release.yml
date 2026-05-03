@@ -39,6 +39,26 @@ jobs:
               force: true,
             });
 
+  platforms:
+    name: Compute platform matrix
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.set.outputs.matrix }}
+    steps:
+      - id: set
+        uses: actions/github-script@v9
+        with:
+          script: |
+            const matrix = [
+              { os: "ubuntu-latest",    wheel_arch: "x86_64",  node_target: "linux-x64",     c_target: "linux-x86_64"  },
+              { os: "ubuntu-24.04-arm", wheel_arch: "aarch64", node_target: "linux-arm64",   c_target: "linux-aarch64" },
+              { os: "macos-15-intel",   wheel_arch: "x86_64",  node_target: "darwin-x64",    c_target: "darwin-x86_64" },
+              { os: "macos-14",         wheel_arch: "arm64",   node_target: "darwin-arm64",  c_target: "darwin-arm64"  },
+              { os: "windows-latest",   wheel_arch: "AMD64",   node_target: "win32-x64",     c_target: "windows-x86_64"},
+              { os: "windows-11-arm",   wheel_arch: "ARM64",   node_target: "win32-arm64",   c_target: "windows-arm64" },
+            ];
+            core.setOutput("matrix", JSON.stringify(matrix));
+
   sdist:
     name: Build sdist
     needs: prep
@@ -59,52 +79,59 @@ jobs:
           if-no-files-found: error
 
   wheels:
-    name: Wheels (${{ matrix.os }}, ${{ matrix.arch }})
-    needs: prep
+    name: Wheels (${{ matrix.os }}, ${{ matrix.wheel_arch }})
+    needs: [prep, platforms]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        include:
-          - { os: ubuntu-latest,    arch: x86_64 }
-          - { os: ubuntu-24.04-arm, arch: aarch64 }
-          - { os: macos-15-intel,   arch: x86_64 }
-          - { os: macos-14,         arch: arm64 }
-          - { os: windows-latest,   arch: AMD64 }
+        include: ${{ fromJson(needs.platforms.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v6
         with:
           ref: ${{ needs.prep.outputs.sha }}
       - uses: pypa/cibuildwheel@v3.4.1
         env:
-          CIBW_ARCHS: ${{ matrix.arch }}
+          CIBW_ARCHS: ${{ matrix.wheel_arch }}
       - uses: actions/upload-artifact@v7
         with:
-          name: wheel-${{ matrix.os }}-${{ matrix.arch }}
+          name: wheel-${{ matrix.os }}-${{ matrix.wheel_arch }}
           path: wheelhouse/*.whl
           if-no-files-found: error
 
   node-prebuilds:
-    name: Node prebuilds
-    needs: prep
-    uses: Datadog/action-prebuildify/.github/workflows/build.yml@a5a4c697af642d8ffd7d9718eb8ad39580c08a2a  # main as of 2026-04-27 — v1 tag is too old to expose `napi` input
-    with:
-      napi: true
-      target-name: tree_sitter_dm_binding
-      min-node-version: 16  # binding.cc uses napi_type_tag, requires N-API 8 (Node 16+)
-      node-gyp-build-major: 4  # package.json pins node-gyp-build ^4.8.4 (DataDog default is 3)
-
-  c-library:
-    name: C library (${{ matrix.target }})
-    needs: prep
+    name: Node prebuild (${{ matrix.node_target }})
+    needs: [prep, platforms]
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        include:
-          - { os: ubuntu-latest,    target: linux-x86_64 }
-          - { os: ubuntu-24.04-arm, target: linux-aarch64 }
-          - { os: macos-15-intel,   target: darwin-x86_64 }
-          - { os: macos-14,         target: darwin-arm64 }
-          - { os: windows-latest,   target: windows-x86_64 }
+        include: ${{ fromJson(needs.platforms.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.prep.outputs.sha }}
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+      - run: npm install --ignore-scripts
+      - name: Build prebuilds
+        shell: bash
+        run: npx prebuildify --napi --strip --target=$(node -p 'process.versions.node')
+      - name: Package prebuilds
+        shell: bash
+        run: tar -czf tree-sitter-dm-prebuild-${{ matrix.node_target }}.tar.gz prebuilds
+      - uses: actions/upload-artifact@v7
+        with:
+          name: node-prebuild-${{ matrix.node_target }}
+          path: tree-sitter-dm-prebuild-*.tar.gz
+          if-no-files-found: error
+
+  c-library:
+    name: C library (${{ matrix.c_target }})
+    needs: [prep, platforms]
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include: ${{ fromJson(needs.platforms.outputs.matrix) }}
     steps:
       - uses: actions/checkout@v6
         with:
@@ -119,37 +146,22 @@ jobs:
           cmake --install build --prefix install --config Release
       - name: Package
         shell: bash
-        run: tar -czf tree-sitter-dm-${{ matrix.target }}.tar.gz -C install .
+        run: tar -czf tree-sitter-dm-${{ matrix.c_target }}.tar.gz -C install .
       - uses: actions/upload-artifact@v7
         with:
-          name: c-library-${{ matrix.target }}
+          name: c-library-${{ matrix.c_target }}
           path: tree-sitter-dm-*.tar.gz
           if-no-files-found: error
 
   release:
     name: Publish GitHub Release
     needs: [sdist, wheels, node-prebuilds, c-library]
-    # Publish even when DataDog's prebuildify tests fail (upstream binding/tree-sitter
-    # ABI mismatch — builds and the prebuilds merge job still succeed, the artifact
-    # is uploaded). Skip only on cancellation or our own job failures.
-    if: ${{ !cancelled() && needs.sdist.result == 'success' && needs.wheels.result == 'success' && needs.c-library.result == 'success' }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v8
         with:
           path: artifacts
           merge-multiple: true
-      - name: Repackage Node prebuilds as per-platform tarballs
-        shell: bash
-        run: |
-          set -euo pipefail
-          if [ -d artifacts/prebuilds ]; then
-            for d in artifacts/prebuilds/*/; do
-              name=$(basename "$d")
-              tar -czf "artifacts/tree-sitter-dm-prebuild-${name}.tar.gz" -C artifacts/prebuilds "$name"
-            done
-            rm -rf artifacts/prebuilds
-          fi
       - uses: softprops/action-gh-release@v3
         with:
           files: artifacts/*
