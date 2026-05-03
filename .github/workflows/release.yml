@@ -148,7 +148,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          base='tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.c_target }}'
+          base='tree-sitter-dm-${{ needs.prep.outputs.version }}-c-${{ matrix.c_target }}'
           target='${{ matrix.c_target }}'
           case "$target" in
             linux-*)   cp -L install/lib/libtree-sitter-dm.so   "${base}.so" ;;
@@ -159,9 +159,9 @@ jobs:
         with:
           name: c-library-${{ matrix.c_target }}
           path: |
-            tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.c_target }}.so
-            tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.c_target }}.dylib
-            tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.c_target }}.dll
+            tree-sitter-dm-${{ needs.prep.outputs.version }}-c-${{ matrix.c_target }}.so
+            tree-sitter-dm-${{ needs.prep.outputs.version }}-c-${{ matrix.c_target }}.dylib
+            tree-sitter-dm-${{ needs.prep.outputs.version }}-c-${{ matrix.c_target }}.dll
           if-no-files-found: error
 
   node-prebuilds-musl:
@@ -214,11 +214,11 @@ jobs:
             cmake --install build --prefix install --config Release
           '
       - name: Extract loose shared library
-        run: cp -L install/lib/libtree-sitter-dm.so "tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.target }}.so"
+        run: cp -L install/lib/libtree-sitter-dm.so "tree-sitter-dm-${{ needs.prep.outputs.version }}-c-${{ matrix.target }}.so"
       - uses: actions/upload-artifact@v7
         with:
           name: c-library-${{ matrix.target }}
-          path: tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.target }}.so
+          path: tree-sitter-dm-${{ needs.prep.outputs.version }}-c-${{ matrix.target }}.so
           if-no-files-found: error
 
   wasm:
