@@ -139,8 +139,19 @@ jobs:
         with:
           path: artifacts
           merge-multiple: true
+      - name: Repackage Node prebuilds as per-platform tarballs
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ -d artifacts/prebuilds ]; then
+            for d in artifacts/prebuilds/*/; do
+              name=$(basename "$d")
+              tar -czf "artifacts/tree-sitter-dm-prebuild-${name}.tar.gz" -C artifacts/prebuilds "$name"
+            done
+            rm -rf artifacts/prebuilds
+          fi
       - uses: softprops/action-gh-release@v3
         with:
-          files: artifacts/**/*
+          files: artifacts/*
           generate_release_notes: true
           fail_on_unmatched_files: true
