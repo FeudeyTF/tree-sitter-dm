@@ -50,12 +50,12 @@ jobs:
         with:
           script: |
             const matrix = [
-              { os: "ubuntu-latest",    wheel_arch: "x86_64",  node_target: "linux-x64",     c_target: "linux-x86_64"  },
-              { os: "ubuntu-24.04-arm", wheel_arch: "aarch64", node_target: "linux-arm64",   c_target: "linux-aarch64" },
-              { os: "macos-15-intel",   wheel_arch: "x86_64",  node_target: "darwin-x64",    c_target: "darwin-x86_64" },
               { os: "macos-15",         wheel_arch: "arm64",   node_target: "darwin-arm64",  c_target: "darwin-arm64"  },
-              { os: "windows-latest",   wheel_arch: "AMD64",   node_target: "win32-x64",     c_target: "windows-x86_64"},
+              { os: "macos-15-intel",   wheel_arch: "x86_64",  node_target: "darwin-x64",    c_target: "darwin-x86_64" },
+              { os: "ubuntu-24.04-arm", wheel_arch: "aarch64", node_target: "linux-arm64",   c_target: "linux-aarch64" },
+              { os: "ubuntu-latest",    wheel_arch: "x86_64",  node_target: "linux-x64",     c_target: "linux-x86_64"  },
               { os: "windows-11-arm",   wheel_arch: "ARM64",   node_target: "win32-arm64",   c_target: "windows-arm64" },
+              { os: "windows-latest",   wheel_arch: "AMD64",   node_target: "win32-x64",     c_target: "windows-x86_64"},
             ];
             core.setOutput("matrix", JSON.stringify(matrix));
 
@@ -171,8 +171,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - { os: ubuntu-latest,    target: linux-x64-musl }
           - { os: ubuntu-24.04-arm, target: linux-arm64-musl }
+          - { os: ubuntu-latest,    target: linux-x64-musl }
     steps:
       - uses: actions/checkout@v6
         with:
@@ -199,8 +199,8 @@ jobs:
     strategy:
       matrix:
         include:
-          - { os: ubuntu-latest,    target: linux-x86_64-musl }
           - { os: ubuntu-24.04-arm, target: linux-aarch64-musl }
+          - { os: ubuntu-latest,    target: linux-x86_64-musl }
     steps:
       - uses: actions/checkout@v6
         with:
@@ -246,7 +246,7 @@ jobs:
 
   release:
     name: Publish GitHub Release
-    needs: [sdist, wheels, node-prebuilds, node-prebuilds-musl, c-library, c-library-musl, wasm]
+    needs: [c-library, c-library-musl, node-prebuilds, node-prebuilds-musl, sdist, wasm, wheels]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v8
