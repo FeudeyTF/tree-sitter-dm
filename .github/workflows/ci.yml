@@ -49,18 +49,15 @@ jobs:
               echo "$rel" >> current-failures.txt
             fi
           done < <(find dm-test-suite -name '*.dm' -not -path '*/BrokenTests/*' -print0)
-          sort -o current-failures.txt current-failures.txt
 
           baseline=.github/dm-test-suite-baseline.txt
-          current_count=$(wc -l < current-failures.txt)
-          baseline_count=$(wc -l < "$baseline")
-          echo "Baseline failures: $baseline_count"
-          echo "Current  failures: $current_count"
+          echo "Baseline failures: $(wc -l < "$baseline")"
+          echo "Current  failures: $(wc -l < current-failures.txt)"
 
           # Files that fail now but didn't in the baseline → regressions
-          regressions=$(comm -23 current-failures.txt "$baseline")
-          # Files that passed now but failed in the baseline → improvements
-          improvements=$(comm -13 current-failures.txt "$baseline")
+          regressions=$(grep -F -x -v -f "$baseline" current-failures.txt || true)
+          # Files in baseline that pass now → improvements
+          improvements=$(grep -F -x -v -f current-failures.txt "$baseline" || true)
 
           if [ -n "$regressions" ]; then
             echo "::error::Regressions — these files newly fail to parse:"
