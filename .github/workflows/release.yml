@@ -72,10 +72,14 @@ jobs:
           python-version: "3.13"
       - run: pip install build
       - run: python -m build --sdist
+      - name: Rename sdist for unambiguous filename
+        run: |
+          f=$(ls dist/tree_sitter_dm-*.tar.gz)
+          mv "$f" "${f%.tar.gz}-sdist.tar.gz"
       - uses: actions/upload-artifact@v7
         with:
           name: sdist
-          path: dist/*.tar.gz
+          path: dist/*-sdist.tar.gz
           if-no-files-found: error
 
   wheels:
@@ -146,12 +150,12 @@ jobs:
           cmake --install build --prefix install --config Release
       - name: Package full install (.tar.gz)
         shell: bash
-        run: tar -czf tree-sitter-dm-${{ needs.prep.outputs.version }}-${{ matrix.c_target }}.tar.gz -C install .
+        run: tar -czf tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.c_target }}.tar.gz -C install .
       - name: Extract loose shared library
         shell: bash
         run: |
           set -euo pipefail
-          base='tree-sitter-dm-${{ needs.prep.outputs.version }}-${{ matrix.c_target }}'
+          base='tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.c_target }}'
           target='${{ matrix.c_target }}'
           case "$target" in
             linux-*)   cp -L install/lib/libtree-sitter-dm.so   "${base}.so" ;;
@@ -162,10 +166,10 @@ jobs:
         with:
           name: c-library-${{ matrix.c_target }}
           path: |
-            tree-sitter-dm-${{ needs.prep.outputs.version }}-${{ matrix.c_target }}.tar.gz
-            tree-sitter-dm-${{ needs.prep.outputs.version }}-${{ matrix.c_target }}.so
-            tree-sitter-dm-${{ needs.prep.outputs.version }}-${{ matrix.c_target }}.dylib
-            tree-sitter-dm-${{ needs.prep.outputs.version }}-${{ matrix.c_target }}.dll
+            tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.c_target }}.tar.gz
+            tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.c_target }}.so
+            tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.c_target }}.dylib
+            tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.c_target }}.dll
           if-no-files-found: error
 
   node-prebuilds-musl:
@@ -218,15 +222,15 @@ jobs:
             cmake --install build --prefix install --config Release
           '
       - name: Package full install (.tar.gz)
-        run: tar -czf tree-sitter-dm-${{ needs.prep.outputs.version }}-${{ matrix.target }}.tar.gz -C install .
+        run: tar -czf tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.target }}.tar.gz -C install .
       - name: Extract loose shared library
-        run: cp -L install/lib/libtree-sitter-dm.so "tree-sitter-dm-${{ needs.prep.outputs.version }}-${{ matrix.target }}.so"
+        run: cp -L install/lib/libtree-sitter-dm.so "tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.target }}.so"
       - uses: actions/upload-artifact@v7
         with:
           name: c-library-${{ matrix.target }}
           path: |
-            tree-sitter-dm-${{ needs.prep.outputs.version }}-${{ matrix.target }}.tar.gz
-            tree-sitter-dm-${{ needs.prep.outputs.version }}-${{ matrix.target }}.so
+            tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.target }}.tar.gz
+            tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.target }}.so
           if-no-files-found: error
 
   wasm:
