@@ -53,7 +53,7 @@ jobs:
               { os: "ubuntu-latest",    wheel_arch: "x86_64",  node_target: "linux-x64",     c_target: "linux-x86_64"  },
               { os: "ubuntu-24.04-arm", wheel_arch: "aarch64", node_target: "linux-arm64",   c_target: "linux-aarch64" },
               { os: "macos-15-intel",   wheel_arch: "x86_64",  node_target: "darwin-x64",    c_target: "darwin-x86_64" },
-              { os: "macos-14",         wheel_arch: "arm64",   node_target: "darwin-arm64",  c_target: "darwin-arm64"  },
+              { os: "macos-15",         wheel_arch: "arm64",   node_target: "darwin-arm64",  c_target: "darwin-arm64"  },
               { os: "windows-latest",   wheel_arch: "AMD64",   node_target: "win32-x64",     c_target: "windows-x86_64"},
               { os: "windows-11-arm",   wheel_arch: "ARM64",   node_target: "win32-arm64",   c_target: "windows-arm64" },
             ];
@@ -118,11 +118,11 @@ jobs:
         run: npx prebuildify --napi --strip --target=$(node -p 'process.versions.node')
       - name: Package prebuilds
         shell: bash
-        run: tar -czf tree-sitter-dm-prebuild-${{ matrix.node_target }}.tar.gz prebuilds
+        run: tar -czf tree-sitter-dm-${{ needs.prep.outputs.version }}-prebuild-${{ matrix.node_target }}.tar.gz prebuilds
       - uses: actions/upload-artifact@v7
         with:
           name: node-prebuild-${{ matrix.node_target }}
-          path: tree-sitter-dm-prebuild-*.tar.gz
+          path: tree-sitter-dm-*-prebuild-*.tar.gz
           if-no-files-found: error
 
   c-library:
@@ -144,18 +144,117 @@ jobs:
             -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON
           cmake --build build --config Release --parallel
           cmake --install build --prefix install --config Release
-      - name: Package
+      - name: Package full install (.tar.gz)
         shell: bash
-        run: tar -czf tree-sitter-dm-${{ matrix.c_target }}.tar.gz -C install .
+        run: tar -czf tree-sitter-dm-${{ needs.prep.outputs.version }}-${{ matrix.c_target }}.tar.gz -C install .
+      - name: Extract loose shared library
+        shell: bash
+        run: |
+          set -euo pipefail
+          base='tree-sitter-dm-${{ needs.prep.outputs.version }}-${{ matrix.c_target }}'
+          target='${{ matrix.c_target }}'
+          case "$target" in
+            linux-*)   cp -L install/lib/libtree-sitter-dm.so   "${base}.so" ;;
+            darwin-*)  cp -L install/lib/libtree-sitter-dm.dylib "${base}.dylib" ;;
+            windows-*) cp -L install/bin/tree-sitter-dm.dll      "${base}.dll" ;;
+          esac
       - uses: actions/upload-artifact@v7
         with:
           name: c-library-${{ matrix.c_target }}
-          path: tree-sitter-dm-*.tar.gz
+          path: |
+            tree-sitter-dm-${{ needs.prep.outputs.version }}-${{ matrix.c_target }}.tar.gz
+            tree-sitter-dm-${{ needs.prep.outputs.version }}-${{ matrix.c_target }}.so
+            tree-sitter-dm-${{ needs.prep.outputs.version }}-${{ matrix.c_target }}.dylib
+            tree-sitter-dm-${{ needs.prep.outputs.version }}-${{ matrix.c_target }}.dll
+          if-no-files-found: error
+
+  node-prebuilds-musl:
+    name: Node prebuild (${{ matrix.target }})
+    needs: prep
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - { os: ubuntu-latest,    target: linux-x64-musl }
+          - { os: ubuntu-24.04-arm, target: linux-arm64-musl }
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.prep.outputs.sha }}
+      - name: Build prebuild inside Alpine
+        run: |
+          docker run --rm -v "$PWD:/work" -w /work node:22-alpine sh -c '
+            apk add --no-cache python3 make g++
+            npm install --ignore-scripts
+            npx prebuildify --napi --strip --target=$(node -p "process.versions.node")
+          '
+      - name: Package prebuilds
+        run: tar -czf tree-sitter-dm-${{ needs.prep.outputs.version }}-prebuild-${{ matrix.target }}.tar.gz prebuilds
+      - uses: actions/upload-artifact@v7
+        with:
+          name: node-prebuild-${{ matrix.target }}
+          path: tree-sitter-dm-*-prebuild-*.tar.gz
+          if-no-files-found: error
+
+  c-library-musl:
+    name: C library (${{ matrix.target }})
+    needs: prep
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - { os: ubuntu-latest,    target: linux-x86_64-musl }
+          - { os: ubuntu-24.04-arm, target: linux-aarch64-musl }
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.prep.outputs.sha }}
+      - name: Build C library inside Alpine
+        run: |
+          docker run --rm -v "$PWD:/work" -w /work alpine:3.20 sh -c '
+            apk add --no-cache build-base cmake
+            cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
+            cmake --build build --config Release --parallel
+            cmake --install build --prefix install --config Release
+          '
+      - name: Package full install (.tar.gz)
+        run: tar -czf tree-sitter-dm-${{ needs.prep.outputs.version }}-${{ matrix.target }}.tar.gz -C install .
+      - name: Extract loose shared library
+        run: cp -L install/lib/libtree-sitter-dm.so "tree-sitter-dm-${{ needs.prep.outputs.version }}-${{ matrix.target }}.so"
+      - uses: actions/upload-artifact@v7
+        with:
+          name: c-library-${{ matrix.target }}
+          path: |
+            tree-sitter-dm-${{ needs.prep.outputs.version }}-${{ matrix.target }}.tar.gz
+            tree-sitter-dm-${{ needs.prep.outputs.version }}-${{ matrix.target }}.so
+          if-no-files-found: error
+
+  wasm:
+    name: WASM build
+    needs: prep
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ needs.prep.outputs.sha }}
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+      - run: npm install --ignore-scripts
+      - run: npm install -g tree-sitter-cli@0.25.10
+      - name: Build tree-sitter-dm.wasm
+        run: |
+          tree-sitter build --wasm --docker
+          mv tree-sitter-dm.wasm tree-sitter-dm-${{ needs.prep.outputs.version }}.wasm
+      - uses: actions/upload-artifact@v7
+        with:
+          name: wasm
+          path: tree-sitter-dm-*.wasm
           if-no-files-found: error
 
   release:
     name: Publish GitHub Release
-    needs: [sdist, wheels, node-prebuilds, c-library]
+    needs: [sdist, wheels, node-prebuilds, node-prebuilds-musl, c-library, c-library-musl, wasm]
     runs-on: ubuntu-latest
     steps:
       - uses: actions/download-artifact@v8
