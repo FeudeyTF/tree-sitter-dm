@@ -72,14 +72,10 @@ jobs:
           python-version: "3.13"
       - run: pip install build
       - run: python -m build --sdist
-      - name: Rename sdist for unambiguous filename
-        run: |
-          f=$(ls dist/tree_sitter_dm-*.tar.gz)
-          mv "$f" "${f%.tar.gz}-sdist.tar.gz"
       - uses: actions/upload-artifact@v7
         with:
           name: sdist
-          path: dist/*-sdist.tar.gz
+          path: dist/*.tar.gz
           if-no-files-found: error
 
   wheels:
