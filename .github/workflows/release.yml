@@ -148,9 +148,6 @@ jobs:
             -DCMAKE_WINDOWS_EXPORT_ALL_SYMBOLS=ON
           cmake --build build --config Release --parallel
           cmake --install build --prefix install --config Release
-      - name: Package full install (.tar.gz)
-        shell: bash
-        run: tar -czf tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.c_target }}.tar.gz -C install .
       - name: Extract loose shared library
         shell: bash
         run: |
@@ -166,7 +163,6 @@ jobs:
         with:
           name: c-library-${{ matrix.c_target }}
           path: |
-            tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.c_target }}.tar.gz
             tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.c_target }}.so
             tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.c_target }}.dylib
             tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.c_target }}.dll
@@ -221,16 +217,12 @@ jobs:
             cmake --build build --config Release --parallel
             cmake --install build --prefix install --config Release
           '
-      - name: Package full install (.tar.gz)
-        run: tar -czf tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.target }}.tar.gz -C install .
       - name: Extract loose shared library
         run: cp -L install/lib/libtree-sitter-dm.so "tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.target }}.so"
       - uses: actions/upload-artifact@v7
         with:
           name: c-library-${{ matrix.target }}
-          path: |
-            tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.target }}.tar.gz
-            tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.target }}.so
+          path: tree-sitter-dm-${{ needs.prep.outputs.version }}-c-library-${{ matrix.target }}.so
           if-no-files-found: error
 
   wasm:
