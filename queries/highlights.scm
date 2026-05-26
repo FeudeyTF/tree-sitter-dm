@@ -143,5 +143,5 @@
 (field_expression
  field: (identifier) @property) 
 
-+(type_proc_override
-+  name: (identifier) @function)
+(type_proc_override
+  name: (identifier) @function)
