@@ -396,6 +396,26 @@ module.exports = grammar({
         optional(seq($.var_modifier, $.type_operator)),
         field('name', $.identifier),
         optional(seq('=', $.expression)),
+      ),
+      // Temporal fix of relative global declaration
+      // To fully correct the issue, the 'path' code 
+      // needs to be completely changed
+      seq(
+        $.var_keyword,
+        $.type_operator,
+        $.var_modifier,
+        $._newline,
+        optional(
+          seq(
+            $._indent,
+            repeat1(seq(
+              choice(
+                $.identifier,
+                $.type_path
+              ), optional(seq("=", $.expression)), $._newline)),
+            $._dedent
+          )
+        )
       )
     ), $._newline),
 
