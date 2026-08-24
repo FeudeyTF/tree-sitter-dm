@@ -899,6 +899,10 @@
           "named": true
         },
         {
+          "type": "identifier",
+          "named": true
+        },
+        {
           "type": "type_operator",
           "named": true
         },
