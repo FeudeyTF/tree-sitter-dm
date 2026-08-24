@@ -753,7 +753,12 @@ module.exports = grammar({
       field('field', $.identifier),
     ),
 
-    field_operator: $ => choice(token.immediate('.'), '?.', token.immediate(':')),
+    field_operator: $ => choice(
+      token.immediate('.'),
+      '?.',
+      token.immediate(':'),
+      '::'
+    ),
 
     field_proc_expression: $ => prec(1, seq(
       field('argument', $.expression),
