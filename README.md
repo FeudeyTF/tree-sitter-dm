@@ -5,7 +5,7 @@
 [![npm][npm]](https://www.npmjs.com/package/tree-sitter-dm)
 [![pypi][pypi]](https://pypi.org/project/tree-sitter-dm/)
 
-DreamMaker grammar for [tree-sitter](https://github.com/tree-sitter/tree-sitter).
+DreamMaker grammar for [tree-sitter](https://github.com/tree-sitter/tree-sitter) project.
 
 # References
 - [DM Reference](https://www.byond.com/docs/ref/#/DM)
