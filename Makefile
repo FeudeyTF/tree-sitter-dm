@@ -4,7 +4,7 @@ endif
 
 LANGUAGE_NAME := tree-sitter-dm
 HOMEPAGE_URL := https://github.com/feudeytf/tree-sitter-dm
-VERSION := 0.25.1
+VERSION := 0.25.2
 
 # repository
 SRC_DIR := src
