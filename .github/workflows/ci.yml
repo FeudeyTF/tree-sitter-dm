@@ -1,0 +1,75 @@
+name: CI
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  tree-sitter-test:
+    name: tree-sitter test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+      - run: npm install -g tree-sitter-cli@0.25.10
+      - run: tree-sitter test
+
+  dm-test-suite:
+    name: Parse spacestation13/dm-test-suite (regression check)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+      - run: npm install -g tree-sitter-cli@0.25.10
+
+      - name: Clone dm-test-suite
+        uses: actions/checkout@v6
+        with:
+          repository: spacestation13/dm-test-suite
+          path: dm-test-suite
+
+      - name: Compare current parse failures against baseline
+        shell: bash
+        run: |
+          set -uo pipefail
+
+          # Collect current failures (excluding intentionally-broken corpus)
+          : > current-failures.txt
+          while IFS= read -r -d '' f; do
+            rel="${f#dm-test-suite/}"
+            if ! tree-sitter parse --quiet "$f" >/dev/null 2>&1; then
+              echo "$rel" >> current-failures.txt
+            fi
+          done < <(find dm-test-suite -name '*.dm' -not -path '*/BrokenTests/*' -print0)
+
+          baseline=.github/dm-test-suite-baseline.txt
+          echo "Baseline failures: $(wc -l < "$baseline")"
+          echo "Current  failures: $(wc -l < current-failures.txt)"
+
+          # Files that fail now but didn't in the baseline → regressions
+          regressions=$(grep -F -x -v -f "$baseline" current-failures.txt || true)
+          # Files in baseline that pass now → improvements
+          improvements=$(grep -F -x -v -f current-failures.txt "$baseline" || true)
+
+          if [ -n "$regressions" ]; then
+            echo "::error::Regressions — these files newly fail to parse:"
+            while IFS= read -r f; do
+              echo "::error file=dm-test-suite/$f::Newly fails to parse"
+            done <<< "$regressions"
+            exit 1
+          fi
+
+          if [ -n "$improvements" ]; then
+            echo "::notice::Newly passing — these files passed but were in the baseline. Remove them from .github/dm-test-suite-baseline.txt to lock in the improvement:"
+            echo "$improvements"
+          fi
+
+          echo "No regressions."
