@@ -2,6 +2,6 @@
   name: (identifier) @name) @definition.function
 
 (call_expression
-  name: [
+  function: [
       (identifier) @name
   ]) @reference.call

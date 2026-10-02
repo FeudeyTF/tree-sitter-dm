@@ -1,34 +1,23 @@
 (comment) @comment @spell
+
 (identifier) @variable
+
+(proc_definition
+  name: (identifier) @function)
+
+(proc_override
+  name: (identifier) @function)
+
+(call_expression
+  [
+    function: (identifier) @function.call
+    (field_expression field: (identifier) @function.call .)
+  ]
+)
+
+
 ((identifier) @constant
- (#match? @constant "^[A-Z][A-Z\\d_]*$"))
-
-(pair
-  key: (expression (literal (identifier) @member)))
-
-[
-  "while"
-  "for"
-  "in"
-  "step"
-  "continue"
-  "break"
-  "goto"
-  "do"
-] @keyword.repeat
-
-[
-  "if"
-  "else"
-  "switch"
-  "to"
-  "as"
-] @keyword.conditional
-
-[
-  "try"
-  "catch"
-] @keyword.exception
+ (#match? @constant "^[A-Z][A-Z][A-Z\\d_]*$"))
 
 [
   "#if"
@@ -49,16 +38,61 @@
 
 "#include" @keyword.import
 
-"..." @punctuation.special
+[
+  (preproc_message)
+  (preproc_arg)
+] @string
+
+(preproc_def
+    name: (identifier) @constant.macro)
+
+(preproc_function_def
+    name: (identifier) @function)
+
+"return" @keyword.return
+
+[
+  "while"
+  "for"
+  "step"
+  "continue"
+  "break"
+  "goto"
+  "do"
+] @keyword.repeat
+
+[
+  "if"
+  "else"
+  "switch"
+  "to"
+  "as"
+  "in"
+] @keyword.conditional
+
+(conditional_expression
+  [
+    "?"
+    ":"
+  ] @keyword.conditional.ternary)
+
+[
+  "try"
+  "catch"
+  "throw"
+] @keyword.exception
+
+"..." @variable.parameter.builtin
+
+"/" @punctuation.delimiter
 
 [
   "("
   ")"
-  "["
-  "]"
   "{"
   "}"
 ] @punctuation.bracket
+
 
 [
   "="
@@ -108,98 +142,75 @@
   "FALSE"
 ] @boolean
 
-(conditional_expression
-  [
-    "?"
-    ":"
-  ] @keyword.conditional.ternary)
+(field_operator) @delimiter
 
-(type_operator) @punctuation.delimiter
-
-"return" @keyword.return
 [
   "static"
   "global"
   "final"
   "const"
   "tmp"
-] @keyword
+] @keyword.modifier
 
-"new" @keyword
+"set" @keyword
 
-(preproc_message) @string
+"spawn" @function
 
-(preproc_ifdef
-  name: (identifier) @keyword)
+(type_definition
+  root: (identifier) @type)
 
-(preproc_def
- name: (identifier) @keyword) 
+(type
+  root: (identifier) @type)
 
-(preproc_undef
- name: (identifier) @keyword) 
+(var_type
+  root: (identifier) @type)
 
-(preproc_defproc
-  name: (identifier) @keyword)
+(subtype_definition
+  (identifier) @type)
 
-(preproc_call_expression
-  directive: (identifier) @keyword)
+(var_subtype
+  (identifier) @type)
 
-[
- "?."
- "."
-] @delimiter
+(type
+  (identifier) @type)
+
+(inline_var_definition
+  name: (identifier) @variable)
+
+(inline_var_definition 
+ (type (identifier) @variable .))
+
+(number_literal) @number
 
 (interpolation
   "[" @punctuation.special
   "]" @punctuation.special) @embedded
+
 [
  (string_literal)
  (file_literal)
 ] @string
+
 (escape_sequence) @string.escape
 
+[
+  "var"
+  "new"
+  "anything"
+  "text"
+  "num"
+] @keyword
+
+[
+  "proc" 
+  "operator"
+  "verb"
+] @keyword.function
+
 (null) @keyword
-(number_literal) @number
-(builtin_const) @keyword
-(builtin_macro) @keyword
 
-(primitive_type 
-  (identifier) @type)
+(builtin_vars) @variable.builtin
 
-(primitive_type) @type
+(builtin_macro) @constant.macro
 
-(var_keyword) @keyword
-(proc_keyword) @keyword
-"set" @keyword
-
-(var_definition
-  name: (identifier) @variable)
-
-"spawn" @function
-
-(proc_definition
-  name: (identifier) @function)
-
-(type_proc_definition
-  name: (identifier) @function)
-
-(type_proc_override
-  name: (identifier) @function)
-
-(proc_override
-  name: (identifier) @function)
-
-(proc_parameter
-  name: (identifier) @variable)
-
-(call_expression
-  name: (identifier) @function.call)
-
-(field_proc_expression
-  proc: (identifier) @function.call)
-
-(field_expression
- field: (identifier) @property) 
-
-(as_type) @keyword
 
