@@ -1,5 +1,87 @@
 [
   {
+    "type": "expression",
+    "named": true,
+    "subtypes": [
+      {
+        "type": "array_expression",
+        "named": true
+      },
+      {
+        "type": "assignment_expression",
+        "named": true
+      },
+      {
+        "type": "binary_expression",
+        "named": true
+      },
+      {
+        "type": "builtin_macro",
+        "named": true
+      },
+      {
+        "type": "builtin_vars",
+        "named": true
+      },
+      {
+        "type": "call_expression",
+        "named": true
+      },
+      {
+        "type": "conditional_expression",
+        "named": true
+      },
+      {
+        "type": "field_expression",
+        "named": true
+      },
+      {
+        "type": "identifier",
+        "named": true
+      },
+      {
+        "type": "new_expression",
+        "named": true
+      },
+      {
+        "type": "null",
+        "named": true
+      },
+      {
+        "type": "number_literal",
+        "named": true
+      },
+      {
+        "type": "parent_proc",
+        "named": true
+      },
+      {
+        "type": "parenthesized_expression",
+        "named": true
+      },
+      {
+        "type": "return_value",
+        "named": true
+      },
+      {
+        "type": "string_literal",
+        "named": true
+      },
+      {
+        "type": "type_literal",
+        "named": true
+      },
+      {
+        "type": "unary_expression",
+        "named": true
+      },
+      {
+        "type": "update_expression",
+        "named": true
+      }
+    ]
+  },
+  {
     "type": "argument_list",
     "named": true,
     "fields": {},
@@ -45,25 +127,6 @@
     }
   },
   {
-    "type": "as_expression",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "as_operator",
-          "named": true
-        },
-        {
-          "type": "expression",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "as_operator",
     "named": true,
     "fields": {},
@@ -91,7 +154,7 @@
           "named": true
         },
         {
-          "type": "type_path",
+          "type": "type_literal",
           "named": true
         }
       ]
@@ -110,6 +173,10 @@
             "named": true
           },
           {
+            "type": "call_expression",
+            "named": true
+          },
+          {
             "type": "field_expression",
             "named": true
           },
@@ -118,7 +185,11 @@
             "named": true
           },
           {
-            "type": "proc_return_value",
+            "type": "parenthesized_expression",
+            "named": true
+          },
+          {
+            "type": "return_value",
             "named": true
           }
         ]
@@ -346,11 +417,19 @@
       "required": false,
       "types": [
         {
+          "type": "as_operator",
+          "named": true
+        },
+        {
           "type": "break_statement",
           "named": true
         },
         {
           "type": "continue_statement",
+          "named": true
+        },
+        {
+          "type": "else_clause",
           "named": true
         },
         {
@@ -374,15 +453,11 @@
           "named": true
         },
         {
-          "type": "preproc_directive",
-          "named": true
-        },
-        {
           "type": "return_statement",
           "named": true
         },
         {
-          "type": "set_expression",
+          "type": "set_statement",
           "named": true
         },
         {
@@ -391,6 +466,10 @@
         },
         {
           "type": "switch_statement",
+          "named": true
+        },
+        {
+          "type": "throw_statement",
           "named": true
         },
         {
@@ -414,12 +493,12 @@
     "fields": {}
   },
   {
-    "type": "builtin_const",
+    "type": "builtin_macro",
     "named": true,
     "fields": {}
   },
   {
-    "type": "builtin_macro",
+    "type": "builtin_vars",
     "named": true,
     "fields": {}
   },
@@ -437,16 +516,12 @@
           }
         ]
       },
-      "name": {
+      "function": {
         "multiple": false,
         "required": true,
         "types": [
           {
-            "type": "..",
-            "named": false
-          },
-          {
-            "type": "identifier",
+            "type": "expression",
             "named": true
           }
         ]
@@ -530,115 +605,6 @@
     }
   },
   {
-    "type": "elseif_clause",
-    "named": true,
-    "fields": {
-      "condition": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "expression",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "block",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "expression",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "array_expression",
-          "named": true
-        },
-        {
-          "type": "as_expression",
-          "named": true
-        },
-        {
-          "type": "assignment_expression",
-          "named": true
-        },
-        {
-          "type": "binary_expression",
-          "named": true
-        },
-        {
-          "type": "builtin_const",
-          "named": true
-        },
-        {
-          "type": "builtin_macro",
-          "named": true
-        },
-        {
-          "type": "call_expression",
-          "named": true
-        },
-        {
-          "type": "conditional_expression",
-          "named": true
-        },
-        {
-          "type": "field_expression",
-          "named": true
-        },
-        {
-          "type": "field_proc_expression",
-          "named": true
-        },
-        {
-          "type": "literal",
-          "named": true
-        },
-        {
-          "type": "new_expression",
-          "named": true
-        },
-        {
-          "type": "null",
-          "named": true
-        },
-        {
-          "type": "parenthesized_expression",
-          "named": true
-        },
-        {
-          "type": "proc_return_value",
-          "named": true
-        },
-        {
-          "type": "type_path_expression",
-          "named": true
-        },
-        {
-          "type": "unary_expression",
-          "named": true
-        },
-        {
-          "type": "update_expression",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "field_expression",
     "named": true,
     "fields": {
@@ -680,74 +646,9 @@
     "fields": {}
   },
   {
-    "type": "field_proc_expression",
-    "named": true,
-    "fields": {
-      "argument": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "expression",
-            "named": true
-          }
-        ]
-      },
-      "operator": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "field_operator",
-            "named": true
-          }
-        ]
-      },
-      "proc": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "argument_list",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "file_literal",
     "named": true,
     "fields": {}
-  },
-  {
-    "type": "for_condition",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "forlist_condition",
-          "named": true
-        },
-        {
-          "type": "forloop_condition",
-          "named": true
-        }
-      ]
-    }
   },
   {
     "type": "for_statement",
@@ -762,164 +663,11 @@
           "named": true
         },
         {
-          "type": "for_condition",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "for_var_definition",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "literal",
-          "named": true
-        },
-        {
-          "type": "var_definition",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "forlist_condition",
-    "named": true,
-    "fields": {
-      "key": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "for_var_definition",
-            "named": true
-          }
-        ]
-      },
-      "value": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "as_operator",
-          "named": true
-        },
-        {
           "type": "expression",
           "named": true
         },
         {
-          "type": "for_var_definition",
-          "named": true
-        },
-        {
-          "type": "number_literal",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "forloop_condition",
-    "named": true,
-    "fields": {
-      "condition": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "expression",
-            "named": true
-          }
-        ]
-      },
-      "increment": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "expression",
-            "named": true
-          }
-        ]
-      },
-      "initial": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "for_var_definition",
-            "named": true
-          }
-        ]
-      }
-    }
-  },
-  {
-    "type": "global_var_definition",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "expression",
-          "named": true
-        },
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "type_operator",
-          "named": true
-        },
-        {
-          "type": "type_path",
-          "named": true
-        },
-        {
-          "type": "var_definition",
-          "named": true
-        },
-        {
-          "type": "var_keyword",
-          "named": true
-        },
-        {
-          "type": "var_modifier",
+          "type": "inline_var_definition",
           "named": true
         }
       ]
@@ -928,73 +676,24 @@
   {
     "type": "goto_label",
     "named": true,
-    "fields": {},
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
         {
-          "type": "break_statement",
-          "named": true
-        },
-        {
-          "type": "continue_statement",
-          "named": true
-        },
-        {
-          "type": "expression",
-          "named": true
-        },
-        {
-          "type": "for_statement",
-          "named": true
-        },
-        {
-          "type": "goto_label",
-          "named": true
-        },
-        {
-          "type": "goto_statement",
-          "named": true
-        },
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "if_statement",
-          "named": true
-        },
-        {
-          "type": "preproc_directive",
-          "named": true
-        },
-        {
-          "type": "return_statement",
-          "named": true
-        },
-        {
-          "type": "set_expression",
-          "named": true
-        },
-        {
-          "type": "spawn_statement",
-          "named": true
-        },
-        {
-          "type": "switch_statement",
-          "named": true
-        },
-        {
-          "type": "try_catch_statement",
-          "named": true
-        },
-        {
-          "type": "var_definition",
-          "named": true
-        },
-        {
-          "type": "while_statement",
+          "type": "block",
           "named": true
         }
       ]
@@ -1003,36 +702,23 @@
   {
     "type": "goto_statement",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier",
-          "named": true
-        }
-      ]
+    "fields": {
+      "label": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
     "type": "if_statement",
     "named": true,
     "fields": {
-      "alternative": {
-        "multiple": true,
-        "required": false,
-        "types": [
-          {
-            "type": "else_clause",
-            "named": true
-          },
-          {
-            "type": "elseif_clause",
-            "named": true
-          }
-        ]
-      },
       "condition": {
         "multiple": true,
         "required": true,
@@ -1060,6 +746,40 @@
     }
   },
   {
+    "type": "inline_var_definition",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "as_operator",
+          "named": true
+        },
+        {
+          "type": "expression",
+          "named": true
+        },
+        {
+          "type": "type",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "interpolation",
     "named": true,
     "fields": {
@@ -1073,33 +793,6 @@
           }
         ]
       }
-    }
-  },
-  {
-    "type": "literal",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "file_literal",
-          "named": true
-        },
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "number_literal",
-          "named": true
-        },
-        {
-          "type": "string_literal",
-          "named": true
-        }
-      ]
     }
   },
   {
@@ -1126,7 +819,7 @@
           "named": true
         },
         {
-          "type": "type_path",
+          "type": "type_literal",
           "named": true
         }
       ]
@@ -1138,28 +831,183 @@
     "fields": {}
   },
   {
-    "type": "operator",
-    "named": true,
-    "fields": {}
-  },
-  {
     "type": "operator_override",
     "named": true,
     "fields": {
-      "name": {
-        "multiple": false,
+      "operator": {
+        "multiple": true,
         "required": true,
         "types": [
           {
-            "type": "identifier",
-            "named": true
+            "type": "!=",
+            "named": false
+          },
+          {
+            "type": "\"\"",
+            "named": false
+          },
+          {
+            "type": "%",
+            "named": false
+          },
+          {
+            "type": "%%",
+            "named": false
+          },
+          {
+            "type": "%%=",
+            "named": false
+          },
+          {
+            "type": "%=",
+            "named": false
+          },
+          {
+            "type": "&",
+            "named": false
+          },
+          {
+            "type": "&&",
+            "named": false
+          },
+          {
+            "type": "&&=",
+            "named": false
+          },
+          {
+            "type": "&=",
+            "named": false
+          },
+          {
+            "type": "*",
+            "named": false
+          },
+          {
+            "type": "*=",
+            "named": false
+          },
+          {
+            "type": "+",
+            "named": false
+          },
+          {
+            "type": "+=",
+            "named": false
+          },
+          {
+            "type": "-",
+            "named": false
+          },
+          {
+            "type": "-=",
+            "named": false
+          },
+          {
+            "type": "/",
+            "named": false
+          },
+          {
+            "type": "/=",
+            "named": false
+          },
+          {
+            "type": ":=",
+            "named": false
+          },
+          {
+            "type": "<",
+            "named": false
+          },
+          {
+            "type": "<<",
+            "named": false
+          },
+          {
+            "type": "<<=",
+            "named": false
+          },
+          {
+            "type": "<=",
+            "named": false
+          },
+          {
+            "type": "<=>",
+            "named": false
+          },
+          {
+            "type": "<>",
+            "named": false
+          },
+          {
+            "type": "=",
+            "named": false
+          },
+          {
+            "type": "==",
+            "named": false
+          },
+          {
+            "type": ">",
+            "named": false
+          },
+          {
+            "type": ">=",
+            "named": false
+          },
+          {
+            "type": ">>",
+            "named": false
+          },
+          {
+            "type": ">>=",
+            "named": false
+          },
+          {
+            "type": "[]",
+            "named": false
+          },
+          {
+            "type": "[]=",
+            "named": false
+          },
+          {
+            "type": "^",
+            "named": false
+          },
+          {
+            "type": "^=",
+            "named": false
+          },
+          {
+            "type": "|",
+            "named": false
+          },
+          {
+            "type": "|=",
+            "named": false
+          },
+          {
+            "type": "||",
+            "named": false
+          },
+          {
+            "type": "||=",
+            "named": false
+          },
+          {
+            "type": "~!",
+            "named": false
+          },
+          {
+            "type": "~=",
+            "named": false
           }
         ]
       }
     },
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "as_operator",
@@ -1170,23 +1018,7 @@
           "named": true
         },
         {
-          "type": "operator",
-          "named": true
-        },
-        {
-          "type": "proc_keyword",
-          "named": true
-        },
-        {
-          "type": "proc_parameters",
-          "named": true
-        },
-        {
-          "type": "type_operator",
-          "named": true
-        },
-        {
-          "type": "type_path",
+          "type": "proc_parameter",
           "named": true
         }
       ]
@@ -1234,82 +1066,7 @@
     }
   },
   {
-    "type": "preproc_arg",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "break_statement",
-          "named": true
-        },
-        {
-          "type": "continue_statement",
-          "named": true
-        },
-        {
-          "type": "expression",
-          "named": true
-        },
-        {
-          "type": "for_statement",
-          "named": true
-        },
-        {
-          "type": "goto_label",
-          "named": true
-        },
-        {
-          "type": "goto_statement",
-          "named": true
-        },
-        {
-          "type": "if_statement",
-          "named": true
-        },
-        {
-          "type": "line_continuation",
-          "named": true
-        },
-        {
-          "type": "preproc_directive",
-          "named": true
-        },
-        {
-          "type": "return_statement",
-          "named": true
-        },
-        {
-          "type": "set_expression",
-          "named": true
-        },
-        {
-          "type": "spawn_statement",
-          "named": true
-        },
-        {
-          "type": "switch_statement",
-          "named": true
-        },
-        {
-          "type": "try_catch_statement",
-          "named": true
-        },
-        {
-          "type": "var_definition",
-          "named": true
-        },
-        {
-          "type": "while_statement",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "preproc_call_expression",
+    "type": "preproc_call",
     "named": true,
     "fields": {
       "directive": {
@@ -1341,6 +1098,7 @@
   {
     "type": "preproc_def",
     "named": true,
+    "extra": true,
     "fields": {
       "name": {
         "multiple": false,
@@ -1351,183 +1109,28 @@
             "named": true
           }
         ]
-      }
-    },
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "preproc_arg",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "preproc_defproc",
-    "named": true,
-    "fields": {
-      "name": {
+      },
+      "value": {
         "multiple": false,
-        "required": true,
+        "required": false,
         "types": [
           {
-            "type": "identifier",
+            "type": "expression",
+            "named": true
+          },
+          {
+            "type": "preproc_arg",
             "named": true
           }
         ]
       }
-    },
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier",
-          "named": true
-        },
-        {
-          "type": "preproc_arg",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "preproc_directive",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "preproc_def",
-          "named": true
-        },
-        {
-          "type": "preproc_defproc",
-          "named": true
-        },
-        {
-          "type": "preproc_error",
-          "named": true
-        },
-        {
-          "type": "preproc_if",
-          "named": true
-        },
-        {
-          "type": "preproc_ifdef",
-          "named": true
-        },
-        {
-          "type": "preproc_include",
-          "named": true
-        },
-        {
-          "type": "preproc_pragma",
-          "named": true
-        },
-        {
-          "type": "preproc_undef",
-          "named": true
-        },
-        {
-          "type": "preproc_warn",
-          "named": true
-        }
-      ]
     }
   },
   {
     "type": "preproc_elif",
     "named": true,
+    "extra": true,
     "fields": {
-      "alternative": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "preproc_elif",
-            "named": true
-          },
-          {
-            "type": "preproc_else",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "preproc_if_block",
-          "named": true
-        },
-        {
-          "type": "preproc_message",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "preproc_else",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": false,
-      "types": [
-        {
-          "type": "preproc_if_block",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "preproc_endif",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "preproc_error",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "preproc_message",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "preproc_if",
-    "named": true,
-    "fields": {
-      "alternative": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "preproc_elif",
-            "named": true
-          },
-          {
-            "type": "preproc_else",
-            "named": true
-          }
-        ]
-      },
       "condition": {
         "multiple": false,
         "required": true,
@@ -1538,127 +1141,13 @@
           }
         ]
       }
-    },
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "preproc_endif",
-          "named": true
-        },
-        {
-          "type": "preproc_if_block",
-          "named": true
-        }
-      ]
     }
   },
   {
-    "type": "preproc_if_block",
+    "type": "preproc_elifdef",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "break_statement",
-          "named": true
-        },
-        {
-          "type": "continue_statement",
-          "named": true
-        },
-        {
-          "type": "expression",
-          "named": true
-        },
-        {
-          "type": "for_statement",
-          "named": true
-        },
-        {
-          "type": "global_var_definition",
-          "named": true
-        },
-        {
-          "type": "goto_label",
-          "named": true
-        },
-        {
-          "type": "goto_statement",
-          "named": true
-        },
-        {
-          "type": "if_statement",
-          "named": true
-        },
-        {
-          "type": "preproc_directive",
-          "named": true
-        },
-        {
-          "type": "proc_definition",
-          "named": true
-        },
-        {
-          "type": "proc_override",
-          "named": true
-        },
-        {
-          "type": "return_statement",
-          "named": true
-        },
-        {
-          "type": "set_expression",
-          "named": true
-        },
-        {
-          "type": "spawn_statement",
-          "named": true
-        },
-        {
-          "type": "switch_statement",
-          "named": true
-        },
-        {
-          "type": "try_catch_statement",
-          "named": true
-        },
-        {
-          "type": "type_definition",
-          "named": true
-        },
-        {
-          "type": "var_definition",
-          "named": true
-        },
-        {
-          "type": "while_statement",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "preproc_ifdef",
-    "named": true,
+    "extra": true,
     "fields": {
-      "alternative": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "preproc_elif",
-            "named": true
-          },
-          {
-            "type": "preproc_else",
-            "named": true
-          }
-        ]
-      },
       "name": {
         "multiple": false,
         "required": true,
@@ -1669,40 +1158,136 @@
           }
         ]
       }
-    },
+    }
+  },
+  {
+    "type": "preproc_else",
+    "named": true,
+    "extra": true,
+    "fields": {}
+  },
+  {
+    "type": "preproc_endif",
+    "named": true,
+    "extra": true,
+    "fields": {}
+  },
+  {
+    "type": "preproc_error",
+    "named": true,
+    "extra": true,
+    "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
         {
-          "type": "preproc_endif",
-          "named": true
-        },
-        {
-          "type": "preproc_if_block",
+          "type": "preproc_message",
           "named": true
         }
       ]
     }
   },
   {
+    "type": "preproc_function_def",
+    "named": true,
+    "extra": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "parameters": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "preproc_params",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "preproc_arg",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "preproc_if",
+    "named": true,
+    "extra": true,
+    "fields": {
+      "condition": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
+    "type": "preproc_ifdef",
+    "named": true,
+    "extra": true,
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "preproc_include",
     "named": true,
     "fields": {
-      "file": {
+      "path": {
         "multiple": false,
         "required": true,
         "types": [
           {
             "type": "file_literal",
             "named": true
-          },
-          {
-            "type": "string_literal",
-            "named": true
           }
         ]
       }
+    }
+  },
+  {
+    "type": "preproc_params",
+    "named": true,
+    "fields": {},
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        }
+      ]
     }
   },
   {
@@ -1723,6 +1308,7 @@
   {
     "type": "preproc_undef",
     "named": true,
+    "extra": true,
     "fields": {
       "name": {
         "multiple": false,
@@ -1739,6 +1325,7 @@
   {
     "type": "preproc_warn",
     "named": true,
+    "extra": true,
     "fields": {},
     "children": {
       "multiple": false,
@@ -1752,42 +1339,12 @@
     }
   },
   {
-    "type": "primitive_type",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "primitive_type_path",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "identifier",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
     "type": "proc_definition",
     "named": true,
     "fields": {
       "name": {
-        "multiple": false,
-        "required": true,
+        "multiple": true,
+        "required": false,
         "types": [
           {
             "type": "identifier",
@@ -1798,7 +1355,7 @@
     },
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "as_operator",
@@ -1809,28 +1366,11 @@
           "named": true
         },
         {
-          "type": "proc_keyword",
-          "named": true
-        },
-        {
-          "type": "proc_parameters",
-          "named": true
-        },
-        {
-          "type": "type_operator",
-          "named": true
-        },
-        {
-          "type": "type_path",
+          "type": "proc_parameter",
           "named": true
         }
       ]
     }
-  },
-  {
-    "type": "proc_keyword",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "proc_override",
@@ -1860,15 +1400,7 @@
           "named": true
         },
         {
-          "type": "proc_parameters",
-          "named": true
-        },
-        {
-          "type": "type_operator",
-          "named": true
-        },
-        {
-          "type": "type_path",
+          "type": "proc_parameter",
           "named": true
         }
       ]
@@ -1877,64 +1409,17 @@
   {
     "type": "proc_parameter",
     "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": false,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": false,
-      "types": [
-        {
-          "type": "as_operator",
-          "named": true
-        },
-        {
-          "type": "expression",
-          "named": true
-        },
-        {
-          "type": "type_operator",
-          "named": true
-        },
-        {
-          "type": "type_path",
-          "named": true
-        },
-        {
-          "type": "var_definition",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "proc_parameters",
-    "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": false,
       "types": [
         {
-          "type": "proc_parameter",
+          "type": "inline_var_definition",
           "named": true
         }
       ]
     }
-  },
-  {
-    "type": "proc_return_value",
-    "named": true,
-    "fields": {}
   },
   {
     "type": "return_statement",
@@ -1952,22 +1437,29 @@
     }
   },
   {
-    "type": "set_expression",
+    "type": "set_statement",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "expression",
-          "named": true
-        },
-        {
-          "type": "identifier",
-          "named": true
-        }
-      ]
+    "fields": {
+      "setting": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "value": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
     }
   },
   {
@@ -1980,19 +1472,15 @@
       "required": false,
       "types": [
         {
-          "type": "global_var_definition",
+          "type": "preproc_call",
           "named": true
         },
         {
-          "type": "operator_override",
+          "type": "preproc_include",
           "named": true
         },
         {
-          "type": "preproc_call_expression",
-          "named": true
-        },
-        {
-          "type": "preproc_directive",
+          "type": "preproc_pragma",
           "named": true
         },
         {
@@ -2000,11 +1488,11 @@
           "named": true
         },
         {
-          "type": "proc_override",
+          "type": "type_definition",
           "named": true
         },
         {
-          "type": "type_definition",
+          "type": "var_definition",
           "named": true
         }
       ]
@@ -2076,6 +1564,60 @@
     }
   },
   {
+    "type": "subtype_definition",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "operator_override",
+          "named": true
+        },
+        {
+          "type": "proc_definition",
+          "named": true
+        },
+        {
+          "type": "proc_override",
+          "named": true
+        },
+        {
+          "type": "subtype_definition",
+          "named": true
+        },
+        {
+          "type": "var_assignment",
+          "named": true
+        },
+        {
+          "type": "var_definition",
+          "named": true
+        },
+        {
+          "type": "verb_definition",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
     "type": "switch_statement",
     "named": true,
     "fields": {
@@ -2102,9 +1644,36 @@
     }
   },
   {
+    "type": "throw_statement",
+    "named": true,
+    "fields": {
+      "exception": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "expression",
+            "named": true
+          }
+        ]
+      }
+    }
+  },
+  {
     "type": "try_catch_statement",
     "named": true,
-    "fields": {},
+    "fields": {
+      "name": {
+        "multiple": false,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": true,
@@ -2114,104 +1683,33 @@
           "named": true
         },
         {
-          "type": "var_definition",
+          "type": "type",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "type_body",
+    "type": "type",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": false,
-      "required": true,
-      "types": [
-        {
-          "type": "type_body_braced",
-          "named": true
-        },
-        {
-          "type": "type_body_intended",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "type_body_braced",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "expression",
-          "named": true
-        },
-        {
-          "type": "preproc_directive",
-          "named": true
-        },
-        {
-          "type": "type_member",
-          "named": true
-        },
-        {
-          "type": "type_operator_override",
-          "named": true
-        },
-        {
-          "type": "type_proc_definition",
-          "named": true
-        },
-        {
-          "type": "type_proc_override",
-          "named": true
-        },
-        {
-          "type": "var_definition",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "type_body_intended",
-    "named": true,
-    "fields": {},
+    "fields": {
+      "root": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
     "children": {
       "multiple": true,
       "required": false,
       "types": [
         {
-          "type": "expression",
-          "named": true
-        },
-        {
-          "type": "preproc_directive",
-          "named": true
-        },
-        {
-          "type": "type_member",
-          "named": true
-        },
-        {
-          "type": "type_operator_override",
-          "named": true
-        },
-        {
-          "type": "type_proc_definition",
-          "named": true
-        },
-        {
-          "type": "type_proc_override",
-          "named": true
-        },
-        {
-          "type": "var_definition",
+          "type": "identifier",
           "named": true
         }
       ]
@@ -2220,32 +1718,18 @@
   {
     "type": "type_definition",
     "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "type_body",
-          "named": true
-        },
-        {
-          "type": "type_path",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "type_operator",
-    "named": true,
-    "fields": {}
-  },
-  {
-    "type": "type_operator_override",
-    "named": true,
     "fields": {
       "name": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "root": {
         "multiple": false,
         "required": true,
         "types": [
@@ -2258,156 +1742,49 @@
     },
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
-          "type": "as_operator",
+          "type": "operator_override",
           "named": true
         },
         {
-          "type": "block",
+          "type": "proc_definition",
           "named": true
         },
         {
-          "type": "operator",
+          "type": "proc_override",
           "named": true
         },
         {
-          "type": "proc_keyword",
+          "type": "subtype_definition",
           "named": true
         },
         {
-          "type": "proc_parameters",
+          "type": "var_assignment",
           "named": true
         },
         {
-          "type": "type_operator",
+          "type": "var_definition",
+          "named": true
+        },
+        {
+          "type": "verb_definition",
           "named": true
         }
       ]
     }
   },
   {
-    "type": "type_path",
+    "type": "type_literal",
     "named": true,
     "fields": {},
     "children": {
-      "multiple": true,
+      "multiple": false,
       "required": true,
       "types": [
         {
-          "type": "primitive_type",
-          "named": true
-        },
-        {
-          "type": "type_identifier",
-          "named": true
-        },
-        {
-          "type": "type_operator",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "type_path_expression",
-    "named": true,
-    "fields": {},
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "primitive_type",
-          "named": true
-        },
-        {
-          "type": "primitive_type_path",
-          "named": true
-        },
-        {
-          "type": "type_identifier",
-          "named": true
-        },
-        {
-          "type": "type_operator",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "type_proc_definition",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "as_operator",
-          "named": true
-        },
-        {
-          "type": "block",
-          "named": true
-        },
-        {
-          "type": "proc_keyword",
-          "named": true
-        },
-        {
-          "type": "proc_parameters",
-          "named": true
-        },
-        {
-          "type": "type_operator",
-          "named": true
-        }
-      ]
-    }
-  },
-  {
-    "type": "type_proc_override",
-    "named": true,
-    "fields": {
-      "name": {
-        "multiple": false,
-        "required": true,
-        "types": [
-          {
-            "type": "identifier",
-            "named": true
-          }
-        ]
-      }
-    },
-    "children": {
-      "multiple": true,
-      "required": true,
-      "types": [
-        {
-          "type": "as_operator",
-          "named": true
-        },
-        {
-          "type": "block",
-          "named": true
-        },
-        {
-          "type": "proc_parameters",
+          "type": "type",
           "named": true
         }
       ]
@@ -2436,11 +1813,11 @@
             "named": false
           },
           {
-            "type": "&",
+            "type": "+",
             "named": false
           },
           {
-            "type": "*",
+            "type": "-",
             "named": false
           },
           {
@@ -2482,7 +1859,7 @@
     }
   },
   {
-    "type": "var_definition",
+    "type": "var_assignment",
     "named": true,
     "fields": {
       "name": {
@@ -2498,7 +1875,7 @@
     },
     "children": {
       "multiple": true,
-      "required": true,
+      "required": false,
       "types": [
         {
           "type": "as_operator",
@@ -2507,21 +1884,39 @@
         {
           "type": "expression",
           "named": true
-        },
+        }
+      ]
+    }
+  },
+  {
+    "type": "var_definition",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
         {
-          "type": "type_operator",
-          "named": true
-        },
-        {
-          "type": "type_path",
-          "named": true
-        },
-        {
-          "type": "var_keyword",
+          "type": "var_assignment",
           "named": true
         },
         {
           "type": "var_modifier",
+          "named": true
+        },
+        {
+          "type": "var_type",
           "named": true
         }
       ]
@@ -2530,7 +1925,140 @@
   {
     "type": "var_modifier",
     "named": true,
-    "fields": {}
+    "fields": {
+      "name": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "var_assignment",
+          "named": true
+        },
+        {
+          "type": "var_type",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "var_subtype",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": true,
+      "types": [
+        {
+          "type": "identifier",
+          "named": true
+        },
+        {
+          "type": "var_assignment",
+          "named": true
+        },
+        {
+          "type": "var_subtype",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "var_type",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      },
+      "root": {
+        "multiple": false,
+        "required": true,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "var_assignment",
+          "named": true
+        },
+        {
+          "type": "var_subtype",
+          "named": true
+        }
+      ]
+    }
+  },
+  {
+    "type": "verb_definition",
+    "named": true,
+    "fields": {
+      "name": {
+        "multiple": true,
+        "required": false,
+        "types": [
+          {
+            "type": "identifier",
+            "named": true
+          }
+        ]
+      }
+    },
+    "children": {
+      "multiple": true,
+      "required": false,
+      "types": [
+        {
+          "type": "as_operator",
+          "named": true
+        },
+        {
+          "type": "block",
+          "named": true
+        },
+        {
+          "type": "proc_parameter",
+          "named": true
+        }
+      ]
+    }
   },
   {
     "type": "while_statement",
@@ -2559,15 +2087,15 @@
     }
   },
   {
-    "type": "\n",
-    "named": false
-  },
-  {
     "type": "!",
     "named": false
   },
   {
     "type": "!=",
+    "named": false
+  },
+  {
+    "type": "\"",
     "named": false
   },
   {
@@ -2580,6 +2108,14 @@
   },
   {
     "type": "#elif",
+    "named": false
+  },
+  {
+    "type": "#elifdef",
+    "named": false
+  },
+  {
+    "type": "#elifndef",
     "named": false
   },
   {
@@ -2655,10 +2191,6 @@
     "named": false
   },
   {
-    "type": "'",
-    "named": false
-  },
-  {
     "type": "(",
     "named": false
   },
@@ -2704,10 +2236,6 @@
   },
   {
     "type": ".",
-    "named": false
-  },
-  {
-    "type": "..",
     "named": false
   },
   {
@@ -2792,6 +2320,10 @@
   },
   {
     "type": "?.",
+    "named": false
+  },
+  {
+    "type": "?[",
     "named": false
   },
   {
@@ -2907,6 +2439,10 @@
     "named": true
   },
   {
+    "type": "file",
+    "named": false
+  },
+  {
     "type": "final",
     "named": false
   },
@@ -2960,6 +2496,14 @@
     "named": false
   },
   {
+    "type": "parent_proc",
+    "named": true
+  },
+  {
+    "type": "preproc_arg",
+    "named": true
+  },
+  {
     "type": "preproc_message",
     "named": true
   },
@@ -2970,6 +2514,10 @@
   {
     "type": "return",
     "named": false
+  },
+  {
+    "type": "return_value",
+    "named": true
   },
   {
     "type": "set",
@@ -3008,6 +2556,10 @@
     "named": false
   },
   {
+    "type": "throw",
+    "named": false
+  },
+  {
     "type": "tmp",
     "named": false
   },
@@ -3020,20 +2572,12 @@
     "named": false
   },
   {
-    "type": "type_identifier",
-    "named": true
-  },
-  {
-    "type": "type_member",
-    "named": true
-  },
-  {
     "type": "usr",
     "named": false
   },
   {
-    "type": "var_keyword",
-    "named": true
+    "type": "var",
+    "named": false
   },
   {
     "type": "vars",
