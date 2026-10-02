@@ -28,7 +28,7 @@ const PREC = {
   GOTO_LABEL: 16,
 };
 
-module.exports = grammar({
+export default grammar({
   name: "dm",
 
   extras: $ => [
