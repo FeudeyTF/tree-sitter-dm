@@ -1,56 +1,76 @@
 (comment) @comment
-(identifier) @variable
+
+(proc_definition
+  name: (identifier) @function)
+
+(proc_override
+  name: (identifier) @function)
+
+(call_expression
+  [
+    function: (identifier) @function.call
+    (field_expression field: (identifier) @function.call .)
+  ]
+)
+
 ((identifier) @constant
- (#match? @constant "^[A-Z][A-Z\\d_]*$"))
+ (#match? @constant "^[A-Z][A-Z][A-Z\\d_]*$"))
 
 (pair
-  key: (expression (literal (identifier) @member)))
+  key: (identifier) @member)
 
-"break" @keyword
-"continue" @keyword
-"else" @keyword
-"for" @keyword
-"if" @keyword
-"goto" @keyword
-"in" @keyword
-"return" @keyword
-"static" @keyword
-"switch" @keyword
-"while" @keyword
-"do" @keyword
-"set" @keyword
+[
+  "#if"
+  "#ifdef"
+  "#ifndef"
+  "#else"
+  "#elif"
+  "#endif"
+  "#error"
+  "#warn"
+  "#pragma"
+  "#define"
+  "#undef"
+  "#include"
+] @keyword
 
-"#define" @keyword
-"#undef" @keyword
-"#elif" @keyword
-"#else" @keyword
-"#endif" @keyword
-"#if" @keyword
-"#ifdef" @keyword
-"#ifndef" @keyword
-"#include" @keyword
-"#warn" @keyword
-"#error" @keyword
-"spawn" @keyword
-
-"new" @keyword
-
-(preproc_message) @string
-
-(preproc_ifdef
-  name: (identifier) @keyword)
+[
+  (preproc_message)
+  (preproc_arg)
+] @string
 
 (preproc_def
- name: (identifier) @keyword) 
+    name: (identifier) @constant)
 
-(preproc_undef
- name: (identifier) @keyword) 
+(preproc_function_def
+    name: (identifier) @function)
 
-(preproc_defproc
-  name: (identifier) @keyword)
+"return" @keyword
 
-(preproc_call_expression
-  directive: (identifier) @function.special)
+[
+  "while"
+  "for"
+  "step"
+  "continue"
+  "break"
+  "goto"
+  "do"
+] @keyword
+
+[
+  "if"
+  "else"
+  "switch"
+  "to"
+  "as"
+  "in"
+] @keyword
+
+[
+  "try"
+  "catch"
+  "throw"
+] @keyword
 
 (interpolation
   "[" @punctuation.special
@@ -99,8 +119,34 @@
   "%%="
 ] @operator
 
-"?." @delimiter
-"." @delimiter
+[
+  "," "." ";" ":" "?." "?."
+] @punctuation.delimiter
+
+[
+ "(" ")" "[" "]" "{" "}"
+] @punctuation.bracket
+
+"set" @keyword
+
+"spawn" @function
+
+[
+  "static"
+  "global"
+  "final"
+  "const"
+  "tmp"
+] @keyword
+
+(type_definition
+  root: (identifier) @type)
+
+(type
+  root: (identifier) @type)
+
+(var_type
+  root: (identifier) @type)
 
 [
  (string_start)
@@ -109,39 +155,23 @@
 ] @string
 
 (file_literal) @string
+
 (null) @keyword
+
 (number_literal) @number
-(builtin_const) @keyword
+
+(builtin_vars) @keyword
+
 (builtin_macro) @keyword
 
+[
+  "var"
+  "new"
+  "anything"
+  "text"
+  "num"
+  "proc" 
+  "operator"
+  "verb"
+] @keyword
 
-(primitive_type 
-  (identifier) @type)
-
-(primitive_type) @type
-(var_keyword) @keyword
-(proc_keyword) @keyword
-
-(var_definition
-  name: (identifier) @variable)
-
-(proc_definition
-  name: (identifier) @function)
-
-(proc_override
-  name: (identifier) @function)
-
-(proc_parameter
-  name: (identifier) @variable)
-
-(call_expression
-  name: (identifier) @function)
-
-(field_proc_expression
-  proc: (identifier) @function)
-
-(field_expression
- field: (identifier) @property) 
-
-(type_proc_override
-  name: (identifier) @function)
