@@ -1,14 +1,31 @@
 (proc_definition
   name: (identifier) @name) @definition.function
 
-(type_definition
-  (type_path 
-    (type_identifier) @name)) @definition.type
+(proc_override
+  name: (identifier) @name) @definition.function
 
-(type_path_expression 
-  (type_identifier) @name) @reference.type
+(subtype_definition
+  (identifier) @name
+  (var_assignment)
+) @definition.type
+
+(type_definition
+  root: (identifier) @name
+  (var_assignment)
+) @definition.type
+
+(type
+  (identifier) @name) @reference.type
+
+(var_type
+  root: (identifier)  @name) @reference.type
+
+(var_subtype
+  (identifier) @name) @reference.type
 
 (call_expression
-  name: [
-      (identifier) @name
-  ]) @reference.call
+  [
+    function: (identifier) @name
+    (field_expression field: (identifier) @name .)
+  ]
+) @reference.call
