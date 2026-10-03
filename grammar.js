@@ -456,12 +456,36 @@ export default grammar({
     for_statement: $ => seq(
       'for',
       '(',
-      $.inline_var_definition,
-      'in',
-      $.expression,
-      optional(seq('step', $.number_literal)),
+      field("condition", choice(
+        $._for_list_condition,
+        $._for_loop_condition
+      )),
       ')',
-      $.block
+      field("body", $.block),
+    ),
+
+    _for_list_condition: $ => seq(
+      $.inline_var_definition,
+      optional(seq(
+        ",",
+        field("value", $.expression)
+      )),
+      optional(seq(
+        'in',
+        field("list", $.expression)
+      )),
+      optional(seq(
+        'step',
+        field("step", $.number_literal)
+      )),
+    ),
+
+    _for_loop_condition: $ => seq(
+      optional(field('initial', $.inline_var_definition)),
+      choice(',', ';'),
+      optional(field('condition', $.expression)),
+      choice(',', ';'),
+      optional(field('increment', $.expression))
     ),
 
     while_statement: $ => choice(
@@ -470,11 +494,11 @@ export default grammar({
         '(',
         field('condition', $.expression),
         ')',
-        $.block
+        field("body", $.block)
       ),
       seq(
         'do',
-        $.block,
+        field("body", $.block),
         'while',
         '(',
         field('condition', $.expression),
@@ -487,26 +511,17 @@ export default grammar({
       '(',
       field('condition', commaSep1($.expression)),
       ')',
-      $.block,
-    ),
-
-    elseif_clause: $ => seq(
-      'if',
-      '(',
-      field('condition', commaSep1($.expression)),
-      ')',
-      $.block,
-      $.else_clause
+      field("consequence", $.block),
     ),
 
     else_clause: $ => seq(
       'else',
-      $.block
+      field("body", $.block)
     ),
 
     try_catch_statement: $ => prec(1, seq(
       'try',
-      $.block,
+      field("body", $.block),
       'catch',
       optional(
         seq('(',
@@ -533,7 +548,7 @@ export default grammar({
     goto_label: $ => seq(
       field("name", $.identifier),
       ':',
-      $.block
+      field("body", $.block),
     ),
 
     inline_var_definition: $ => prec(1, seq(
