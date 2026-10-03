@@ -343,11 +343,22 @@ bool tree_sitter_dm_external_scanner_scan(
             if (first_comment_indent_length == -1)
                 first_comment_indent_length = (int32_t) indent_length;
 
-            while (lexer->lookahead && lexer->lookahead != '\n')
-                skip(lexer);
             skip(lexer);
-            indent_length = 0;
+            bool possible_include = lexer->lookahead == 'i';
+            skip(lexer);
 
+            // We skip the include directive, as this
+            // checking is too resource-intensive operation
+            // And with a large accumulation of directives, the parser
+            // stops working
+            if (!possible_include || lexer->lookahead != 'n')
+            {
+
+                while (lexer->lookahead && lexer->lookahead != '\n')
+                    skip(lexer);
+                skip(lexer);
+                indent_length = 0;
+            }
         }
         else if (lexer->lookahead == '/')
         {
