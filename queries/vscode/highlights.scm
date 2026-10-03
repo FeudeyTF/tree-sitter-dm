@@ -1,15 +1,55 @@
-(comment) @comment @spell
+(comment) @comment
 ((identifier) @macro
  (#match? @macro "^[A-Z][A-Z\\d_]*$"))
 (identifier) @variable
 
+(proc_definition
+  name: (identifier) @function)
+
+(proc_override
+  name: (identifier) @function)
+
+(call_expression
+  [
+    function: (identifier) @function.call
+    (field_expression field: (identifier) @function.call .)
+  ]
+)
+
 (pair
-  key: (expression (literal (identifier) @member)))
+  key: (identifier) @member)
+
+[
+  "#if"
+  "#ifdef"
+  "#ifndef"
+  "#else"
+  "#elif"
+  "#endif"
+  "#error"
+  "#warn"
+  "#pragma"
+  "#define"
+  "#undef"
+  "#include"
+] @keyword
+
+[
+  (preproc_message)
+  (preproc_arg)
+] @string
+
+(preproc_def
+    name: (identifier) @constant)
+
+(preproc_function_def
+    name: (identifier) @function)
+
+"return" @keyword
 
 [
   "while"
   "for"
-  "in"
   "step"
   "continue"
   "break"
@@ -23,42 +63,18 @@
   "switch"
   "to"
   "as"
+  "in"
 ] @keyword
 
 [
   "try"
   "catch"
+  "throw"
 ] @keyword
 
-[
-  "#if"
-  "#ifdef"
-  "#ifndef"
-  "#else"
-  "#elif"
-  "#endif"
-  "#error"
-  "#warn"
-  "#pragma"
-] @keyword
-
-[
-  "#define"
-  "#undef"
-] @keyword
-
-"#include" @keyword
-
-"..." @punctuation.special
-
-[
-  "("
-  ")"
-  "["
-  "]"
-  "{"
-  "}"
-] @punctuation.bracket
+(interpolation
+  "[" @punctuation.special
+  "]" @punctuation.special) @embedded
 
 [
   "="
@@ -103,102 +119,72 @@
   "%%="
 ] @operator
 
+
 [
   "TRUE"
   "FALSE"
 ] @macro
 
-(conditional_expression
-  [
-    "?"
-    ":"
-  ] @keyword.conditional.ternary)
-
-(type_operator) @punctuation.delimiter
-
-"return" @keyword.return
 [
   "static"
   "global"
   "final"
   "const"
   "tmp"
+  "var"
+  "new"
+  "anything"
+  "text"
+  "num"
+  "proc" 
+  "operator"
+  "verb"
 ] @macro
 
-"new" @macro
-
-(preproc_message) @string
-
-(preproc_ifdef
-  name: (identifier) @macro)
-
-(preproc_def
- name: (identifier) @macro)
-
-(preproc_undef
- name: (identifier) @macro)
-
-(preproc_defproc
-  name: (identifier) @macro)
-
-(preproc_call_expression
-  directive: (identifier) @macro)
+[
+  "," "." ";" ":" "?." "?."
+] @punctuation.delimiter
 
 [
- "?."
- "."
-] @delimiter
+ "(" ")" "[" "]" "{" "}"
+] @punctuation.bracket
 
-(interpolation
-  "[" @punctuation.special
-  "]" @punctuation.special) @embedded
-[
- (string_literal)
- (file_literal)
-] @string
-(escape_sequence) @string.escape
-
-(null) @macro
-(number_literal) @number
-(builtin_const) @macro
-(builtin_macro) @macro
-
-(primitive_type
-  (identifier) @type)
-
-(primitive_type) @type
-
-(var_keyword) @macro
-(proc_keyword) @macro
-"set" @macro
-
-(var_definition
-  name: (identifier) @variable)
+"set" @keyword
 
 "spawn" @function
 
-(proc_definition
-  name: (identifier) @function)
 
-(type_proc_definition
-  name: (identifier) @function)
+(type_definition
+  root: (identifier) @type)
 
-(type_proc_override
-  name: (identifier) @function)
+(subtype_definition
+  (identifier) @type)
 
-(proc_override
-  name: (identifier) @function)
+(type
+ (identifier) @type)
 
-(proc_parameter
+(var_type
+ (identifier) @type)
+
+(inline_var_definition
   name: (identifier) @variable)
 
-(call_expression
-  name: (identifier) @function.call)
+(inline_var_definition 
+ (type (identifier) @variable .))
 
-(field_proc_expression
-  proc: (identifier) @function.call)
+[
+ (string_start)
+ (string_content)
+ (string_end)
+] @string
 
-(field_expression
- field: (identifier) @property)
+(file_literal) @string
 
-(as_type) @macro
+(null) @macro
+
+(number_literal) @number
+
+(builtin_vars) @macro
+
+(builtin_macro) @macro
+
