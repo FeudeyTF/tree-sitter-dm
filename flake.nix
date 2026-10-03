@@ -22,8 +22,6 @@
           name = "tree-sitter-dm environment";
 
           packages = with pkgs; [
-            bun
-            biome
             nodejs
             tree-sitter
             python3
