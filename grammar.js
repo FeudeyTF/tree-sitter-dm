@@ -22,10 +22,11 @@ const PREC = {
   ADD: 10,
   MULTIPLY: 11,
   UNARY: 12,
-  CALL: 13,
-  FIELD: 14,
-  CONDITIONAL: 15,
-  GOTO_LABEL: 16,
+  POWER: 13,
+  CALL: 14,
+  FIELD: 15,
+  CONDITIONAL: 16,
+  GOTO_LABEL: 17,
 };
 
 export default grammar({
@@ -191,7 +192,13 @@ export default grammar({
     ),
 
     preproc_params: $ => seq(
-      token.immediate('('), commaSep(choice($.identifier, '...')), ')',
+      token.immediate('('),
+      commaSep(choice(
+        $.identifier,
+        '...',
+        seq($.identifier, '...')
+      )),
+      ')',
     ),
 
     preproc_warn: $ => seq(
@@ -376,7 +383,7 @@ export default grammar({
     _braced_block: $ => seq(
       "{",
       repeat(seq(
-        $._statement, optional(';')
+        $._statement, choice(';', $._newline)
       )),
       "}"
     ),
@@ -393,7 +400,7 @@ export default grammar({
     ),
 
     _statements: $ => seq(
-      sep1($._statement, ';'),
+      $._statement,
       optional(';'),
       $._newline,
     ),
@@ -446,12 +453,15 @@ export default grammar({
 
     continue_statement: _ => prec.left("continue"),
 
-    break_statement: _ => prec.left("break"),
+    break_statement: $ => seq(
+      "break",
+      optional(field("label", $.identifier))
+    ),
 
-    return_statement: $ => prec.left(seq(
+    return_statement: $ => seq(
       'return',
       optional($.expression),
-    )),
+    ),
 
     for_statement: $ => seq(
       'for',
@@ -572,6 +582,9 @@ export default grammar({
       'text',
       'num',
       'file',
+      'mob',
+      'turf',
+      'obj',
       $.null,
       $.type_literal,
     ),
@@ -597,7 +610,7 @@ export default grammar({
       $.field_expression,
       $.array_expression,
       $.assignment_expression,
-      $.parenthesized_expression
+      $.parenthesized_expression,
     ),
 
     assignment_expression: $ => prec.right(PREC.ASSIGNMENT, seq(
@@ -607,7 +620,8 @@ export default grammar({
         $.field_expression,
         $.array_expression,
         $.parenthesized_expression,
-        $.return_value
+        $.return_value,
+        $.builtin_vars
       )),
       field('operator', choice(
         '=',
@@ -680,6 +694,15 @@ export default grammar({
       ')'
     ),
 
+    braced_argument_list: $ => seq(
+      '{',
+      commaSep(choice(
+        $.expression,
+        $.pair
+      )),
+      '}'
+    ),
+
     pair: $ => seq(
       field("key", $.expression),
       "=",
@@ -692,7 +715,7 @@ export default grammar({
         $.type_literal,
         $.identifier
       )),
-      optional(field("arguments", $.argument_list))
+      optional(field("arguments", choice($.argument_list, $.braced_argument_list)))
     )),
 
     unary_expression: $ => prec.left(PREC.UNARY, seq(
@@ -702,35 +725,37 @@ export default grammar({
 
     binary_expression: $ => {
       const table = [
-        ['+', PREC.ADD],
-        ['-', PREC.ADD],
-        ['*', PREC.MULTIPLY],
-        ['/', PREC.MULTIPLY],
-        ['||', PREC.LOGICAL_OR],
-        ['%', PREC.MULTIPLY],
-        ['%%', PREC.MULTIPLY],
-        ['&&', PREC.LOGICAL_AND],
-        ['|', PREC.INCLUSIVE_OR],
-        ['^', PREC.EXCLUSIVE_OR],
-        ['&', PREC.BITWISE_AND],
-        ['!=', PREC.EQUAL],
-        ['==', PREC.EQUAL],
-        ['<>', PREC.EQUAL],
-        ['>', PREC.RELATIONAL],
-        ['~=', PREC.EQUAL],
-        ['~!', PREC.EQUAL],
-        ['>=', PREC.RELATIONAL],
-        ['<', PREC.RELATIONAL],
-        ['<=', PREC.RELATIONAL],
-        ['<=>', PREC.RELATIONAL],
-        ['<<', PREC.SHIFT],
-        ['>>', PREC.SHIFT],
-        ['in', PREC.CONDITIONAL],
-        ['to', PREC.CONDITIONAL]
+        [prec.left, '+', PREC.ADD],
+        [prec.left, '-', PREC.ADD],
+        [prec.left, '*', PREC.MULTIPLY],
+        [prec.left, '/', PREC.MULTIPLY],
+        [prec.right, '**', PREC.POWER],
+        [prec.left, '||', PREC.LOGICAL_OR],
+        [prec.left, '%', PREC.MULTIPLY],
+        [prec.left, '%%', PREC.MULTIPLY],
+        [prec.left, '&&', PREC.LOGICAL_AND],
+        [prec.left, '|', PREC.INCLUSIVE_OR],
+        [prec.left, '^', PREC.EXCLUSIVE_OR],
+        [prec.left, '&', PREC.BITWISE_AND],
+        [prec.left, '!=', PREC.EQUAL],
+        [prec.left, '==', PREC.EQUAL],
+        [prec.left, '<>', PREC.EQUAL],
+        [prec.left, '>', PREC.RELATIONAL],
+        [prec.left, '~=', PREC.EQUAL],
+        [prec.left, '~!', PREC.EQUAL],
+        [prec.left, '>=', PREC.RELATIONAL],
+        [prec.left, '<', PREC.RELATIONAL],
+        [prec.left, '<=', PREC.RELATIONAL],
+        [prec.left, '<=>', PREC.RELATIONAL],
+        [prec.left, '<<', PREC.SHIFT],
+        [prec.left, '>>', PREC.SHIFT],
+        [prec.left, 'in', PREC.RELATIONAL],
+        [prec.left, 'to', PREC.RELATIONAL]
       ];
 
-      return choice(...table.map(([operator, precedence]) => {
-        return prec.left(precedence, seq(
+      return choice(...table.map(([fn, operator, precedence]) => {
+        // @ts-ignore
+        return fn(precedence, seq(
           field('left', $.expression),
           // @ts-ignore
           field('operator', operator),
@@ -799,7 +824,7 @@ export default grammar({
 
     interpolation: $ => seq(
       '[',
-      field('expression', $.expression),
+      optional(field('expression', $.expression)),
       ']',
     ),
 
