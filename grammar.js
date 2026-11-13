@@ -196,7 +196,8 @@ export default grammar({
       commaSep(choice(
         $.identifier,
         '...',
-        seq($.identifier, '...')
+        seq($.identifier, '...'),
+        seq($.identifier, token.immediate('...')),
       )),
       ')',
     ),
