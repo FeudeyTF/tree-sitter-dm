@@ -392,7 +392,6 @@ bool tree_sitter_dm_external_scanner_scan(
             {
 
                 lexer->mark_end(lexer);
-                skip(lexer);
                 scanner->pending_token = Indent;
                 lexer->result_symbol = NEWLINE;
                 return true;

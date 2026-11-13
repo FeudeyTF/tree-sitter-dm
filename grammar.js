@@ -268,7 +268,7 @@ export default grammar({
       'proc',
       forkEnd($, seq(
         "operator",
-        field("operator", choice(
+        optional(field("operator", choice(
           '=', '+=', '-=', '*=',
           '/=', '%=', '%%=', '&=',
           '|=', '^=', '<<=', '>>=',
@@ -280,7 +280,7 @@ export default grammar({
           '~!', '>=', '<', '<=',
           '<=>', '<<', '>>', '[]',
           '""'
-        )),
+        ))),
         '(',
         commaSep($.proc_parameter),
         ')',
@@ -312,11 +312,11 @@ export default grammar({
     var_definition: $ => path($,
       'var',
       optional(fork($,
-        choice(
+        prec.left(commaSep1(choice(
           $.var_type,
           $.var_modifier,
           $.var_assignment
-        ),
+        ))),
         field("name", $.identifier),
       )),
     ),
@@ -324,7 +324,10 @@ export default grammar({
     var_type: $ => path($,
       field("root", $.identifier),
       fork($,
-        choice($.var_subtype, $.var_assignment),
+        prec.left(commaSep1(choice(
+          $.var_subtype,
+          $.var_assignment
+        ))),
         field("name", $.identifier),
       ),
     ),
@@ -332,7 +335,10 @@ export default grammar({
     var_subtype: $ => path($,
       $.identifier,
       fork($,
-        choice($.var_subtype, $.var_assignment),
+        prec.left(commaSep1(choice(
+          $.var_subtype,
+          $.var_assignment
+        ))),
         field("name", $.identifier),
       ),
     ),
@@ -346,7 +352,10 @@ export default grammar({
         'final'
       ),
       fork($,
-        choice($.var_type, $.var_assignment),
+        prec.left(commaSep1(choice(
+          $.var_type,
+          $.var_assignment
+        ))),
         field("name", $.identifier),
       ),
     ),
@@ -383,8 +392,7 @@ export default grammar({
 
     _braced_block: $ => seq(
       "{",
-      repeat(seq(
-        $._statement, choice(';', $._newline)
+      repeat(seq($._statement, choice(';', $._newline)
       )),
       "}"
     ),
@@ -424,6 +432,7 @@ export default grammar({
       $.continue_statement,
       $.break_statement,
       $.return_statement,
+      $.sleep_expression,
       seq($.expression, optional($.as_operator))
     ),
 
@@ -672,6 +681,11 @@ export default grammar({
       field("arguments", $.argument_list)
     )),
 
+    sleep_expression: $ => seq(
+      "sleep",
+      field("time", $.expression),
+    ),
+
     field_expression: $ => seq(
       prec(PREC.FIELD, seq(field('argument', $.expression),
         field('operator', $.field_operator))),
@@ -697,10 +711,10 @@ export default grammar({
 
     braced_argument_list: $ => seq(
       '{',
-      commaSep(choice(
-        $.expression,
-        $.pair
-      )),
+      choice(optional(sep1(
+        choice($.expression, $.pair),
+        choice(';', ',')
+      ))),
       '}'
     ),
 
@@ -785,7 +799,7 @@ export default grammar({
       field("root", $.identifier),
       repeat(
         seq(
-          token.immediate('/'),
+          choice(token.immediate('/'), token.immediate('./')),
           $.identifier
         )
       )
@@ -878,7 +892,8 @@ export default grammar({
 
     null: _ => 'null',
 
-    identifier: _ => /[a-zA-Z_][a-zA-Z0-9_]*/,
+
+    identifier: _ => /(?:[a-zA-Z_\\]|\\\*)(?:[a-zA-Z0-9_\\]|\\\*)*/,
 
     comment: $ => choice(
       $.line_comment,
