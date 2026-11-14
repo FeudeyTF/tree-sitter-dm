@@ -294,15 +294,13 @@ export default grammar({
       $.block
     ),
 
-    _proc_signature: $ =>
-      seq(
-        field("name", $.identifier),
-        '(',
-        commaSep($.proc_parameter),
-        ')',
-        optional($.as_operator)
-      )
-    ,
+    _proc_signature: $ => seq(
+      field("name", $.identifier),
+      '(',
+      commaSep($.proc_parameter),
+      ')',
+      optional($.as_operator)
+    ),
 
     proc_parameter: $ => choice(
       $.inline_var_definition,
@@ -392,7 +390,9 @@ export default grammar({
 
     _braced_block: $ => seq(
       "{",
-      repeat(seq($._statement, choice(';', $._newline)
+      repeat(seq(
+        $._statement,
+        choice(';', $._newline)
       )),
       "}"
     ),
@@ -409,7 +409,7 @@ export default grammar({
     ),
 
     _statements: $ => seq(
-      $._statement,
+      choice($._statement, ';'),
       optional(';'),
       $._newline,
     ),
@@ -433,7 +433,7 @@ export default grammar({
       $.break_statement,
       $.return_statement,
       $.sleep_expression,
-      seq($.expression, optional($.as_operator))
+      seq($.expression, optional($.as_operator)),
     ),
 
     spawn_statement: $ => seq(
@@ -476,16 +476,16 @@ export default grammar({
     for_statement: $ => seq(
       'for',
       '(',
-      field("condition", choice(
-        $._for_list_condition,
-        $._for_loop_condition
-      )),
+      optional(field("condition", choice(
+        $.for_list_condition,
+        $.for_loop_condition
+      ))),
       ')',
       field("body", $.block),
     ),
 
-    _for_list_condition: $ => seq(
-      $.inline_var_definition,
+    for_list_condition: $ => seq(
+      field('initial', $._for_loop_initial),
       optional(seq(
         ",",
         field("value", $.expression)
@@ -500,12 +500,37 @@ export default grammar({
       )),
     ),
 
-    _for_loop_condition: $ => seq(
-      optional(field('initial', $.inline_var_definition)),
+    for_loop_condition: $ => prec(1, seq(
+      optional(field('initial', choice(
+        $._for_loop_initial,
+        seq(
+          '{',
+          sep1($._for_loop_initial, ';'),
+          '}'
+        )
+      ))),
       choice(',', ';'),
-      optional(field('condition', $.expression)),
-      choice(',', ';'),
-      optional(field('increment', $.expression))
+      optional(seq(
+        optional(field('condition', $.expression)),
+        optional(seq(
+          choice(',', ';'),
+          optional(
+            field('increment', choice(
+              $.expression,
+              seq(
+                '{',
+                sep1($.expression, ';'),
+                '}'
+              )
+            ))
+          )
+        ))
+      )),
+    )),
+
+    _for_loop_initial: $ => choice(
+      $.inline_var_definition,
+      $.return_value
     ),
 
     while_statement: $ => choice(
@@ -703,6 +728,11 @@ export default grammar({
     argument_list: $ => seq(
       '(',
       commaSep(choice(
+        seq(
+          field("weight", $.number_literal),
+          ';',
+          $.expression
+        ),
         $.expression,
         $.pair
       )),
