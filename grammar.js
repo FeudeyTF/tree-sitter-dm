@@ -124,7 +124,6 @@ export default grammar({
       $._newline,
     ),
 
-
     preproc_undef: $ => seq(
       preprocessor('undef'),
       field('name', $.identifier),
@@ -242,14 +241,16 @@ export default grammar({
       $.proc_definition,
       $.verb_definition,
       $.proc_override,
-      $.operator_override
     ),
 
     proc_definition: $ => path($,
       'proc',
       optional(forkEnd($,
         seq(
-          $._proc_signature,
+          choice(
+            $._proc_signature,
+            $.operator_override
+          ),
           optional($.block)
         )
       )),
@@ -265,33 +266,32 @@ export default grammar({
       )),
     ),
 
-    operator_override: $ => path($,
-      'proc',
-      forkEnd($, seq(
-        "operator",
-        optional(field("operator", choice(
-          '=', '+=', '-=', '*=',
-          '/=', '%=', '%%=', '&=',
-          '|=', '^=', '<<=', '>>=',
-          ':=', '&&=', '||=', '[]=',
-          '+', '-', '*', '/',
-          '||', '%', '%%', '&&',
-          '|', '^', '&', '!=',
-          '==', '<>', '>', '~=',
-          '~!', '>=', '<', '<=',
-          '<=>', '<<', '>>', '[]',
-          '""'
-        ))),
-        '(',
-        commaSep($.proc_parameter),
-        ')',
-        optional($.as_operator),
-        optional($.block)
-      )),
+    operator_override: $ => seq(
+      "operator",
+      optional(field("operator", choice(
+        '=', '+=', '-=', '*=',
+        '/=', '%=', '%%=', '&=',
+        '|=', '^=', '<<=', '>>=',
+        ':=', '&&=', '||=', '[]=',
+        '+', '-', '*', '/',
+        '||', '%', '%%', '&&',
+        '|', '^', '&', '!=',
+        '==', '<>', '>', '~=',
+        '~!', '>=', '<', '<=',
+        '<=>', '<<', '>>', '[]',
+        '""'
+      ))),
+      '(',
+      commaSep($.proc_parameter),
+      ')',
+      optional($.as_operator),
     ),
 
     proc_override: $ => seq(
-      $._proc_signature,
+      choice(
+        $._proc_signature,
+        $.operator_override
+      ),
       $.block
     ),
 
@@ -361,7 +361,11 @@ export default grammar({
 
     type_var_assignment: $ => seq(
       field("name", $.identifier),
-      repeat(seq('[', optional($.number_literal), ']')),
+      repeat(seq(
+        '[',
+        optional(field("size", $.expression)),
+        ']'
+      )),
       choice(
         seq(
           seq("=", $.expression),
@@ -373,7 +377,11 @@ export default grammar({
 
     var_assignment: $ => seq(
       field("name", $.identifier),
-      repeat(seq('[', optional($.number_literal), ']')),
+      repeat(seq(
+        '[',
+        optional(field("size", $.expression)),
+        ']'
+      )),
       optional(seq(
         "=",
         $.expression
@@ -562,6 +570,7 @@ export default grammar({
 
     else_clause: $ => seq(
       'else',
+      optional(':'),
       field("body", $.block)
     ),
 
@@ -592,8 +601,10 @@ export default grammar({
     ),
 
     goto_label: $ => seq(
-      field("name", $.identifier),
-      ':',
+      choice(
+        seq(field("name", $.identifier), ':'),
+        seq(':', field("name", $.identifier),),
+      ),
       field("body", $.block),
     ),
 
