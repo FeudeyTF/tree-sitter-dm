@@ -8,7 +8,9 @@
 // @ts-check
 
 const PREC = {
-  ASSIGNMENT: -2,
+  ASSIGNMENT: -3,
+  SEARCH: -2,
+  CONDITIONAL: -1,
   DEFAULT: 0,
   LOGICAL_OR: 1,
   LOGICAL_AND: 2,
@@ -25,8 +27,7 @@ const PREC = {
   POWER: 13,
   CALL: 14,
   FIELD: 15,
-  CONDITIONAL: 16,
-  GOTO_LABEL: 17,
+  GOTO_LABEL: 16,
 };
 
 export default grammar({
@@ -57,7 +58,7 @@ export default grammar({
   ],
 
   conflicts: $ => [
-    [$.goto_label, $.expression],
+    [$.goto_label, $.expression]
   ],
 
   externals: $ => [
@@ -643,6 +644,7 @@ export default grammar({
       $.parent_proc,
       $.conditional_expression,
       $.field_expression,
+      $.search_expression,
       $.array_expression,
       $.assignment_expression,
       $.parenthesized_expression,
@@ -712,16 +714,22 @@ export default grammar({
     ),
 
     field_expression: $ => seq(
-      prec(PREC.FIELD, seq(field('argument', $.expression),
-        field('operator', $.field_operator))),
-
+      prec(PREC.FIELD, seq(
+        field('argument', $.expression),
+        field('operator', $.field_operator)
+      )),
       field('field', $.identifier),
     ),
 
-    field_operator: _ => choice(
-      token.immediate('.'),
-      '?.',
+    search_expression: $ => prec(PREC.SEARCH, seq(
+      field('argument', $.expression),
       ':',
+      field('field', $.identifier),
+    )),
+
+    field_operator: _ => choice(
+      '.',
+      '?.',
       '::'
     ),
 
